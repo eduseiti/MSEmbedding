@@ -4,7 +4,7 @@ import torch
 import numpy as np
 
 
-class batchLoader:
+class BatchLoader:
 
     def __init__(self, originalData, randomSeed = 1234):
 
@@ -15,7 +15,7 @@ class batchLoader:
 
     def listMultipleScansSequences(self):
 
-        maxLen   = 0
+        self.maxPeaksListLen = 0
         totalLen = 0
 
         sequenceMaxLen = ''
@@ -28,7 +28,7 @@ class batchLoader:
 
         for key in self.totalSpectra.spectra.keys():
             
-            if key != sp.scan.UNRECOGNIZED_SEQUENCE:
+            if key != sp.Scan.UNRECOGNIZED_SEQUENCE:
                 scansLen = len(self.totalSpectra.spectra[key])
 
                 if scansLen > 1:
@@ -46,11 +46,11 @@ class batchLoader:
                 totalLen += spectrumLen
                 numSpectrum += 1
                 
-                if spectrumLen > maxLen:
-                    maxLen = spectrumLen
+                if spectrumLen > self.maxPeaksListLen:
+                    self.maxPeaksListLen = spectrumLen
                     sequenceMaxLen = key
 
-        print('Maximum non-zero peaks list len = {}. key = {}'.format(maxLen, sequenceMaxLen))
+        print('Maximum non-zero peaks list len = {}. key = {}'.format(self.maxPeaksListLen, sequenceMaxLen))
         print('Average peaks list len = {}'.format(totalLen / numSpectrum))
         print('Number of sequences with more than 1 scan = {}'.format(sequenceWithMultipleScans))
         print('Max number of scans in a single sequence = {}'.format(maxScansInSequence))
@@ -60,7 +60,7 @@ class batchLoader:
 
         random.shuffle(self.multipleScansSequences)
 
-        negativeExamplesIndexes = random.choices(range(len(self.totalSpectra.spectra[sp.scan.UNRECOGNIZED_SEQUENCE])), k = len(self.multipleScansSequences))
+        negativeExamplesIndexes = random.choices(range(len(self.totalSpectra.spectra[sp.Scan.UNRECOGNIZED_SEQUENCE])), k = len(self.multipleScansSequences))
 
         newBatch = {}
 
@@ -79,9 +79,9 @@ class batchLoader:
         return newBatch
 
 
-    def groupTriplets(self, currentBatch):
+    def loadTripletsBatch(self, currentBatch):
 
-        groupedBatch = []
+        loadedBatch = torch.zeros(len(currentBatch) * 3, self.maxPeaksListLen, 2)
 
         for i, tripletKey in enumerate(currentBatch.keys()):
 
@@ -89,12 +89,13 @@ class batchLoader:
 
             sampleTriplet = []
 
-            sampleTriplet.append(self.totalSpectra.spectra[tripletKey][triplet['anchor']]['nzero_peaks'].cuda())
-            sampleTriplet.append(self.totalSpectra.spectra[tripletKey][triplet['positive']]['nzero_peaks'].cuda())
-            sampleTriplet.append(self.totalSpectra.spectra[sp.scan.UNRECOGNIZED_SEQUENCE][triplet['negative']]['nzero_peaks'].cuda())
+            loadedBatch[i * 3, 0:(len(self.totalSpectra.spectra[tripletKey][triplet['anchor']]['nzero_peaks']))] = self.totalSpectra.spectra[tripletKey][triplet['anchor']]['nzero_peaks']
+            loadedBatch[i * 3 + 1, 0:(len(self.totalSpectra.spectra[tripletKey][triplet['positive']]['nzero_peaks']))] = self.totalSpectra.spectra[tripletKey][triplet['positive']]['nzero_peaks']
+            loadedBatch[i * 3 + 2, 0:(len(self.totalSpectra.spectra[sp.Scan.UNRECOGNIZED_SEQUENCE][triplet['negative']]['nzero_peaks']))] = self.totalSpectra.spectra[sp.Scan.UNRECOGNIZED_SEQUENCE][triplet['negative']]['nzero_peaks']
 
-            groupedBatch.append(sampleTriplet)
+            print('\nGrouping sequence {}: {}'.format(i, tripletKey))
 
-            print('\Grouping sequence {}: {}'.format(i, tripletKey))
+        if torch.cuda.is_available():
+            loadedBatch = loadedBatch.cuda()
 
-        return groupedBatch
+        return loadedBatch

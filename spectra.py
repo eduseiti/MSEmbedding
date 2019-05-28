@@ -47,7 +47,7 @@ class PXD000561:
         self.identificationsFilename = identificationsFilename
         self.spectraFilename = spectraFilename
     
-        self.totalSpectra = spectraFound(False, 'sequences')
+        self.totalSpectra = SpectraFound(False, 'sequences')
     
     
     def load_identifications(self, verbose = False, singleFile = None):
@@ -62,6 +62,8 @@ class PXD000561:
         if self.totalSpectra.spectra: 
             return
         
+        # print('Loading file: {}. dir:{}'.format(self.identificationsFilename, os.getcwd()))
+
         gel_elite_49 = pd.read_csv(self.identificationsFilename)
 
         if verbose:
@@ -150,7 +152,7 @@ class PXD000561:
         self.totalSpectra.save_spectra(self.spectraFilename)
 
 
-class scan:
+class Scan:
     
     UNRECOGNIZED_SEQUENCE = "unrecognized"    
     
@@ -185,7 +187,7 @@ class scan:
         
         
         
-class spectraFound:
+class SpectraFound:
     
     def __init__(self, saveFiles, filesFolder):
                 
@@ -318,7 +320,7 @@ class MGF:
                                 raise ValueError('\"END IONS\" statement missing. File={}. Scan={}'.format(whichFile.name,
                                                                                                            json.dump(newScan.to_dict)))
 
-                            newScan = scan(scanFilenamePrefix)
+                            newScan = Scan(scanFilenamePrefix)
 
                         elif (i == MGF.TITLE_FIELD):
                             newScan.scan = int(parsing.group(1))
@@ -340,7 +342,7 @@ class MGF:
                                     hasFoundScan = True
 
                                 elif newScan.scan < searchedScan:
-                                    spectraFound.add_scan(newScan, scan.UNRECOGNIZED_SEQUENCE)
+                                    spectraFound.add_scan(newScan, Scan.UNRECOGNIZED_SEQUENCE)
 
                                     newScan = None
 
