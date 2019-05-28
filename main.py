@@ -59,23 +59,15 @@ print('Test sequences size {}'.format(len(blTest.multipleScansSequences)))
 # taken from Cross-Modal retrieval article
 LOSS_MARGIN = 0.3 
 
-embeddingNet = m.TripletNet(m.MSEmbeddingNet()).cuda()
-embeddingNetSeq = m.TripletNet(m.MSEmbeddingNetSeq()).cuda()
+embeddingNet = m.MSEmbeddingNet(2000, 16, 10, False).cuda()
 
-# embeddingNetGroupedTriplets = m.TripletNet(m.MSEmbeddingNetGroupedTriplets())
-
-optmizer    = optim.SGD(embeddingNet.parameters(), lr = 0.01)
-optmizerSeq = optim.SGD(embeddingNetSeq.parameters(), lr = 0.01)
-
-# optmizerGroupedTriplet = optim.SGD(embeddingNetGroupedTriplets.parameters(), lr = 0.01)
+optmizer = optim.SGD(embeddingNet.parameters(), lr = 0.01)
 
 
 criterion = nn.TripletMarginLoss(margin = LOSS_MARGIN)
 
 try:
     embeddingNet.load_state_dict(torch.load('embeddingNet.state'))
-    embeddingNetSeq.load_state_dict(torch.load('embeddingNetSeq.state'))
-    # embeddingNetGroupedTriplets.load_state_dict(torch.load('embeddingNetGroupedTriplet.state'))
 except Exception as e:
     print('Could not open trained model files')
 
@@ -84,24 +76,6 @@ newBatch = bl.createTripletBatch()
 groupedBatch = bl.groupTriplets(newBatch)
 
 embeddingNet.train()
-embeddingNetSeq.train()
-# embeddingNetGroupedTriplets.train()
-
-
-# groupedBatch = bl.groupTriplets(newBatch)
-
-# for i, sample in enumerate(groupedBatch):
-
-#     optmizerGroupedTriplet.zero_grad()
-
-#     embeddings = embeddingNetGroupedTriplets(sample)
-
-#     lossGrouped = criterion(embeddings[0, -1, :], embeddings[1, -1, :], embeddings[2, -1, :])
-
-#     print('- Loss grouped = {}'.format(lossGrouped))
-
-#     lossGrouped.backward()
-#     optmizerGroupedTriplet.step()
 
 HOW_MANY_SAMPLES = 100
 
