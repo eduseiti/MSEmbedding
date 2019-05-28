@@ -114,18 +114,24 @@ startTime = time.time()
 resultEmbeddings = embeddingNet(loadedTestBatch)
 print('Embedding time: {}'.format(time.time() - startTime))
 
-validationResult = np.zeros((len(blTest.multipleScansSequences), 2), dtype = bool)
+validationResult = np.zeros((len(blTest.multipleScansSequences) * 2, 2), dtype = bool)
 
 for i in range(len(resultEmbeddings) // 3):
-    if torch.dist(resultEmbeddings[i * 3], resultEmbeddings[i * 3 + 1]) < LOSS_MARGIN:
-        validationResult[i] = (True, True)
+
+    positiveDistance = torch.dist(resultEmbeddings[i * 3], resultEmbeddings[i * 3 + 1])
+    negativeDistance = torch.dist(resultEmbeddings[i * 3], resultEmbeddings[i * 3 + 2])
+
+    print('{} - Positive distance={}, Negative distance={}'.format(i, positiveDistance, negativeDistance))
+
+    if torch.lt(positiveDistance, LOSS_MARGIN):
+        validationResult[i * 2] = (True, True)
     else:
-        validationResult[i] = (True, False)
+        validationResult[i * 2] = (True, False)
     
-    if torch.dist(resultEmbeddings[i * 3], resultEmbeddings[i * 3 + 2]) < LOSS_MARGIN:
-        validationResult[i] = (True, False)
+    if torch.lt(negativeDistance, LOSS_MARGIN):
+        validationResult[i * 2 + 1] = (True, False)
     else:
-        validationResult[i] = (True, True)
+        validationResult[i * 2 + 1] = (True, True)
 
 
 print('Validation accuracy: {}'.format(accuracy_score(validationResult[:, 0], validationResult[:, 1])))

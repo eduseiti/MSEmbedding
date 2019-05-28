@@ -60,7 +60,7 @@ class BatchLoader:
 
         random.shuffle(self.multipleScansSequences)
 
-        negativeExamplesIndexes = random.choices(range(len(self.totalSpectra.spectra[sp.Scan.UNRECOGNIZED_SEQUENCE])), k = len(self.multipleScansSequences))
+        negativeExamplesIndexes = random.sample(range(len(self.totalSpectra.spectra[sp.Scan.UNRECOGNIZED_SEQUENCE])), k = len(self.multipleScansSequences))
 
         newBatch = {}
 
@@ -68,7 +68,7 @@ class BatchLoader:
 
             examples = {}
 
-            positiveExamplesIndexes = random.choices(range(len(self.totalSpectra.spectra[sequence])), k = 2)
+            positiveExamplesIndexes = random.sample(range(len(self.totalSpectra.spectra[sequence])), k = 2)
 
             examples['anchor']   = positiveExamplesIndexes[0]
             examples['positive'] = positiveExamplesIndexes[1]
@@ -93,7 +93,7 @@ class BatchLoader:
             loadedBatch[i * 3 + 1, 0:(len(self.totalSpectra.spectra[tripletKey][triplet['positive']]['nzero_peaks']))] = self.totalSpectra.spectra[tripletKey][triplet['positive']]['nzero_peaks']
             loadedBatch[i * 3 + 2, 0:(len(self.totalSpectra.spectra[sp.Scan.UNRECOGNIZED_SEQUENCE][triplet['negative']]['nzero_peaks']))] = self.totalSpectra.spectra[sp.Scan.UNRECOGNIZED_SEQUENCE][triplet['negative']]['nzero_peaks']
 
-            print('\nGrouping sequence {}: {}'.format(i, tripletKey))
+            print('Grouping sequence {}: {}'.format(i, tripletKey))
 
         if torch.cuda.is_available():
             loadedBatch = loadedBatch.cuda()
