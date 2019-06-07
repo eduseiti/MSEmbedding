@@ -1,4 +1,4 @@
-import spectra as sp
+from .spectra import Scan
 import random
 import torch
 import numpy as np
@@ -28,7 +28,7 @@ class BatchLoader:
 
         for key in self.totalSpectra.spectra.keys():
             
-            if key != sp.Scan.UNRECOGNIZED_SEQUENCE:
+            if key != Scan.UNRECOGNIZED_SEQUENCE:
                 scansLen = len(self.totalSpectra.spectra[key])
 
                 if scansLen > 1:
@@ -60,7 +60,7 @@ class BatchLoader:
 
         random.shuffle(self.multipleScansSequences)
 
-        negativeExamplesIndexes = random.sample(range(len(self.totalSpectra.spectra[sp.Scan.UNRECOGNIZED_SEQUENCE])), k = len(self.multipleScansSequences))
+        negativeExamplesIndexes = random.sample(range(len(self.totalSpectra.spectra[Scan.UNRECOGNIZED_SEQUENCE])), k = len(self.multipleScansSequences))
 
         newBatch = {}
 
@@ -91,7 +91,7 @@ class BatchLoader:
 
             loadedBatch[i * 3, 0:(len(self.totalSpectra.spectra[tripletKey][triplet['anchor']]['nzero_peaks']))] = self.totalSpectra.spectra[tripletKey][triplet['anchor']]['nzero_peaks']
             loadedBatch[i * 3 + 1, 0:(len(self.totalSpectra.spectra[tripletKey][triplet['positive']]['nzero_peaks']))] = self.totalSpectra.spectra[tripletKey][triplet['positive']]['nzero_peaks']
-            loadedBatch[i * 3 + 2, 0:(len(self.totalSpectra.spectra[sp.Scan.UNRECOGNIZED_SEQUENCE][triplet['negative']]['nzero_peaks']))] = self.totalSpectra.spectra[sp.Scan.UNRECOGNIZED_SEQUENCE][triplet['negative']]['nzero_peaks']
+            loadedBatch[i * 3 + 2, 0:(len(self.totalSpectra.spectra[Scan.UNRECOGNIZED_SEQUENCE][triplet['negative']]['nzero_peaks']))] = self.totalSpectra.spectra[sp.Scan.UNRECOGNIZED_SEQUENCE][triplet['negative']]['nzero_peaks']
 
             print('Grouping sequence {}: {}'.format(i, tripletKey))
 
