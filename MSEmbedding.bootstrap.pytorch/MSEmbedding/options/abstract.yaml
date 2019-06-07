@@ -12,13 +12,12 @@ dataset:
 model:
   name: MSEmbedding
   network:
-    import: mnist.models.networks.factory
+    import: models.networks.factory
     name: net
   criterion:
-    name: nll
+    name: TripletMarginLoss
   metric:
-    name: accuracy
-    topk: [1,5]
+    name: embeddingsDistance
 optimizer:
   name: sgd
   lr: 0.01
