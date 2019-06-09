@@ -15,9 +15,9 @@ class HumanProteome(data.Dataset):
         os.chdir(dir_data)
 
         if split == 'train':
-            self.dataset = s.PXD000561(spectraFilename = TRAIN_DATASET)
+            self.dataset = PXD000561(spectraFilename = TRAIN_DATASET)
         else:
-            self.dataset = s.PXD000561(spectraFilename = TEST_DATASET)
+            self.dataset = PXD000561(spectraFilename = TEST_DATASET)
 
         self.dataset.load_identifications()
 
