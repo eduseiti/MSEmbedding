@@ -2,6 +2,7 @@ from .spectra import PXD000561
 import os
 import torch
 import torch.utils.data as data
+from .BatchLoader import BatchLoader
 
 class HumanProteome(data.Dataset):
 
@@ -28,23 +29,20 @@ class HumanProteome(data.Dataset):
 
 
 
-
     def __getitem__(self, index):
-
-        return item
-
+        return self.batchSampler.currentBatch[index]
 
 
     def __len__(self):
+        return len(self.dataset.totalSpectra.multipleScansSequences) * 3
 
 
     def make_batch_loader(self):
+        self.batchSampler = BatchLoader(self.dataset.totalSpectra, 128 * 3)
+
         data_loader = data.DataLoader(self,
-            batch_size=self.batch_size,
             num_workers=self.nb_threads,
-            shuffle=self.shuffle,
-            pin_memory=self.pin_memory,
-            collate_fn=self.collate_fn,
+            batch_sampler=self.batch_sampler,
             drop_last=False)
         return data_loader
 

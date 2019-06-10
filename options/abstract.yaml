@@ -15,9 +15,9 @@ model:
     import: mnist.models.networks.factory
     name: net
   criterion:
-    name: nll
+    name: tripletMargin
   metric:
-    name: accuracy
+    name: embeddingsDistance
     topk: [1,5]
 optimizer:
   name: sgd
