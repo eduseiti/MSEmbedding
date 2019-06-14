@@ -16,6 +16,7 @@ model:
     name: net
   criterion:
     name: tripletMargin
+    
   metric:
     name: embeddingsDistance
     topk: [1,5]

@@ -8,3 +8,7 @@ class TripletMargin(mm.TripletMarginLoss):
         super(TripletMargin, self).__init__(margin, p, eps, swap, size_average,
                                             reduce, reduction)
 
+
+    def forward(self, networkOutput, batch):
+
+        return super(TripletMargin, self).forward(networkOutput[::3], networkOutput[1::3], networkOutput[2::3])
