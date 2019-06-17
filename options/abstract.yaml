@@ -16,10 +16,8 @@ model:
     name: MSEmbeddingNet
   criterion:
     name: tripletMargin
-    
   metric:
     name: embeddingsDistance
-    topk: [1,5]
 optimizer:
   name: sgd
   lr: 0.01
