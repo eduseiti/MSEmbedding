@@ -6,14 +6,14 @@ dataset:
   name: humanProteome
   dir: data/humanProteome
   train_split: train
-  eval_split: val
-  nb_threads: 4
+  eval_split: eval
+  nb_threads: 1
   batch_size: 100
 model:
   name: simple
   network:
-    import: mnist.models.networks.factory
-    name: net
+    import: MSEmbedding.models.networks.factory
+    name: MSEmbeddingNet
   criterion:
     name: tripletMargin
     

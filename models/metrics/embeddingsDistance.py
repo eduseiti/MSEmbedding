@@ -31,4 +31,8 @@ class EmbeddingDistance(nn.Module):
                 validationResult[i * 2 + 1] = (True, True)
 
 
-        print('Validation accuracy: {}'.format(accuracy_score(validationResult[:, 0], validationResult[:, 1])))        
+        totalAccuracyScore = accuracy_score(validationResult[:, 0], validationResult[:, 1])
+
+        print('Validation accuracy: {}'.format(totalAccuracyScore))
+
+        return totalAccuracyScore

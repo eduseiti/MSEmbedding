@@ -11,21 +11,30 @@ class HumanProteome(data.Dataset):
     TEST_DATASET = 'initialTest2_b02.pkl'
 
 
-    def __init__(self, dir_data='data/humanProteome', split='train', batch_size=100, nb_threads=1):
+    def __init__(self, dataDirectory='data/humanProteome', split='train', batch_size=100, nb_threads=1):
 
-        os.chdir(dir_data)
+        self.split = split
+
+        currentDirectory = os.getcwd()
+
+        print('Working directory: ' + os.getcwd())
+
+        try:
+            currentDirectory.index(dataDirectory)
+        except Exception:
+            os.chdir(dataDirectory)
 
         if split == 'train':
-            self.dataset = PXD000561(spectraFilename = TRAIN_DATASET)
+            self.dataset = PXD000561(spectraFilename = HumanProteome.TRAIN_DATASET)
         else:
-            self.dataset = PXD000561(spectraFilename = TEST_DATASET)
+            self.dataset = PXD000561(spectraFilename = HumanProteome.TEST_DATASET)
 
         self.dataset.load_identifications()
 
         if not self.dataset.totalSpectra.spectra:
             raise NotImplementedError('Missing implementation to generate the dataset spectra file.')
 
-        self.data.totalSpectra.listMultipleScansSequences()
+        self.dataset.totalSpectra.listMultipleScansSequences()
 
 
 

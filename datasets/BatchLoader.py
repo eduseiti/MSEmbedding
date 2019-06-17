@@ -6,12 +6,10 @@ import numpy as np
 
 class BatchLoader:
 
-    def __init__(self, originalData, batchSize, randomSeed = 1234):
+    def __init__(self, originalData, batchSize):
 
         self.totalSpectra = originalData
         self.batchSize = batchSize
-
-        random.seed(randomSeed)
 
 
     def createTripletBatch(self):

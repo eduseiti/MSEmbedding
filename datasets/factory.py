@@ -21,6 +21,6 @@ def factory_humanProteome(split):
     dataset = HumanProteome(
         Options()['dataset']['dir'],
         split,
-        batch_size=Options()['dataset']['batch_size'],
-        nb_threads=Options()['dataset']['nb_threads'])
+        batch_size = Options()['dataset']['batch_size'],
+        nb_threads = Options()['dataset']['nb_threads'])
     return dataset
