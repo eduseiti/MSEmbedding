@@ -1,9 +1,17 @@
 from torch import nn
+from bootstrap.lib.options import Options
 
-class TripletMargin(mm.TripletMarginLoss):
+class TripletMargin(nn.TripletMarginLoss):
 
-    def __init__(self, margin=1.0, p=2., eps=1e-6, swap=False, size_average=None,
-                 reduce=None, reduction='mean'):
+    def __init__(self):
+
+        margin = Options()['model']['criterion']['loss_margin']
+        p = 2
+        eps = 1e-6
+        swap = False
+        size_average = None
+        reduce = None
+        reduction = 'mean'
 
         super(TripletMargin, self).__init__(margin, p, eps, swap, size_average,
                                             reduce, reduction)

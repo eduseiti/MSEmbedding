@@ -4,64 +4,70 @@ import torch
 import numpy as np
 
 
-class BatchLoader:
+class BatchLoader(object):
 
     def __init__(self, originalData, batchSize):
 
         self.totalSpectra = originalData
         self.batchSize = batchSize
 
+        self.createTripletBatch()
+
 
     def createTripletBatch(self):
 
         random.shuffle(self.totalSpectra.multipleScansSequences)
 
-        negativeExamplesIndexes = random.sample(range(len(self.totalSpectra.spectra[Scan.UNRECOGNIZED_SEQUENCE])), k = len(self.multipleScansSequences))
+        negativeExamplesIndexes = random.sample(range(len(self.totalSpectra.spectra[Scan.UNRECOGNIZED_SEQUENCE])), 
+                                                k = len(self.totalSpectra.multipleScansSequences))
 
         self.epoch = {}
 
-        for i, sequence in enumerate(self.multipleScansSequences):
+        peaksIndex = 0
 
-            examples = {}
+        #
+        # Every 3 peaks corresponds to the following sequence: anchor, positive and negative examples.
+        #
+
+        for i, sequence in enumerate(self.totalSpectra.multipleScansSequences):
 
             positiveExamplesIndexes = random.sample(range(len(self.totalSpectra.spectra[sequence])), k = 2)
 
-            examples['anchor']   = positiveExamplesIndexes[0]
-            examples['positive'] = positiveExamplesIndexes[1]
-            examples['negative'] = negativeExamplesIndexes[i]
+            self.epoch[peaksIndex] = positiveExamplesIndexes[0]
+            self.epoch[peaksIndex + 1] = positiveExamplesIndexes[1]
+            self.epoch[peaksIndex + 2] = negativeExamplesIndexes[i]
 
-            self.epoch[sequence] = examples
+            peaksIndex += 3
+
+
+        print('********************* BatchLoader.createTripletBatch. self.epoch: {}'.format(id(self.epoch)))
 
         return self.epoch
 
 
     def __iter__(self):
 
-        i = 0
+        print('********************* BatchLoader.__iter__. self: {}'.format(self))
 
-        for tripletKey in currentBatch.keys():
+        #
+        # Generate a single list of peaks
+        #
 
-            triplet = self.epoch[tripletKey]
+        howManyCompleteBatches = len(self.epoch) // self.batchSize
 
-            self.currentBatch[i] = self.totalSpectra.spectra[tripletKey][triplet['anchor']]['nzero_peaks']
-            self.currentBatch[i + 1] = self.totalSpectra.spectra[tripletKey][triplet['positive']]['nzero_peaks']
-            self.currentBatch[i + 2] = self.totalSpectra.spectra[sp.Scan.UNRECOGNIZED_SEQUENCE][triplet['negative']]['nzero_peaks']
+        for batch in range(howManyCompleteBatches):
 
-            i += 3
+            print('Batch {}: from {} to {}'.format(batch, batch * self.batchSize, batch * self.batchSize + self.batchSize - 1))
 
-            # print('Grouping sequence {}: {}'.format(i, tripletKey))
+            yield(list(range(batch * self.batchSize, self.batchSize)))
 
-            if i % self.batchSize == 0:
-                yield list(self.currentBatch.keys())
+            print('\nWill get next batch')
+      
+        print('Last batch {}: from {} to {}'.format(batch, howManyCompleteBatches * self.batchSize, howManyCompleteBatches * self.batchSize + self.batchSize - 1))
 
-                del self.currentBatch
-                torch.cuda.empty_cache()
+        yield(list(range(howManyCompleteBatches * self.batchSize, len(self.epoch))))
 
-                self.currentBatch = {}
-
-                i = 0
-
-                print('\nGetting next batch')
+        
 
     
     def __len__(self):

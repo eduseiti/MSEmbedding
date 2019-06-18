@@ -14,6 +14,7 @@ class HumanProteome(data.Dataset):
     def __init__(self, dataDirectory='data/humanProteome', split='train', batch_size=100, nb_threads=1):
 
         self.split = split
+        self.nb_threads = nb_threads
 
         currentDirectory = os.getcwd()
 
@@ -39,7 +40,11 @@ class HumanProteome(data.Dataset):
 
 
     def __getitem__(self, index):
-        return self.batchSampler.currentBatch[index]
+
+        # print('********************* __getitem__: {}, index: {}'.format(self.batchSampler, index))
+        # print('********************* __getitem__: epoch: {}'.format(id(self.batchSampler.epoch)))
+
+        return self.batchSampler.epoch[index]
 
 
     def __len__(self):
@@ -47,11 +52,14 @@ class HumanProteome(data.Dataset):
 
 
     def make_batch_loader(self):
+
         self.batchSampler = BatchLoader(self.dataset.totalSpectra, 128 * 3)
+
+        print('********************* make_batch_loader: {}'.format(self.batchSampler))
 
         data_loader = data.DataLoader(self,
             num_workers=self.nb_threads,
-            batch_sampler=self.batch_sampler,
+            batch_sampler=self.batchSampler,
             drop_last=False)
         return data_loader
 

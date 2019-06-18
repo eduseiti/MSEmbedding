@@ -1,5 +1,5 @@
 from bootstrap.lib.options import Options
-from .humanProteome import HumanProteome
+from .HumanProteome import HumanProteome
 
 def factory(engine=None):
     dataset = {}

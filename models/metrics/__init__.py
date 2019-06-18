@@ -1,1 +1,1 @@
-from .embeddingsDistance import EmbeddingDistance
+from .EmbeddingsDistance import EmbeddingsDistance

@@ -3,10 +3,10 @@ import numpy as np
 from sklearn.metrics import confusion_matrix
 from sklearn.metrics import accuracy_score
 
-class EmbeddingDistance(nn.Module):
+class EmbeddingsDistance(torch.nn.Module):
 
     def __init__(self):
-        super(EmbeddingDistance, self).__init__()
+        super(EmbeddingsDistance, self).__init__()
 
 
     def forward(self, criterionOutput, networkOutput, batch):

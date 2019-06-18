@@ -10,14 +10,22 @@ dataset:
   nb_threads: 1
   batch_size: 100
 model:
-  name: simple
+  import: MSEmbedding.models.factory
+  name: MSEmbedding
   network:
     import: MSEmbedding.models.networks.factory
     name: MSEmbeddingNet
+    max_sequence_len: 2000
+    fc_out_dim: 16
+    lstm_out_dim: 10
+    bidirecional_lstm: False
   criterion:
     name: tripletMargin
+    import: MSEmbedding.models.criterions.factory
+    loss_margin: 0.3
   metric:
     name: embeddingsDistance
+    import: MSEmbedding.models.metrics.factory
 optimizer:
   name: sgd
   lr: 0.01
