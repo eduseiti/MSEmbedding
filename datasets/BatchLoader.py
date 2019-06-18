@@ -21,9 +21,7 @@ class BatchLoader(object):
         negativeExamplesIndexes = random.sample(range(len(self.totalSpectra.spectra[Scan.UNRECOGNIZED_SEQUENCE])), 
                                                 k = len(self.totalSpectra.multipleScansSequences))
 
-        self.epoch = {}
-
-        peaksIndex = 0
+        peaksList = []
 
         #
         # Every 3 peaks corresponds to the following sequence: anchor, positive and negative examples.
@@ -33,12 +31,12 @@ class BatchLoader(object):
 
             positiveExamplesIndexes = random.sample(range(len(self.totalSpectra.spectra[sequence])), k = 2)
 
-            self.epoch[peaksIndex] = positiveExamplesIndexes[0]
-            self.epoch[peaksIndex + 1] = positiveExamplesIndexes[1]
-            self.epoch[peaksIndex + 2] = negativeExamplesIndexes[i]
+            peaksList.append(self.totalSpectra.spectra[sequence][positiveExamplesIndexes[0]]['nzero_peaks'])
+            peaksList.append(self.totalSpectra.spectra[sequence][positiveExamplesIndexes[1]]['nzero_peaks'])
+            peaksList.append(self.totalSpectra.spectra[Scan.UNRECOGNIZED_SEQUENCE][negativeExamplesIndexes[i]]['nzero_peaks'])
 
-            peaksIndex += 3
 
+        self.epoch = torch.nn.utils.rnn.pad_sequence(peaksList, batch_first = True, padding_value = 0.0)
 
         print('********************* BatchLoader.createTripletBatch. self.epoch: {}'.format(id(self.epoch)))
 

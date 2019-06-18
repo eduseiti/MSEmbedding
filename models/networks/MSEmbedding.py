@@ -9,8 +9,6 @@ class MSEmbeddingNet(nn.Module):
     
     def __init__(self):
 
-
-
         self.maxSequenceLen = Options()['model']['network']['max_sequence_len']
         self.fcOutDim = Options()['model']['network']['fc_out_dim']
         self.lstmOutDim = Options()['model']['network']['lstm_out_dim']
@@ -34,6 +32,8 @@ class MSEmbeddingNet(nn.Module):
     #
 
     def forward(self, x):
+
+        print("--> Data shape: {}".format(x.shape))
 
         transform = torch.empty(x.shape[0], x.shape[1], self.fcOutDim * 2)
 
