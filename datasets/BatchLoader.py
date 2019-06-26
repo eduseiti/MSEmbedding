@@ -38,7 +38,8 @@ class BatchLoader(object):
 
         self.epoch = torch.nn.utils.rnn.pad_sequence(peaksList, batch_first = True, padding_value = 0.0)
 
-        print('********************* BatchLoader.createTripletBatch. self.epoch: {}'.format(id(self.epoch)))
+        print('********************* BatchLoader.createTripletBatch. self.epoch len: {}, shape: {}'.format(len(self.epoch), 
+                                                                                                               self.epoch.shape))
 
         return self.epoch
 
@@ -62,16 +63,20 @@ class BatchLoader(object):
 
             print('Batch {}: from {} to {}'.format(batch, batch * self.batchSize, batch * self.batchSize + self.batchSize - 1))
 
-            yield(list(range(batch * self.batchSize, self.batchSize)))
+            print('Batch Indexes: {}'.format(list(range(batch * self.batchSize, batch * self.batchSize + self.batchSize))))
+
+            yield(list(range(batch * self.batchSize, batch * self.batchSize + self.batchSize)))
 
             print('\nWill get next batch')
       
         print('Last batch {}: from {} to {}; size {}'.format(batch + 1, 
                                                     howManyCompleteBatches * self.batchSize, 
                                                     howManyCompleteBatches * self.batchSize + len(self.epoch) % self.batchSize - 1,
-                                                    len(self.epoch) % self.batchSize - 1))
+                                                    len(self.epoch) % self.batchSize))
 
-        yield(list(range(howManyCompleteBatches * self.batchSize, len(self.epoch) % self.batchSize - 1)))
+        print('Batch Indexes: {}'.format(list(range(howManyCompleteBatches * self.batchSize, howManyCompleteBatches * self.batchSize + len(self.epoch) % self.batchSize - 1))))
+
+        yield(list(range(howManyCompleteBatches * self.batchSize, howManyCompleteBatches * self.batchSize+ len(self.epoch) % self.batchSize)))
 
         
 
