@@ -8,7 +8,7 @@ dataset:
   train_split: train
   eval_split: eval
   nb_threads: 1
-  batch_size: 100
+  batch_size: 300
 model:
   import: MSEmbedding.models.factory
   name: MSEmbedding

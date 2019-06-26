@@ -19,4 +19,10 @@ class TripletMargin(nn.TripletMarginLoss):
 
     def forward(self, networkOutput, batch):
 
-        return super(TripletMargin, self).forward(networkOutput[::3], networkOutput[1::3], networkOutput[2::3])
+        out = {}
+
+        out['loss'] = super(TripletMargin, self).forward(networkOutput[::3], 
+                                                         networkOutput[1::3], 
+                                                         networkOutput[2::3])
+
+        return out

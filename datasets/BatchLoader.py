@@ -53,6 +53,11 @@ class BatchLoader(object):
 
         howManyCompleteBatches = len(self.epoch) // self.batchSize
 
+        if len(self.epoch) % self.batchSize != 0:
+            self.numberOfBatches = howManyCompleteBatches + 1
+        else:
+            self.numberOfBatches = howManyCompleteBatches
+
         for batch in range(howManyCompleteBatches):
 
             print('Batch {}: from {} to {}'.format(batch, batch * self.batchSize, batch * self.batchSize + self.batchSize - 1))
@@ -61,9 +66,12 @@ class BatchLoader(object):
 
             print('\nWill get next batch')
       
-        print('Last batch {}: from {} to {}'.format(batch, howManyCompleteBatches * self.batchSize, howManyCompleteBatches * self.batchSize + self.batchSize - 1))
+        print('Last batch {}: from {} to {}; size {}'.format(batch + 1, 
+                                                    howManyCompleteBatches * self.batchSize, 
+                                                    howManyCompleteBatches * self.batchSize + len(self.epoch) % self.batchSize - 1,
+                                                    len(self.epoch) % self.batchSize - 1))
 
-        yield(list(range(howManyCompleteBatches * self.batchSize, len(self.epoch))))
+        yield(list(range(howManyCompleteBatches * self.batchSize, len(self.epoch) % self.batchSize - 1)))
 
         
 
@@ -72,4 +80,4 @@ class BatchLoader(object):
 
         # The total length will be the number of sequences * 3 = anchor, positive and negative examples.
 
-        return len(self.epoch) * 3
+        return self.numberOfBatches

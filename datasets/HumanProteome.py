@@ -15,6 +15,7 @@ class HumanProteome(data.Dataset):
 
         self.split = split
         self.nb_threads = nb_threads
+        self.batch_size = batch_size
 
         currentDirectory = os.getcwd()
 
@@ -37,6 +38,15 @@ class HumanProteome(data.Dataset):
 
         self.dataset.totalSpectra.listMultipleScansSequences()
 
+        numberOfSequences = len(self.dataset.totalSpectra.multipleScansSequences)
+
+        self.numberOfBatches = (numberOfSequences * 3) // self.batch_size
+
+        if (numberOfSequences * 3) % self.batch_size != 0:
+            self.numberOfBatches += 1
+
+        print('=============> Initial number of batches: {}'.format(self.numberOfBatches))
+
 
 
     def __getitem__(self, index):
@@ -48,12 +58,23 @@ class HumanProteome(data.Dataset):
 
 
     def __len__(self):
-        return len(self.dataset.totalSpectra.multipleScansSequences) * 3
+
+        print('--------------->>>> number of batches: {}'.format(self.numberOfBatches))
+
+        return self.numberOfBatches
 
 
     def make_batch_loader(self):
 
-        self.batchSampler = BatchLoader(self.dataset.totalSpectra, 128 * 3)
+        self.batchSampler = BatchLoader(self.dataset.totalSpectra, self.batch_size)
+
+        self.numberOfBatches = len(self.batchSampler.epoch) // self.batch_size
+
+        if len(self.batchSampler.epoch) % self.batch_size != 0:
+            self.numberOfBatches += 1
+
+        print('=============> Updated number of batches: {}'.format(self.numberOfBatches))
+
 
         print('********************* make_batch_loader: {}'.format(self.batchSampler))
 
