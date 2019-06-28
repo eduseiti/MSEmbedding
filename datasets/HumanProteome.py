@@ -47,6 +47,13 @@ class HumanProteome(data.Dataset):
 
         print('=============> Initial number of batches: {}'.format(self.numberOfBatches))
 
+        #
+        # Make sure the initial working directory remains the same, to avoid breaking the
+        # framework.
+        #
+
+        os.chdir(currentDirectory)
+
 
 
     def __getitem__(self, index):
