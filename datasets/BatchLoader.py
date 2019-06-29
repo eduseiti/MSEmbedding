@@ -21,6 +21,10 @@ class BatchLoader(object):
         negativeExamplesIndexes = random.sample(range(len(self.totalSpectra.spectra[Scan.UNRECOGNIZED_SEQUENCE])), 
                                                 k = len(self.totalSpectra.multipleScansSequences))
 
+
+        print('*_*_**_*_*_*_*_*_*_*_*_*_*>>> New epoch initial sequences: {}'.format(self.totalSpectra.multipleScansSequences[0:10]))
+
+
         peaksList = []
 
         #
@@ -63,7 +67,7 @@ class BatchLoader(object):
 
             print('Batch {}: from {} to {}'.format(batch, batch * self.batchSize, batch * self.batchSize + self.batchSize - 1))
 
-            print('Batch Indexes: {}'.format(list(range(batch * self.batchSize, batch * self.batchSize + self.batchSize))))
+            # print('Batch Indexes: {}'.format(list(range(batch * self.batchSize, batch * self.batchSize + self.batchSize))))
 
             yield(list(range(batch * self.batchSize, batch * self.batchSize + self.batchSize)))
 
@@ -74,7 +78,7 @@ class BatchLoader(object):
                                                     howManyCompleteBatches * self.batchSize + len(self.epoch) % self.batchSize - 1,
                                                     len(self.epoch) % self.batchSize))
 
-        print('Batch Indexes: {}'.format(list(range(howManyCompleteBatches * self.batchSize, howManyCompleteBatches * self.batchSize + len(self.epoch) % self.batchSize - 1))))
+        # print('Batch Indexes: {}'.format(list(range(howManyCompleteBatches * self.batchSize, howManyCompleteBatches * self.batchSize + len(self.epoch) % self.batchSize - 1))))
 
         yield(list(range(howManyCompleteBatches * self.batchSize, howManyCompleteBatches * self.batchSize+ len(self.epoch) % self.batchSize)))
 
