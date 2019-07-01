@@ -10,7 +10,7 @@ from bootstrap.lib.options import Options
 
 class HumanProteome(data.Dataset):
 
-    TRAIN_DATASET = 'initialTest3_b01_b03.pkl'
+    TRAIN_DATASET = 'initialTest2.pkl'
 
     TEST_DATASET = 'initialTest2_b02.pkl'
 
@@ -31,7 +31,12 @@ class HumanProteome(data.Dataset):
             os.chdir(dataDirectory)
 
         if split == 'train':
-            self.dataset = PXD000561(spectraFilename = HumanProteome.TRAIN_DATASET)
+            if Options()['dataset']['train_peaks_file']:
+                trainPeaksFile = Options()['dataset']['train_peaks_file']
+            else:
+                trainPeaksFile = HumanProteome.TRAIN_DATASET
+
+            self.dataset = PXD000561(spectraFilename = trainPeaksFile)
             self.dataset.load_identifications(filteredFilesList = Options()['dataset']['train_filtered_files_list'])
         else:
             self.dataset = PXD000561(spectraFilename = HumanProteome.TEST_DATASET)
