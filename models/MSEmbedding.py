@@ -28,4 +28,5 @@ class MSEmbedding(Model):
             self.criterions['train'] = criterions.TripletMargin()
 
         if 'eval' in modes:
+            self.criterions['eval'] = criterions.TripletMargin()
             self.metrics['eval'] = metrics.EmbeddingsDistance()

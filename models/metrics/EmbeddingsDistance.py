@@ -3,6 +3,7 @@ import numpy as np
 from sklearn.metrics import confusion_matrix
 from sklearn.metrics import accuracy_score
 from bootstrap.lib.options import Options
+from bootstrap.lib.logger import Logger
 
 class EmbeddingsDistance(torch.nn.Module):
 
@@ -19,7 +20,7 @@ class EmbeddingsDistance(torch.nn.Module):
             positiveDistance = torch.dist(networkOutput[i * 3], networkOutput[i * 3 + 1])
             negativeDistance = torch.dist(networkOutput[i * 3], networkOutput[i * 3 + 2])
 
-            # print('{} - Positive distance={}, Negative distance={}'.format(i, positiveDistance, negativeDistance))
+            Logger()('{} - Positive distance={}, Negative distance={}'.format(i, positiveDistance, negativeDistance))
 
             lossMargin = Options()['model']['criterion']['loss_margin']
 

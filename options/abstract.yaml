@@ -46,7 +46,7 @@ views:
   name: plotly
   items:
   - logs:train_epoch.loss+logs:eval_epoch.loss
-  - logs:train_batch.loss
+  - logs:train_batch.loss+logs:eval_batch.loss
   - logs:eval_epoch.accuracy
   - logs:eval_batch.accuracy
 
