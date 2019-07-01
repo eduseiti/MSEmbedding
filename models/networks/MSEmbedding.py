@@ -2,15 +2,17 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
+from bootstrap.lib.options import Options
+
 
 class MSEmbeddingNet(nn.Module):
     
-    def __init__(self, maxSequenceLen, fcOutDim, lstmOutDim, bidirecionalLstm = False):
+    def __init__(self):
 
-        self.maxSequenceLen = maxSequenceLen
-        self.fcOutDim = fcOutDim
-        self.lstmOutDim = lstmOutDim
-        self.bidirecionalLstm = bidirecionalLstm
+        self.maxSequenceLen = Options()['model']['network']['max_sequence_len']
+        self.fcOutDim = Options()['model']['network']['fc_out_dim']
+        self.lstmOutDim = Options()['model']['network']['lstm_out_dim']
+        self.bidirecionalLstm = Options()['model']['network']['bidirecional_lstm']
 
         super(MSEmbeddingNet, self).__init__()
 
@@ -30,6 +32,8 @@ class MSEmbeddingNet(nn.Module):
     #
 
     def forward(self, x):
+
+        print("--> Data shape: {}".format(x.shape))
 
         transform = torch.empty(x.shape[0], x.shape[1], self.fcOutDim * 2)
 

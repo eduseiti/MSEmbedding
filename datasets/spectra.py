@@ -42,7 +42,7 @@ class PXD000561:
         'b24' : 'Adult_Adrenalgland_Gel_Elite_49_f24.mgf'
     }
 
-    def __init__(self, identificationsFilename, spectraFilename):
+    def __init__(self, identificationsFilename = 'Gel_Elite_49.csv', spectraFilename = None):
     
         self.identificationsFilename = identificationsFilename
         self.spectraFilename = spectraFilename
@@ -50,7 +50,7 @@ class PXD000561:
         self.totalSpectra = SpectraFound(False, 'sequences')
     
     
-    def load_identifications(self, verbose = False, singleFile = None):
+    def load_identifications(self, verbose = False, filteredFilesList = None):
 
         
         #
@@ -62,7 +62,7 @@ class PXD000561:
         if self.totalSpectra.spectra: 
             return
         
-        # print('Loading file: {}. dir:{}'.format(self.identificationsFilename, os.getcwd()))
+        print('Loading file: {}. dir:{}'.format(self.identificationsFilename, os.getcwd()))
 
         gel_elite_49 = pd.read_csv(self.identificationsFilename)
 
@@ -98,8 +98,8 @@ class PXD000561:
         print('Unique combinations file {}: {}'.format('b01', 
                                                        self.uniqueCombination[self.uniqueCombination['File'] == 'b01'].shape))
 
-        if singleFile:
-            self.uniqueCombination = self.uniqueCombination[self.uniqueCombination['File'] == singleFile]
+        if filteredFilesList:
+            self.uniqueCombination = self.uniqueCombination[self.uniqueCombination['File'].isin(filteredFilesList)]
 
 
     def read_spectra(self, spectraParser):
@@ -254,6 +254,48 @@ class SpectraFound:
         with open(os.path.join(self.filesFolder, spectraName), 'wb') as outputFile:
             pickle.dump(self.spectra, outputFile, pickle.HIGHEST_PROTOCOL)
 
+
+    def listMultipleScansSequences(self):
+
+        self.maxPeaksListLen = 0
+        totalLen = 0
+
+        sequenceMaxLen = ''
+        numSpectrum    = 0
+
+        maxScansInSequence        = 0
+        sequenceWithMultipleScans = 0
+
+        self.multipleScansSequences = []
+
+        for key in self.spectra.keys():
+            
+            if key != Scan.UNRECOGNIZED_SEQUENCE:
+                scansLen = len(self.spectra[key])
+
+                if scansLen > 1:
+                    sequenceWithMultipleScans += 1
+                    self.multipleScansSequences.append(key)
+
+                if key != scansLen > maxScansInSequence:
+                    maxScansInSequence = scansLen
+            
+            for spectrum in self.spectra[key]:
+                
+                # spectrumLen = len(spectrum['peaks'][spectrum['peaks'][:,1]>0])
+                spectrumLen = len(spectrum['nzero_peaks'])
+                
+                totalLen += spectrumLen
+                numSpectrum += 1
+                
+                if spectrumLen > self.maxPeaksListLen:
+                    self.maxPeaksListLen = spectrumLen
+                    sequenceMaxLen = key
+
+        print('Maximum non-zero peaks list len = {}. key = {}'.format(self.maxPeaksListLen, sequenceMaxLen))
+        print('Average peaks list len = {}'.format(totalLen / numSpectrum))
+        print('Number of sequences with more than 1 scan = {}'.format(sequenceWithMultipleScans))
+        print('Max number of scans in a single sequence = {}'.format(maxScansInSequence))
 
 
 class MGF:

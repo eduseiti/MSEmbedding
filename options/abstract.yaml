@@ -1,0 +1,52 @@
+exp:
+  dir: logs/MSEmbedding/abstract
+  resume: # last, best_[...], or empty (from scratch)
+dataset:
+  import: MSEmbedding.datasets.factory
+  name: humanProteome
+  dir: data/humanProteome
+  train_split: train
+  train_filtered_files_list: ['b01', 'b03']
+  train_peaks_file: initialTest3_b01_b03.pkl
+  eval_split: eval
+  nb_threads: 1
+  batch_size: 300
+model:
+  import: MSEmbedding.models.factory
+  name: MSEmbedding
+  network:
+    import: MSEmbedding.models.networks.factory
+    name: MSEmbeddingNet
+    max_sequence_len: 2000
+    fc_out_dim: 16
+    lstm_out_dim: 10
+    bidirecional_lstm: False
+  criterion:
+    name: tripletMargin
+    import: MSEmbedding.models.criterions.factory
+    loss_margin: 0.3
+  metric:
+    name: embeddingsDistance
+    import: MSEmbedding.models.metrics.factory
+optimizer:
+  name: sgd
+  lr: 0.01
+  momentum: 0.5
+engine:
+  name: default
+  debug: False
+  nb_epochs: 10
+  print_freq: 10
+  saving_criteria:
+  - accuracy:max # save when new_best > best
+misc:
+  cuda: False
+  seed: 1337
+views:
+  name: plotly
+  items:
+  - logs:train_epoch.loss+logs:eval_epoch.loss
+  - logs:train_batch.loss
+  - logs:eval_epoch.accuracy
+  - logs:eval_batch.accuracy
+
