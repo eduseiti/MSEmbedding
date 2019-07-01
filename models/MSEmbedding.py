@@ -1,7 +1,6 @@
 import torch
 import torch.nn as nn
 
-from bootstrap.lib.options import Options
 from bootstrap.datasets import transforms
 from bootstrap.models.model import Model
 

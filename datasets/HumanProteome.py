@@ -1,12 +1,16 @@
 from .spectra import PXD000561
+from .spectra import MGF
 import os
 import torch
 import torch.utils.data as data
 from .BatchLoader import BatchLoader
 
+from bootstrap.lib.options import Options
+
+
 class HumanProteome(data.Dataset):
 
-    TRAIN_DATASET = 'initialTest2.pkl'
+    TRAIN_DATASET = 'initialTest3_b01_b03.pkl'
 
     TEST_DATASET = 'initialTest2_b02.pkl'
 
@@ -28,13 +32,15 @@ class HumanProteome(data.Dataset):
 
         if split == 'train':
             self.dataset = PXD000561(spectraFilename = HumanProteome.TRAIN_DATASET)
+            self.dataset.load_identifications(filteredFilesList = Options()['dataset']['train_filtered_files_list'])
         else:
             self.dataset = PXD000561(spectraFilename = HumanProteome.TEST_DATASET)
+            self.dataset.load_identifications()
 
-        self.dataset.load_identifications()
 
         if not self.dataset.totalSpectra.spectra:
-            raise NotImplementedError('Missing implementation to generate the dataset spectra file.')
+            self.dataset.read_spectra(MGF())
+            # raise NotImplementedError('Missing implementation to generate the dataset spectra file.')
 
         self.dataset.totalSpectra.listMultipleScansSequences()
 

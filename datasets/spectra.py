@@ -50,7 +50,7 @@ class PXD000561:
         self.totalSpectra = SpectraFound(False, 'sequences')
     
     
-    def load_identifications(self, verbose = False, singleFile = None):
+    def load_identifications(self, verbose = False, filteredFilesList = None):
 
         
         #
@@ -62,7 +62,7 @@ class PXD000561:
         if self.totalSpectra.spectra: 
             return
         
-        # print('Loading file: {}. dir:{}'.format(self.identificationsFilename, os.getcwd()))
+        print('Loading file: {}. dir:{}'.format(self.identificationsFilename, os.getcwd()))
 
         gel_elite_49 = pd.read_csv(self.identificationsFilename)
 
@@ -98,8 +98,8 @@ class PXD000561:
         print('Unique combinations file {}: {}'.format('b01', 
                                                        self.uniqueCombination[self.uniqueCombination['File'] == 'b01'].shape))
 
-        if singleFile:
-            self.uniqueCombination = self.uniqueCombination[self.uniqueCombination['File'] == singleFile]
+        if filteredFilesList:
+            self.uniqueCombination = self.uniqueCombination[self.uniqueCombination['File'].isin(filteredFilesList)]
 
 
     def read_spectra(self, spectraParser):
