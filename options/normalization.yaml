@@ -1,0 +1,3 @@
+__include__: abstract.yaml
+exp:
+    dir: logs/MSEmbedding/normalization

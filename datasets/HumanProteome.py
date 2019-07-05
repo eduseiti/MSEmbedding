@@ -15,11 +15,15 @@ class HumanProteome(data.Dataset):
     TEST_DATASET = 'initialTest2_b02.pkl'
 
 
-    def __init__(self, dataDirectory='data/humanProteome', split='train', batch_size=100, nb_threads=1):
+    def __init__(self, dataDirectory = 'data/humanProteome', split = 'train', 
+                 batch_size = 100, nb_threads = 1, trainingDataset = None):
 
         self.split = split
         self.nb_threads = nb_threads
         self.batch_size = batch_size
+
+        if split != 'train':
+            self.trainingDataset = trainingDataset
 
         currentDirectory = os.getcwd()
 
@@ -84,7 +88,11 @@ class HumanProteome(data.Dataset):
 
     def make_batch_loader(self):
 
-        self.batchSampler = BatchLoader(self.dataset.totalSpectra, self.batch_size)
+        if self.split != 'train':
+            self.batchSampler = BatchLoader(self.dataset.totalSpectra, self.batch_size, self.trainingDataset)
+        else:
+            self.batchSampler = BatchLoader(self.dataset.totalSpectra, self.batch_size)
+
 
         self.numberOfBatches = len(self.batchSampler.epoch) // self.batch_size
 

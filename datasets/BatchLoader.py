@@ -6,10 +6,15 @@ import numpy as np
 
 class BatchLoader(object):
 
-    def __init__(self, originalData, batchSize):
+    def __init__(self, originalData, batchSize, trainingDataset = None):
 
         self.totalSpectra = originalData
         self.batchSize = batchSize
+
+        if trainingDataset:
+            self.normalizationParameters = trainingDataset.batchSampler.normalizationParameters
+        else:
+            self.normalizationParameters = None
 
         self.createTripletBatch()
 
@@ -44,6 +49,24 @@ class BatchLoader(object):
 
         print('********************* BatchLoader.createTripletBatch. self.epoch len: {}, shape: {}'.format(len(self.epoch), 
                                                                                                                self.epoch.shape))
+
+
+        #
+        # Normalize the epoch data, both m/z and the intensity values
+        #
+
+        if not self.normalizationParameters:
+
+            self.normalizationParameters = {}
+
+            self.normalizationParameters['mz_mean'] = self.epoch[:, :, 0].mean()
+            self.normalizationParameters['mz_std'] = self.epoch[:, :, 0].std()
+
+            self.normalizationParameters['intensity_mean'] = self.epoch[:, :, 1].mean()
+            self.normalizationParameters['intensity_std']  = self.epoch[:, :, 1].std()
+
+        self.epoch[:, :, 0] = (self.epoch[:, :, 0] - self.normalizationParameters['mz_mean']) / self.normalizationParameters['mz_std']
+        self.epoch[:, :, 1] = (self.epoch[:, :, 1] - self.normalizationParameters['intensity_mean']) / self.normalizationParameters['intensity_std']
 
         return self.epoch
 

@@ -9,18 +9,22 @@ def factory(engine=None):
         if Options()['dataset'].get('train_split', None):
             dataset['train'] = factory_humanProteome(Options()['dataset']['train_split'])
 
-        if Options()['dataset'].get('eval_split', None): 
-            dataset['eval'] = factory_humanProteome(Options()['dataset']['eval_split'])
+        if Options()['dataset'].get('eval_split', None):
+
+            if dataset['train']:
+                dataset['eval'] = factory_humanProteome(Options()['dataset']['eval_split'], 
+                                                        dataset['train'])
     else:
         raise ValueError()
 
     return dataset
 
 
-def factory_humanProteome(split):
+def factory_humanProteome(split, trainingDataset = None):
     dataset = HumanProteome(
         Options()['dataset']['dir'],
         split,
         batch_size = Options()['dataset']['batch_size'],
-        nb_threads = Options()['dataset']['nb_threads'])
+        nb_threads = Options()['dataset']['nb_threads'], 
+        trainingDataset = trainingDataset)
     return dataset
