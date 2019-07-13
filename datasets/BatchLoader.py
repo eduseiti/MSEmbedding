@@ -3,6 +3,7 @@ import random
 import torch
 import numpy as np
 
+from bootstrap.lib.logger import Logger
 
 class BatchLoader(object):
 
@@ -64,6 +65,9 @@ class BatchLoader(object):
 
             self.normalizationParameters['intensity_mean'] = self.epoch[:, :, 1].mean()
             self.normalizationParameters['intensity_std']  = self.epoch[:, :, 1].std()
+
+            Logger()('mz mean: {}, mz std: {}'.format(self.normalizationParameters['mz_mean'], self.normalizationParameters['mz_std']))
+            Logger()('intensity mean: {}, intensity std: {}'.format(self.normalizationParameters['intensity_mean'], self.normalizationParameters['intensity_std']))
 
         self.epoch[:, :, 0] = (self.epoch[:, :, 0] - self.normalizationParameters['mz_mean']) / self.normalizationParameters['mz_std']
         self.epoch[:, :, 1] = (self.epoch[:, :, 1] - self.normalizationParameters['intensity_mean']) / self.normalizationParameters['intensity_std']

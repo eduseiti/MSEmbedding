@@ -1,0 +1,8 @@
+__include__: abstract.yaml
+exp:
+    dir: logs/MSEmbedding/18_trainingDatasets_normalized
+dataset:
+  train_filtered_files_list: ['b01', 'b03', 'b04', 'b05', 'b06', 'b07', 'b08', 'b09', 'b10', 'b11', 'b12', 'b13', 'b14', 'b15', 'b16', 'b17', 'b18', 'b19']
+  train_peaks_file: train_b01_03_04_05_06_07_08_09_10_11_12_13_14_15_16_17_18_19.pkl
+misc:
+  cuda: True

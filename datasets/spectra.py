@@ -9,6 +9,8 @@ import re
 
 import torch
 
+from bootstrap.lib.logger import Logger
+
 
 class PXD000561:
 
@@ -292,10 +294,10 @@ class SpectraFound:
                     self.maxPeaksListLen = spectrumLen
                     sequenceMaxLen = key
 
-        print('Maximum non-zero peaks list len = {}. key = {}'.format(self.maxPeaksListLen, sequenceMaxLen))
-        print('Average peaks list len = {}'.format(totalLen / numSpectrum))
-        print('Number of sequences with more than 1 scan = {}'.format(sequenceWithMultipleScans))
-        print('Max number of scans in a single sequence = {}'.format(maxScansInSequence))
+        Logger()('Maximum non-zero peaks list len = {}. key = {}'.format(self.maxPeaksListLen, sequenceMaxLen))
+        Logger()('Average peaks list len = {}'.format(totalLen / numSpectrum))
+        Logger()('Number of sequences with more than 1 scan = {}'.format(sequenceWithMultipleScans))
+        Logger()('Max number of scans in a single sequence = {}'.format(maxScansInSequence))
 
 
 class MGF:
