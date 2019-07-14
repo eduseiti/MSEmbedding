@@ -24,8 +24,8 @@ class BatchLoader(object):
 
         random.shuffle(self.totalSpectra.multipleScansSequences)
 
-        negativeExamplesIndexes = random.sample(range(len(self.totalSpectra.spectra[Scan.UNRECOGNIZED_SEQUENCE])), 
-                                                k = len(self.totalSpectra.multipleScansSequences))
+        negativeExamplesIndexes = list(range(len(self.totalSpectra.spectra[Scan.UNRECOGNIZED_SEQUENCE])))
+        random.shuffle(negativeExamplesIndexes)
 
 
         print('*_*_**_*_*_*_*_*_*_*_*_*_*>>> New epoch initial sequences: {}'.format(self.totalSpectra.multipleScansSequences[0:10]))
@@ -37,13 +37,20 @@ class BatchLoader(object):
         # Every 3 peaks corresponds to the following sequence: anchor, positive and negative examples.
         #
 
-        for i, sequence in enumerate(self.totalSpectra.multipleScansSequences):
+        negativeIndexes = 0
 
-            positiveExamplesIndexes = random.sample(range(len(self.totalSpectra.spectra[sequence])), k = 2)
+        for sequence in self.totalSpectra.multipleScansSequences:
 
-            peaksList.append(self.totalSpectra.spectra[sequence][positiveExamplesIndexes[0]]['nzero_peaks'])
-            peaksList.append(self.totalSpectra.spectra[sequence][positiveExamplesIndexes[1]]['nzero_peaks'])
-            peaksList.append(self.totalSpectra.spectra[Scan.UNRECOGNIZED_SEQUENCE][negativeExamplesIndexes[i]]['nzero_peaks'])
+            positiveExamplesIndexes = list(range(len(self.totalSpectra.spectra[sequence])))
+            random.shuffle(positiveExamplesIndexes)
+
+            for positiveIndex in positiveExamplesIndexes[1:3]:
+                peaksList.append(self.totalSpectra.spectra[sequence][positiveExamplesIndexes[0]]['nzero_peaks'])
+                peaksList.append(self.totalSpectra.spectra[sequence][positiveIndex]['nzero_peaks'])
+                peaksList.append(self.totalSpectra.spectra[Scan.UNRECOGNIZED_SEQUENCE][negativeExamplesIndexes[negativeIndexes]]['nzero_peaks'])
+
+                # negativeIndexes = (negativeIndexes + 1) % len(self.totalSpectra.spectra[Scan.UNRECOGNIZED_SEQUENCE]) 
+                negativeIndexes += 1
 
 
         self.epoch = torch.nn.utils.rnn.pad_sequence(peaksList, batch_first = True, padding_value = 0.0)
