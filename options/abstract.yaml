@@ -17,7 +17,6 @@ model:
   network:
     import: MSEmbedding.models.networks.factory
     name: MSEmbeddingNet
-    max_sequence_len: 2000
     fc_out_dim: 16
     lstm_out_dim: 10
     bidirecional_lstm: False

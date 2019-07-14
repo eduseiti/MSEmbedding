@@ -9,7 +9,6 @@ class MSEmbeddingNet(nn.Module):
     
     def __init__(self):
 
-        self.maxSequenceLen = Options()['model']['network']['max_sequence_len']
         self.fcOutDim = Options()['model']['network']['fc_out_dim']
         self.lstmOutDim = Options()['model']['network']['lstm_out_dim']
         self.bidirecionalLstm = Options()['model']['network']['bidirecional_lstm']
