@@ -37,7 +37,7 @@ engine:
   nb_epochs: 10
   print_freq: 10
   saving_criteria:
-  - accuracy:max # save when new_best > best
+  - MedR:max # save when new_best > best
 misc:
   cuda: False
   seed: 1337
@@ -46,6 +46,8 @@ views:
   items:
   - logs:train_epoch.loss+logs:eval_epoch.loss
   - logs:train_batch.loss+logs:eval_batch.loss
-  - logs:eval_epoch.accuracy
-  - logs:eval_batch.accuracy
+  - logs:eval_epoch.MedR
+  - logs:eval_batch.MedR
+  - logs:eval_epoch.MedR_torch
+  - logs:eval_batch.MedR_torch
 
