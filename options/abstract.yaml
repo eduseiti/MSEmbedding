@@ -48,6 +48,6 @@ views:
   - logs:train_batch.loss+logs:eval_batch.loss
   - logs:eval_epoch.MedR
   - logs:eval_batch.MedR
-  - logs:eval_epoch.MedR_torch
-  - logs:eval_batch.MedR_torch
+  # - logs:eval_epoch.MedR_torch
+  # - logs:eval_batch.MedR_torch
 
