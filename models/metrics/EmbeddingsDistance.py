@@ -28,13 +28,17 @@ class EmbeddingsDistance(torch.nn.Module):
 
             distances = cdist(embeddings[i * 3].reshape(1, -1), embeddings.reshape(embeddings.shape[0], -1))
 
-            netOutputFixed = networkOutput.contiguous()
+            # netOutputFixed = networkOutput.contiguous()
 
-            distancesTorch = torch.cdist(netOutputFixed[i * 3].view(1, -1), netOutputFixed.view(netOutputFixed.shape[0], -1))
+            # distancesTorch = torch.cdist(netOutputFixed[i * 3].view(1, -1), netOutputFixed.view(netOutputFixed.shape[0], -1))
 
-            orderedDistances = np.argsort(distances)
+            print('==> distances.shape={}'.format(distances.shape))
 
-            orderedDistancesTorch = np.argsort(distancesTorch.cpu())
+            orderedDistances = np.argsort(distances[0])
+
+            print('==> orderedDistances={}'.format(orderedDistances))
+
+            # orderedDistancesTorch = np.argsort(distancesTorch.cpu())
 
             #
             # Keep the rank of the positive example of the given anchor - it should be the nearest point.
@@ -42,25 +46,32 @@ class EmbeddingsDistance(torch.nn.Module):
             # positive example ranking.
             #
 
-            positiveExampleRank = orderedDistances[0].tolist().index(i * 3 + 1) - 1
-            negativeExampleRank = orderedDistances[0].tolist().index(i * 3 + 2) - 1
+            orderedList = orderedDistances.tolist()
 
-            postiveExampleRankTorch = orderedDistancesTorch[0].tolist().index(i * 3 + 1) - 1
+            sameRank = orderedList.index(i * 3)
+            positiveExampleRank = orderedList.index(i * 3 + 1) - 1
+            negativeExampleRank = orderedList.index(i * 3 + 2) - 1
+
+            # postiveExampleRankTorch = orderedDistancesTorch[0].tolist().index(i * 3 + 1) - 1
 
             ranks.append(positiveExampleRank)
-            ranksTorch.append(postiveExampleRankTorch)
+            # ranksTorch.append(postiveExampleRankTorch)
 
-            Logger()('{} - Positive rank={}, Positive rank torch={} Negative rank={}'.format(i, positiveExampleRank, postiveExampleRankTorch, negativeExampleRank))
+            Logger()('{} - Same rank={}, Same distance={}, Positive rank={}, Negative rank={}'.format(i, 
+                sameRank, distances[0, orderedList[sameRank]], positiveExampleRank, negativeExampleRank))
+
+            # Logger()('{} - Positive rank={}, Positive rank torch={} Negative rank={}'.format(i, positiveExampleRank, postiveExampleRankTorch, negativeExampleRank))
 
 
         out = {}
 
         MedR = np.mean(ranks)
-        MedR_torch = np.mean(ranksTorch)
+        # MedR_torch = np.mean(ranksTorch)
 
-        print('Validation MedR={}, MedR_torch={}'.format(MedR, MedR_torch))
+        print('Validation MedR={}'.format(MedR))
+        # print('Validation MedR={}, MedR_torch={}'.format(MedR, MedR_torch))
 
         out['MedR'] = MedR
-        out['MedR_torch'] = MedR_torch
+        # out['MedR_torch'] = MedR_torch
 
         return out
