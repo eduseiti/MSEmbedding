@@ -36,7 +36,7 @@ class EmbeddingsDistance(torch.nn.Module):
 
             orderedDistances = np.argsort(distances[0])
 
-            print('==> orderedDistances={}'.format(orderedDistances))
+            # print('==> orderedDistances={}'.format(orderedDistances))
 
             # orderedDistancesTorch = np.argsort(distancesTorch.cpu())
 
