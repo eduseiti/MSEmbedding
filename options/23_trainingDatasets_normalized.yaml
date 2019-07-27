@@ -4,5 +4,6 @@ exp:
 dataset:
   train_filtered_files_list: ['b01', 'b03', 'b04', 'b05', 'b06', 'b07', 'b08', 'b09', 'b10', 'b11', 'b12', 'b13', 'b14', 'b15', 'b16', 'b17', 'b18', 'b19', 'b20', 'b21', 'b22', 'b23', 'b24']
   train_peaks_file: train_b01_03_04_05_06_07_08_09_10_11_12_13_14_15_16_17_18_19_20_21_22_23_24.pkl
+  batch_size: 210
 misc:
   cuda: True

@@ -29,4 +29,4 @@ class MSEmbedding(Model):
 
         if 'eval' in modes:
             self.criterions['eval'] = criterions.TripletMargin()
-            self.metrics['eval'] = metrics.EmbeddingsDistance()
+            self.metrics['eval'] = metrics.EmbeddingsDistance(engine = engine, mode = 'eval')

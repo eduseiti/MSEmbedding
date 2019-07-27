@@ -32,22 +32,23 @@ optimizer:
   lr: 0.01
   momentum: 0.5
 engine:
-  name: default
+  name: logger
   debug: False
   nb_epochs: 10
   print_freq: 10
   saving_criteria:
-  - MedR:max # save when new_best > best
+  - eval_epoch.metric.MedR:min # save when new_best > best
 misc:
   cuda: False
   seed: 1337
 views:
-  name: plotly
-  items:
-  - logs:train_epoch.loss+logs:eval_epoch.loss
-  - logs:train_batch.loss+logs:eval_batch.loss
-  - logs:eval_epoch.MedR
-  - logs:eval_batch.MedR
-  # - logs:eval_epoch.MedR_torch
-  # - logs:eval_batch.MedR_torch
+  # name: plotly
+  # items:
+  # - logs:train_batch.loss + logs:eval_batch.loss
+  # - logs:train_epoch.loss + logs:eval_epoch.loss
+  - logs:train_batch.loss
+  - logs:train_epoch.loss
+  - logs:eval_batch.loss
+  - logs:eval_epoch.loss
+  - logs:eval_epoch.metric.MedR
 
