@@ -28,7 +28,7 @@ class BatchLoader(object):
                                                 k = len(self.totalSpectra.multipleScansSequences))
 
 
-        print('*_*_**_*_*_*_*_*_*_*_*_*_*>>> New epoch initial sequences: {}'.format(self.totalSpectra.multipleScansSequences[0:10]))
+        Logger()('>>> New epoch initial sequences: {}'.format(self.totalSpectra.multipleScansSequences[0:10]))
 
 
         peaksList = []
