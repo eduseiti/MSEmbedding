@@ -7,15 +7,14 @@ from .madamw import MAdamW
 # mode: depending on the split (?)
 #
 
-def factory(engine=None, mode=None):
+def factory(model=None, engine=None):
 
     Logger()('Creating MAdamW optimizer...')
 
     if (Options()['optimizer']['name'] == 'madamw'):
-        if mode == 'eval':
-            optimizer = MAdamW()
-        else:
-            optimizer = None
+        optimizer = MAdamW(filter(lambda p: p.requires_grad, model.network.parameters()),
+                           lr = Options()['optimizer']['lr'],
+                           weight_decay = Options()['optimizer'].get('weight_decay', 0))
     else:
         raise ValueError()
 

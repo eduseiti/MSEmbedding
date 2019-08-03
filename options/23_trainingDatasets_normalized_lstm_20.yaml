@@ -16,4 +16,4 @@ optimizer:
   lr: 0.01 
   weight_decay: 0.00001  
 misc:
-  cuda: False
+  cuda: True
