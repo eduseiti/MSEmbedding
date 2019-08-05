@@ -1,4 +1,5 @@
 import torch
+import torch.nn as nn
 import numpy as np
 from sklearn.metrics import confusion_matrix
 from sklearn.metrics import accuracy_score
@@ -33,29 +34,42 @@ class EmbeddingsDistance(torch.nn.Module):
 
         epochEmbeddings = torch.cat(self.allEmbeddings)
 
-        # scipy.cdist - begin
+        print("epochEmbeddings.shape={}".format(epochEmbeddings.shape))
 
-        epochEmbeddings = epochEmbeddings.cpu()
-        epochEmbeddings = epochEmbeddings.numpy()
+        epochEmbeddingsNorm = epochEmbeddings.reshape(epochEmbeddings.shape[0], -1)
 
-        # scipy.cdist - end
+        print("epochEmbeddingsNorm.shape={}".format(epochEmbeddingsNorm.shape))
 
-        print('Dimensions: {}'.format(epochEmbeddings.shape))
+        epochEmbeddingsNorm = nn.functional.normalize(epochEmbeddingsNorm)
+        allCosineDistances = 1 - torch.mm(epochEmbeddingsNorm, epochEmbeddingsNorm.t())
+
+
+        # # scipy.cdist - begin
+
+        # epochEmbeddings = epochEmbeddings.cpu()
+        # epochEmbeddings = epochEmbeddings.numpy()
+
+        # # scipy.cdist - end
+
+        # print('Dimensions: {}'.format(epochEmbeddings.shape))
 
         ranks = []
 
         for i in range(len(epochEmbeddings) // 3):
 
-            # scipy.cdist - begin
+            # # scipy.cdist - begin
 
-            distances = cdist(epochEmbeddings[i * 3].reshape(1, -1), epochEmbeddings.reshape(epochEmbeddings.shape[0], -1), metric = 'cosine')
+            # distances = cdist(epochEmbeddings[i * 3].reshape(1, -1), epochEmbeddings.reshape(epochEmbeddings.shape[0], -1), metric = 'cosine')
 
-            print('==> distances.shape={}'.format(distances.shape))
+            # print('==> distances.shape={}'.format(distances.shape))
 
-            orderedDistances = np.argsort(distances[0])
-            orderedList      = orderedDistances.tolist()
+            # orderedDistances = np.argsort(distances[0])
+            # orderedList      = orderedDistances.tolist()
 
-            # scipy.cdist - end
+            # # scipy.cdist - end
+
+            orderedDistancesFast = torch.argsort(allCosineDistances[i * 3])
+            orderedListFast = orderedDistancesFast.tolist()
 
 
             # torch.cdist - begin
@@ -80,14 +94,24 @@ class EmbeddingsDistance(torch.nn.Module):
             #
 
 
-            sameRank = orderedList.index(i * 3)
-            positiveExampleRank = orderedList.index(i * 3 + 1) - 1
-            negativeExampleRank = orderedList.index(i * 3 + 2) - 1
+            sameRankFast = orderedListFast.index(i * 3)
+            positiveExampleRankFast = orderedListFast.index(i * 3 + 1) - 1
+            negativeExampleRankFast = orderedListFast.index(i * 3 + 2) - 1
 
-            ranks.append(positiveExampleRank)
+            ranks.append(positiveExampleRankFast)
 
-            Logger()('{} - Same rank={}, Same distance={}, Positive rank={}, Negative rank={}'.format(i, 
-                sameRank, distances[0, orderedList[sameRank]], positiveExampleRank, negativeExampleRank))
+            # sameRank = orderedList.index(i * 3)
+            # positiveExampleRank = orderedList.index(i * 3 + 1) - 1
+            # negativeExampleRank = orderedList.index(i * 3 + 2) - 1
+
+            # ranks.append(positiveExampleRank)
+
+            # Logger()('{} - Same rank={}, Same distance={}, Positive rank={}, Negative rank={}'.format(i, 
+            #     sameRank, distances[0, orderedList[sameRank]], positiveExampleRank, negativeExampleRank))
+
+            Logger()('{} - Same rank Fast={}, Same distance Fast={}, Positive rank Fast={}, Negative rank Fast={}'.format(i, 
+                sameRankFast, allCosineDistances[orderedListFast[sameRankFast], orderedListFast[sameRankFast]], 
+                positiveExampleRankFast, negativeExampleRankFast))
 
 
         out = {}
