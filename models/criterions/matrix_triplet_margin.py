@@ -23,7 +23,7 @@ class MatrixTripletMargin(nn.Module):
         positive = positive.reshape(positive.shape[0], -1)
         negative = negative.reshape(negative.shape[0], -1)
 
-        allCosineDistances = torch.mm(anchors, torch.cat((positive, negative)).t())
+        allCosineDistances = 1 - torch.mm(anchors, torch.cat((positive, negative)).t())
 
         anchorPositiveDistance = allCosineDistances.diag().unsqueeze(1)
 
