@@ -10,6 +10,8 @@ engine:
 model:
   network:
     lstm_out_dim: 20
+  criterion:
+    name: MatrixTripletMargin    
 optimizer:
   import: MSEmbedding.models.optimizers.factory
   name: madamw
