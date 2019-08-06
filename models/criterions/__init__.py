@@ -1,1 +1,1 @@
-from .TripletMargin import TripletMargin
+from .factory import factory

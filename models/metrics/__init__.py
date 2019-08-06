@@ -1,1 +1,1 @@
-from .EmbeddingsDistance import EmbeddingsDistance
+from .factory import factory
