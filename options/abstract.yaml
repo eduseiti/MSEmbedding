@@ -43,7 +43,7 @@ misc:
   seed: 1337
 views:
   name: plotly
-  plot_width: 1024
+  plot_width: 2048
   items:  
     - logs:train_batch.loss
     - logs:train_epoch.loss

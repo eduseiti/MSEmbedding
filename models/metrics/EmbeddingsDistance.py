@@ -7,6 +7,9 @@ from bootstrap.lib.options import Options
 from bootstrap.lib.logger import Logger
 from scipy.spatial.distance import cdist
 
+import os
+import pickle
+
 class EmbeddingsDistance(torch.nn.Module):
 
     def __init__(self, engine = None, mode = 'train'):
@@ -41,7 +44,7 @@ class EmbeddingsDistance(torch.nn.Module):
         print("epochEmbeddingsNorm.shape={}".format(epochEmbeddingsNorm.shape))
 
         epochEmbeddingsNorm = nn.functional.normalize(epochEmbeddingsNorm)
-        allCosineDistances = 1 - torch.mm(epochEmbeddingsNorm, epochEmbeddingsNorm.t())
+        allCosineDistances = torch.max(1 - torch.mm(epochEmbeddingsNorm, epochEmbeddingsNorm.t()), torch.zeros(1).cuda())
 
 
         # # scipy.cdist - begin
@@ -97,6 +100,23 @@ class EmbeddingsDistance(torch.nn.Module):
             sameRankFast = orderedListFast.index(i * 3)
             positiveExampleRankFast = orderedListFast.index(i * 3 + 1) - 1
             negativeExampleRankFast = orderedListFast.index(i * 3 + 2) - 1
+
+            if (sameRankFast > 0 or allCosineDistances[orderedListFast[sameRankFast], orderedListFast[sameRankFast]] < 0):
+
+                print('{} - Same rank Fast={}, Same distance Fast={}, Positive rank Fast={}, Negative rank Fast={}'.format(i, 
+                    sameRankFast, allCosineDistances[orderedListFast[sameRankFast], orderedListFast[sameRankFast]], 
+                    positiveExampleRankFast, negativeExampleRankFast))
+
+                print("allCosineDistances={}".format(allCosineDistances[i * 3]))
+
+                print("cwd={}".format(os.getcwd()))
+
+                with open("allCosineDistances.pkl", 'wb') as outputFile:
+                    pickle.dump(allCosineDistances, outputFile, pickle.HIGHEST_PROTOCOL)                
+
+                quit()
+
+
 
             ranks.append(positiveExampleRankFast)
 
