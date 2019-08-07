@@ -21,6 +21,7 @@ class HumanProteome(data.Dataset):
         self.split = split
         self.nb_threads = nb_threads
         self.batch_size = batch_size
+        self.dataDirectory = dataDirectory
 
         if split != 'train':
             self.trainingDataset = trainingDataset
@@ -89,9 +90,9 @@ class HumanProteome(data.Dataset):
     def make_batch_loader(self):
 
         if self.split != 'train':
-            self.batchSampler = BatchLoader(self.dataset.totalSpectra, self.batch_size, self.trainingDataset)
+            self.batchSampler = BatchLoader(self.dataset.totalSpectra, self.batch_size, trainingDataset = self.trainingDataset, dataDumpFolder = self.dataDirectory)
         else:
-            self.batchSampler = BatchLoader(self.dataset.totalSpectra, self.batch_size)
+            self.batchSampler = BatchLoader(self.dataset.totalSpectra, self.batch_size, dataDumpFolder = self.dataDirectory)
 
 
         self.numberOfBatches = len(self.batchSampler.epoch) // self.batch_size
