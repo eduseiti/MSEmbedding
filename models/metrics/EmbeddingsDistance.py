@@ -44,7 +44,7 @@ class EmbeddingsDistance(torch.nn.Module):
         print("epochEmbeddingsNorm.shape={}".format(epochEmbeddingsNorm.shape))
 
         epochEmbeddingsNorm = nn.functional.normalize(epochEmbeddingsNorm)
-        allCosineDistances = torch.max(1 - torch.mm(epochEmbeddingsNorm, epochEmbeddingsNorm.t()), torch.zeros(1).cuda())
+        allCosineDistances = 1 - torch.max(torch.mm(epochEmbeddingsNorm, epochEmbeddingsNorm.t()), torch.zeros(1).cuda())
 
 
         # # scipy.cdist - begin
@@ -70,6 +70,8 @@ class EmbeddingsDistance(torch.nn.Module):
             # orderedList      = orderedDistances.tolist()
 
             # # scipy.cdist - end
+
+            allCosineDistances[i * 3, i * 3] = -1 # Make sure the same embedding distance is always the first after sorting
 
             orderedDistancesFast = torch.argsort(allCosineDistances[i * 3])
             orderedListFast = orderedDistancesFast.tolist()
@@ -101,20 +103,20 @@ class EmbeddingsDistance(torch.nn.Module):
             positiveExampleRankFast = orderedListFast.index(i * 3 + 1) - 1
             negativeExampleRankFast = orderedListFast.index(i * 3 + 2) - 1
 
-            if (sameRankFast > 0 or allCosineDistances[orderedListFast[sameRankFast], orderedListFast[sameRankFast]] < 0):
+            # if (sameRankFast > 0 or allCosineDistances[orderedListFast[sameRankFast], orderedListFast[sameRankFast]] < 0):
 
-                print('{} - Same rank Fast={}, Same distance Fast={}, Positive rank Fast={}, Negative rank Fast={}'.format(i, 
-                    sameRankFast, allCosineDistances[orderedListFast[sameRankFast], orderedListFast[sameRankFast]], 
-                    positiveExampleRankFast, negativeExampleRankFast))
+            #     print('{} - Same rank Fast={}, Same distance Fast={}, Positive rank Fast={}, Negative rank Fast={}'.format(i, 
+            #         sameRankFast, allCosineDistances[orderedListFast[sameRankFast], orderedListFast[sameRankFast]], 
+            #         positiveExampleRankFast, negativeExampleRankFast))
 
-                print("allCosineDistances={}".format(allCosineDistances[i * 3]))
+            #     print("allCosineDistances={}".format(allCosineDistances[i * 3]))
 
-                print("cwd={}".format(os.getcwd()))
+            #     print("cwd={}".format(os.getcwd()))
 
-                with open("allCosineDistances.pkl", 'wb') as outputFile:
-                    pickle.dump(allCosineDistances, outputFile, pickle.HIGHEST_PROTOCOL)                
+            #     with open("allCosineDistances.pkl", 'wb') as outputFile:
+            #         pickle.dump(allCosineDistances, outputFile, pickle.HIGHEST_PROTOCOL)                
 
-                quit()
+            #     quit()
 
 
 
