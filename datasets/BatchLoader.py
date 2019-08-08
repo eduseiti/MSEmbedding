@@ -5,6 +5,9 @@ import numpy as np
 
 from bootstrap.lib.logger import Logger
 
+import os
+import pickle
+
 class BatchLoader(object):
 
     numberOfEpochs = 0
@@ -83,8 +86,9 @@ class BatchLoader(object):
 
         BatchLoader.numberOfEpochs += 1
 
-        if (BatchLoader.numberOfEpochs >= BatchLoader.SAVE_EPOCH_DATA_FIRST and BatchLoader.numberOfEpochs <= BatchLoader.SAVE_EPOCH_DATA_LAST):
-            self.dumpData(BatchLoader.numberOfEpochs, self.totalSpectra.multipleScansSequences, negativeExamplesIndexes, self.epoch)
+        if not self.normalizationParameters:
+            if (BatchLoader.numberOfEpochs >= BatchLoader.SAVE_EPOCH_DATA_FIRST and BatchLoader.numberOfEpochs <= BatchLoader.SAVE_EPOCH_DATA_LAST):
+                self.dumpData(BatchLoader.numberOfEpochs, self.totalSpectra.multipleScansSequences, negativeExamplesIndexes, self.epoch)
 
         return self.epoch
 
