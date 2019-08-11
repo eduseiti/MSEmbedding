@@ -12,6 +12,8 @@ import pickle
 
 class EmbeddingsDistance(torch.nn.Module):
 
+    wrongCount = 0
+
     def __init__(self, engine = None, mode = 'train'):
         super(EmbeddingsDistance, self).__init__()
 
@@ -44,53 +46,35 @@ class EmbeddingsDistance(torch.nn.Module):
         print("epochEmbeddingsNorm.shape={}".format(epochEmbeddingsNorm.shape))
 
         epochEmbeddingsNorm = nn.functional.normalize(epochEmbeddingsNorm)
-        allCosineDistances = 1 - torch.max(torch.mm(epochEmbeddingsNorm, epochEmbeddingsNorm.t()), torch.zeros(1).cuda())
+        allCosineDistances = 1 - torch.mm(epochEmbeddingsNorm, epochEmbeddingsNorm.t())
 
+        # ltZeroCount = (allCosineDistances < 0).sum()
+        # gtOneCount = (allCosineDistances > 1).sum()
 
-        # # scipy.cdist - begin
+        # if (ltZeroCount > 0) or (gtOneCount > 0):
 
-        # epochEmbeddings = epochEmbeddings.cpu()
-        # epochEmbeddings = epochEmbeddings.numpy()
+        #     EmbeddingsDistance.wrongCount += 1
 
-        # # scipy.cdist - end
+        #     print("*** Saving data due to unexpected allCosineDistances value. Count={}, Folder={}".format(EmbeddingsDistance.wrongCount, os.getcwd()))
+        #     print("*** ltZeroCount={}, gtOneCount={}".format(ltZeroCount, gtOneCount))
 
-        # print('Dimensions: {}'.format(epochEmbeddings.shape))
+        #     with open("allCosineDistances", 'wb') as outputFile:
+        #         dataDump = {}
+        #         dataDump['allCosineDistances'] = allCosineDistances
+        #         dataDump["anchors"] = anchors
+        #         dataDump["positive"] = positive
+        #         dataDump["negative"] = negative
+        #         pickle.dump(dataDump, outputFile)
+
 
         ranks = []
 
         for i in range(len(epochEmbeddings) // 3):
 
-            # # scipy.cdist - begin
-
-            # distances = cdist(epochEmbeddings[i * 3].reshape(1, -1), epochEmbeddings.reshape(epochEmbeddings.shape[0], -1), metric = 'cosine')
-
-            # print('==> distances.shape={}'.format(distances.shape))
-
-            # orderedDistances = np.argsort(distances[0])
-            # orderedList      = orderedDistances.tolist()
-
-            # # scipy.cdist - end
-
             allCosineDistances[i * 3, i * 3] = -1 # Make sure the same embedding distance is always the first after sorting
 
             orderedDistancesFast = torch.argsort(allCosineDistances[i * 3])
             orderedListFast = orderedDistancesFast.tolist()
-
-
-            # torch.cdist - begin
-
-            # epochEmbeddingsFixed = epochEmbeddings.contiguous()
-
-            # distances = torch.cdist(epochEmbeddingsFixed[i * 3].view(1, -1), 
-            #                              epochEmbeddingsFixed.view(epochEmbeddingsFixed.shape[0], -1))
-
-            # print('==> distances.shape={}'.format(distances.shape))
-
-            # orderedDistancesTorch = torch.argsort(distances[0])
-            # orderedList           = orderedDistancesTorch.tolist()
-
-            # torch.cdist - end
-
 
             #
             # Keep the rank of the positive example of the given anchor - it should be the nearest point.
@@ -121,15 +105,6 @@ class EmbeddingsDistance(torch.nn.Module):
 
 
             ranks.append(positiveExampleRankFast)
-
-            # sameRank = orderedList.index(i * 3)
-            # positiveExampleRank = orderedList.index(i * 3 + 1) - 1
-            # negativeExampleRank = orderedList.index(i * 3 + 2) - 1
-
-            # ranks.append(positiveExampleRank)
-
-            # Logger()('{} - Same rank={}, Same distance={}, Positive rank={}, Negative rank={}'.format(i, 
-            #     sameRank, distances[0, orderedList[sameRank]], positiveExampleRank, negativeExampleRank))
 
             Logger()('{} - Same rank Fast={}, Same distance Fast={}, Positive rank Fast={}, Negative rank Fast={}'.format(i, 
                 sameRankFast, allCosineDistances[orderedListFast[sameRankFast], orderedListFast[sameRankFast]], 
