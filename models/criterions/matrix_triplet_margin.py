@@ -29,7 +29,8 @@ class MatrixTripletMargin(nn.Module):
         positive = positive.reshape(positive.shape[0], -1)
         negative = negative.reshape(negative.shape[0], -1)
 
-        allCosineDistances = 1 - torch.mm(nn.functional.normalize(anchors), nn.functional.normalize(torch.cat((positive, negative))).t())
+        allPositiveCosineDistances = 1 - torch.mm(nn.functional.normalize(anchors), nn.functional.normalize(positive).t())
+        allNegativeCosineDistances = 1 - torch.mm(nn.functional.normalize(anchors), nn.functional.normalize(negative).t())
 
         # ltZeroCount = (allCosineDistances < 0).sum()
         # gtOneCount = (allCosineDistances > 1).sum()
@@ -49,9 +50,9 @@ class MatrixTripletMargin(nn.Module):
         #         dataDump["negative"] = negative
         #         pickle.dump(dataDump, outputFile)
 
-        anchorPositiveDistance = allCosineDistances.diag().unsqueeze(1)
+        anchorPositiveDistances = allPositiveCosineDistances.diag().unsqueeze(1)
 
-        loss = torch.max(anchorPositiveDistance - allCosineDistances + self.margin, torch.zeros(1).cuda())
+        loss = torch.max(anchorPositiveDistances - torch.cat((allPositiveCosineDistances, allNegativeCosineDistances), dim = 1) + self.margin, torch.zeros(1).cuda())
 
         loss[range(loss.shape[0]), range(loss.shape[0])] = 0.
 
