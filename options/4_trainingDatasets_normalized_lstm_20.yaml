@@ -4,6 +4,7 @@ exp:
 dataset:
   train_filtered_files_list: ['b01', 'b03', 'b04', 'b05']
   train_peaks_file: train_b01_03_04_05.pkl
+  batch_size: 500
 model:
   network:
     lstm_out_dim: 20
