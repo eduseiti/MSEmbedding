@@ -13,7 +13,7 @@ model:
 optimizer:
   import: MSEmbedding.models.optimizers.factory
   name: madamw
-  lr: 0.001 
+  lr: 0.01 
   weight_decay: 0.00001
 misc:
   cuda: True
