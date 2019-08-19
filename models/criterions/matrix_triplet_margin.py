@@ -21,16 +21,21 @@ class MatrixTripletMargin(nn.Module):
 
         out = {}
 
-        anchors = networkOutput[::3]
-        positive = networkOutput[1::3]
-        negative = networkOutput[2::3]
+        embeddings = networkOutput[0]
+        indexesSortedPeaks = networkOutput[1]
+
+        anchors = embeddings[indexesSortedPeaks[::3]]
+        positive = embeddings[indexesSortedPeaks[1::3]]
+        negative = embeddings[indexesSortedPeaks[2::3]]
 
         anchors = anchors.reshape(anchors.shape[0], -1)
         positive = positive.reshape(positive.shape[0], -1)
         negative = negative.reshape(negative.shape[0], -1)
 
-        allPositiveCosineDistances = 1 - torch.mm(nn.functional.normalize(anchors), nn.functional.normalize(positive).t())
-        allNegativeCosineDistances = 1 - torch.mm(nn.functional.normalize(anchors), nn.functional.normalize(negative).t())
+        normalizedAnchors = nn.functional.normalize(anchors)
+
+        allPositiveCosineDistances = 1 - torch.mm(normalizedAnchors, nn.functional.normalize(positive).t())
+        allNegativeCosineDistances = 1 - torch.mm(normalizedAnchors, nn.functional.normalize(negative).t())
 
         # ltZeroCount = (allCosineDistances < 0).sum()
         # gtOneCount = (allCosineDistances > 1).sum()
@@ -52,9 +57,10 @@ class MatrixTripletMargin(nn.Module):
 
         anchorPositiveDistances = allPositiveCosineDistances.diag().unsqueeze(1)
 
-        loss = torch.max(anchorPositiveDistances - torch.cat((allPositiveCosineDistances, allNegativeCosineDistances), dim = 1) + self.margin, torch.zeros(1).cuda())
+        loss = torch.max(anchorPositiveDistances - torch.cat((allPositiveCosineDistances, allNegativeCosineDistances), dim = 1) + self.margin, 
+                         anchorPositiveDistances.new_zeros(1))
 
-        loss[range(loss.shape[0]), range(loss.shape[0])] = 0.
+        loss[range(loss.shape[0]), range(loss.shape[0])] = 0.0
 
         out['loss'] = torch.mean(loss)
 

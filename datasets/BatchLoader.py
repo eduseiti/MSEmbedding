@@ -36,14 +36,21 @@ class BatchLoader(object):
 
         random.shuffle(self.totalSpectra.multipleScansSequences)
 
-        negativeExamplesIndexes = random.sample(range(len(self.totalSpectra.spectra[Scan.UNRECOGNIZED_SEQUENCE])), 
-                                                k = len(self.totalSpectra.multipleScansSequences))
+        random.shuffle(self.totalSpectra.singleScanSequences)
 
+        singleScanSequencesCount = len(self.totalSpectra.singleScanSequences)
+
+        print("++++++++ singleScanSequencesCount={}".format(singleScanSequencesCount))
 
         Logger()('>>> New epoch initial sequences: {}'.format(self.totalSpectra.multipleScansSequences[0:10]))
 
 
         peaksList = []
+        self.peaksLen = []
+
+
+        negativeExamplesIndexes = random.sample(range(len(self.totalSpectra.spectra[Scan.UNRECOGNIZED_SEQUENCE])), 
+                                                k = len(self.totalSpectra.multipleScansSequences))
 
         #
         # Every 3 peaks corresponds to the following sequence: anchor, positive and negative examples.
@@ -53,44 +60,67 @@ class BatchLoader(object):
 
             positiveExamplesIndexes = random.sample(range(len(self.totalSpectra.spectra[sequence])), k = 2)
 
-            peaksList.append(self.totalSpectra.spectra[sequence][positiveExamplesIndexes[0]]['nzero_peaks'])
-            peaksList.append(self.totalSpectra.spectra[sequence][positiveExamplesIndexes[1]]['nzero_peaks'])
-            peaksList.append(self.totalSpectra.spectra[Scan.UNRECOGNIZED_SEQUENCE][negativeExamplesIndexes[i]]['nzero_peaks'])
+            anchor = self.totalSpectra.spectra[sequence][positiveExamplesIndexes[0]]['nzero_peaks']
+            positive = self.totalSpectra.spectra[sequence][positiveExamplesIndexes[1]]['nzero_peaks']
 
+            # negativeExample = random.choices(range(singleScanSequencesCount))[0]
+
+
+            # print("++++ which negative={}.".format(negativeExample))
+            # print("++++ negative seq={}.".format(self.totalSpectra.singleScanSequences[negativeExample]))
+            # print("++++ negative peaks={}.".format(self.totalSpectra.spectra[self.totalSpectra.singleScanSequences[negativeExample]][0]['nzero_peaks']))
+
+
+            negative = self.totalSpectra.spectra[self.totalSpectra.singleScanSequences[i]][0]['nzero_peaks']
+            # negative = self.totalSpectra.spectra[Scan.UNRECOGNIZED_SEQUENCE][negativeExamplesIndexes[i]]['nzero_peaks']
+
+            peaksList.append(anchor)
+            self.peaksLen.append(len(anchor))
+
+            peaksList.append(positive)
+            self.peaksLen.append(len(positive))
+
+            peaksList.append(negative)
+            self.peaksLen.append(len(negative))
+
+
+        #
+        # Now, pad the sequence still on the original order: the batches will be sorted before going through the LSTM...
+        #
 
         self.epoch = torch.nn.utils.rnn.pad_sequence(peaksList, batch_first = True, padding_value = 0.0)
 
-        print('********************* BatchLoader.createTripletBatch. self.epoch len: {}, shape: {}'.format(len(self.epoch), 
-                                                                                                               self.epoch.shape))
+        print('********************* BatchLoader.createTripletBatch. self.epoch len: {}, shape: {}'.format(len(self.epoch), self.epoch.shape))
 
 
-        #
-        # Normalize the epoch data, both m/z and the intensity values
-        #
+        # #
+        # # Normalize the epoch data, both m/z and the intensity values
+        # #
 
-        if not self.normalizationParameters:
+        # if not self.normalizationParameters:
 
-            self.normalizationParameters = {}
+        #     self.normalizationParameters = {}
 
-            self.normalizationParameters['mz_mean'] = self.epoch[:, :, 0].mean()
-            self.normalizationParameters['mz_std'] = self.epoch[:, :, 0].std()
+        #     self.normalizationParameters['mz_mean'] = self.epoch[:, :, 0].mean()
+        #     self.normalizationParameters['mz_std'] = self.epoch[:, :, 0].std()
 
-            self.normalizationParameters['intensity_mean'] = self.epoch[:, :, 1].mean()
-            self.normalizationParameters['intensity_std']  = self.epoch[:, :, 1].std()
+        #     self.normalizationParameters['intensity_mean'] = self.epoch[:, :, 1].mean()
+        #     self.normalizationParameters['intensity_std']  = self.epoch[:, :, 1].std()
 
-            Logger()('mz mean: {}, mz std: {}'.format(self.normalizationParameters['mz_mean'], self.normalizationParameters['mz_std']))
-            Logger()('intensity mean: {}, intensity std: {}'.format(self.normalizationParameters['intensity_mean'], self.normalizationParameters['intensity_std']))
+        #     Logger()('mz mean: {}, mz std: {}'.format(self.normalizationParameters['mz_mean'], self.normalizationParameters['mz_std']))
+        #     Logger()('intensity mean: {}, intensity std: {}'.format(self.normalizationParameters['intensity_mean'], self.normalizationParameters['intensity_std']))
 
-        self.epoch[:, :, 0] = (self.epoch[:, :, 0] - self.normalizationParameters['mz_mean']) / self.normalizationParameters['mz_std']
-        self.epoch[:, :, 1] = (self.epoch[:, :, 1] - self.normalizationParameters['intensity_mean']) / self.normalizationParameters['intensity_std']
+        # self.epoch[:, :, 0] = (self.epoch[:, :, 0] - self.normalizationParameters['mz_mean']) / self.normalizationParameters['mz_std']
+        # self.epoch[:, :, 1] = (self.epoch[:, :, 1] - self.normalizationParameters['intensity_mean']) / self.normalizationParameters['intensity_std']
+
 
         BatchLoader.numberOfEpochs += 1
 
-        if not self.normalizationParameters:
-            if (BatchLoader.numberOfEpochs >= BatchLoader.SAVE_EPOCH_DATA_FIRST and BatchLoader.numberOfEpochs <= BatchLoader.SAVE_EPOCH_DATA_LAST):
-                self.dumpData(BatchLoader.numberOfEpochs, self.totalSpectra.multipleScansSequences, negativeExamplesIndexes, self.epoch)
+        # if not self.normalizationParameters:
+        #     if (BatchLoader.numberOfEpochs >= BatchLoader.SAVE_EPOCH_DATA_FIRST and BatchLoader.numberOfEpochs <= BatchLoader.SAVE_EPOCH_DATA_LAST):
+        #         self.dumpData(BatchLoader.numberOfEpochs, self.totalSpectra.multipleScansSequences, self.epoch)
 
-        return self.epoch
+        return (self.epoch, self.peaksLen)
 
 
     def __iter__(self):
@@ -114,7 +144,11 @@ class BatchLoader(object):
 
             # print('Batch Indexes: {}'.format(list(range(batch * self.batchSize, batch * self.batchSize + self.batchSize))))
 
-            yield(list(range(batch * self.batchSize, batch * self.batchSize + self.batchSize)))
+            batchExamples = list(range(batch * self.batchSize, batch * self.batchSize + self.batchSize))
+
+            # batch = {'peaks' : batchExamples, "peaksLen" : self.peaksLen[batchExamples[0]:len(batchExamples)]}
+
+            yield batchExamples
 
             print('\nWill get next batch')
       
@@ -125,7 +159,12 @@ class BatchLoader(object):
 
         # print('Batch Indexes: {}'.format(list(range(howManyCompleteBatches * self.batchSize, howManyCompleteBatches * self.batchSize + len(self.epoch) % self.batchSize - 1))))
 
-        yield(list(range(howManyCompleteBatches * self.batchSize, howManyCompleteBatches * self.batchSize+ len(self.epoch) % self.batchSize)))
+
+        batchExamples = list(range(howManyCompleteBatches * self.batchSize, howManyCompleteBatches * self.batchSize + len(self.epoch) % self.batchSize))
+
+        # batch = {'peaks' : batchExamples, "peaksLen" : self.peaksLen[batchExamples[0]:len(batchExamples)]}
+
+        yield batchExamples
 
         
     def __len__(self):

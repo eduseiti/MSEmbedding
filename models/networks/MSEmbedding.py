@@ -30,7 +30,18 @@ class MSEmbeddingNet(nn.Module):
     # Receives a batch with the shape [<batch size>, <sequence len>, <2 = m/z + intensity pair>]
     #
 
-    def forward(self, x):
+    def forward(self, batch):
+
+        # print (">>> batch={}".format(batch))
+        # print (">>> peaks.shape={}".format(batch['peaks'].shape)) 
+        # print (">>> peaksLen.shape={}".format(batch['peaksLen'].shape)) 
+
+        originalPeaksLen = batch['peaksLen']
+        indexesSortedPeaks = torch.argsort(originalPeaksLen, descending = True)
+
+        sortedPeaks = batch['peaks'][indexesSortedPeaks]
+
+        x = sortedPeaks
 
         print("--> Data shape: {}".format(x.shape))
 
@@ -47,13 +58,19 @@ class MSEmbeddingNet(nn.Module):
 
         transform = torch.stack((xMZ, xIntensity), 2).view(x.shape[0], x.shape[1], -1)
             
-        print('-- Len = {}, shape = {}'.format(len(transform), transform.shape))
-            
+        print('-- Before pack: Len = {}, shape = {}'.format(len(transform), transform.shape))
+
+        transform = torch.nn.utils.rnn.pack_padded_sequence(transform, originalPeaksLen[indexesSortedPeaks], batch_first = True)
+
         x, _ = self.lstm(transform)
 
         # print('Output={}, hidden={}'.format(x.shape, hidden))
 
-        return x
+        x, _ = torch.nn.utils.rnn.pad_packed_sequence(x, batch_first = True)
+
+        print('-- After pack: Len = {}, shape = {}'.format(len(x), x.shape))
+
+        return (x, indexesSortedPeaks)
 
 
 

@@ -257,18 +257,20 @@ class SpectraFound:
             pickle.dump(self.spectra, outputFile, pickle.HIGHEST_PROTOCOL)
 
 
-    def listMultipleScansSequences(self):
+    def listSingleAndMultipleScansSequences(self):
 
         self.maxPeaksListLen = 0
         totalLen = 0
 
         sequenceMaxLen = ''
-        numSpectrum    = 0
+        numSpectrum = 0
 
-        maxScansInSequence        = 0
-        sequenceWithMultipleScans = 0
+        maxScansInSequence = 0
+        sequencesWithMultipleScans = 0
+        sequencesWithSingleScan = 0
 
         self.multipleScansSequences = []
+        self.singleScanSequences = []
 
         for key in self.spectra.keys():
             
@@ -276,8 +278,11 @@ class SpectraFound:
                 scansLen = len(self.spectra[key])
 
                 if scansLen > 1:
-                    sequenceWithMultipleScans += 1
+                    sequencesWithMultipleScans += 1
                     self.multipleScansSequences.append(key)
+                else:
+                    sequencesWithSingleScan += 1    
+                    self.singleScanSequences.append(key)
 
                 if key != scansLen > maxScansInSequence:
                     maxScansInSequence = scansLen
@@ -296,7 +301,8 @@ class SpectraFound:
 
         Logger()('Maximum non-zero peaks list len = {}. key = {}'.format(self.maxPeaksListLen, sequenceMaxLen))
         Logger()('Average peaks list len = {}'.format(totalLen / numSpectrum))
-        Logger()('Number of sequences with more than 1 scan = {}'.format(sequenceWithMultipleScans))
+        Logger()('Number of sequences with a single scan = {}'.format(sequencesWithSingleScan))
+        Logger()('Number of sequences with more than 1 scan = {}'.format(sequencesWithMultipleScans))
         Logger()('Max number of scans in a single sequence = {}'.format(maxScansInSequence))
 
 

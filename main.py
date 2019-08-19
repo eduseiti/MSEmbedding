@@ -38,7 +38,7 @@ if not originalData.totalSpectra.spectra:
 totalSpectra = originalData.totalSpectra
 
 bl = b.BatchLoader(totalSpectra, randomSeed = time.time())
-bl.listMultipleScansSequences()
+bl.listSingleAndMultipleScansSequences()
 
 multipleScansSequences = bl.multipleScansSequences
 
@@ -57,7 +57,7 @@ if not testData.totalSpectra.spectra:
 testSpectra = testData.totalSpectra
 
 blTest = b.BatchLoader(testSpectra)
-blTest.listMultipleScansSequences()
+blTest.listSingleAndMultipleScansSequences()
 
 unrecognizedTestLen = len(testSpectra.spectra[s.Scan.UNRECOGNIZED_SEQUENCE])
 

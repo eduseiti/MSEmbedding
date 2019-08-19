@@ -52,7 +52,7 @@ class HumanProteome(data.Dataset):
             self.dataset.read_spectra(MGF())
             # raise NotImplementedError('Missing implementation to generate the dataset spectra file.')
 
-        self.dataset.totalSpectra.listMultipleScansSequences()
+        self.dataset.totalSpectra.listSingleAndMultipleScansSequences()
 
         numberOfSequences = len(self.dataset.totalSpectra.multipleScansSequences)
 
@@ -77,7 +77,11 @@ class HumanProteome(data.Dataset):
         # print('********************* __getitem__: {}, index: {}'.format(self.batchSampler, index))
         # print('********************* __getitem__: epoch: {}'.format(id(self.batchSampler.epoch)))
 
-        return self.batchSampler.epoch[index]
+        item = {}
+        item['peaks'] = self.batchSampler.epoch[index]
+        item['peaksLen'] = self.batchSampler.peaksLen[index]
+
+        return item
 
 
     def __len__(self):
