@@ -93,25 +93,25 @@ class BatchLoader(object):
         print('********************* BatchLoader.createTripletBatch. self.epoch len: {}, shape: {}'.format(len(self.epoch), self.epoch.shape))
 
 
-        # #
-        # # Normalize the epoch data, both m/z and the intensity values
-        # #
+        #
+        # Normalize the epoch data, both m/z and the intensity values
+        #
 
-        # if not self.normalizationParameters:
+        if not self.normalizationParameters:
 
-        #     self.normalizationParameters = {}
+            self.normalizationParameters = {}
 
-        #     self.normalizationParameters['mz_mean'] = self.epoch[:, :, 0].mean()
-        #     self.normalizationParameters['mz_std'] = self.epoch[:, :, 0].std()
+            self.normalizationParameters['mz_mean'] = self.epoch[:, :, 0].mean()
+            self.normalizationParameters['mz_std'] = self.epoch[:, :, 0].std()
 
-        #     self.normalizationParameters['intensity_mean'] = self.epoch[:, :, 1].mean()
-        #     self.normalizationParameters['intensity_std']  = self.epoch[:, :, 1].std()
+            self.normalizationParameters['intensity_mean'] = self.epoch[:, :, 1].mean()
+            self.normalizationParameters['intensity_std']  = self.epoch[:, :, 1].std()
 
-        #     Logger()('mz mean: {}, mz std: {}'.format(self.normalizationParameters['mz_mean'], self.normalizationParameters['mz_std']))
-        #     Logger()('intensity mean: {}, intensity std: {}'.format(self.normalizationParameters['intensity_mean'], self.normalizationParameters['intensity_std']))
+            Logger()('mz mean: {}, mz std: {}'.format(self.normalizationParameters['mz_mean'], self.normalizationParameters['mz_std']))
+            Logger()('intensity mean: {}, intensity std: {}'.format(self.normalizationParameters['intensity_mean'], self.normalizationParameters['intensity_std']))
 
-        # self.epoch[:, :, 0] = (self.epoch[:, :, 0] - self.normalizationParameters['mz_mean']) / self.normalizationParameters['mz_std']
-        # self.epoch[:, :, 1] = (self.epoch[:, :, 1] - self.normalizationParameters['intensity_mean']) / self.normalizationParameters['intensity_std']
+        self.epoch[:, :, 0] = (self.epoch[:, :, 0] - self.normalizationParameters['mz_mean']) / self.normalizationParameters['mz_std']
+        self.epoch[:, :, 1] = (self.epoch[:, :, 1] - self.normalizationParameters['intensity_mean']) / self.normalizationParameters['intensity_std']
 
 
         BatchLoader.numberOfEpochs += 1
