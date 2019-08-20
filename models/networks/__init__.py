@@ -1,1 +1,1 @@
-from .MSEmbedding import MSEmbeddingNet
+from .factory import factory

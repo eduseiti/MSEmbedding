@@ -19,7 +19,7 @@ class MSEmbedding(Model):
 
         super(MSEmbedding, self).__init__(engine, cuda_tf=cuda_tf)
 
-        self.network = networks.MSEmbeddingNet()
+        self.network = networks.factory(engine = engine)
 
         self.criterions = {}
         self.metrics = {}
