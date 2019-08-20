@@ -49,8 +49,8 @@ class BatchLoader(object):
         self.peaksLen = []
 
 
-        negativeExamplesIndexes = random.sample(range(len(self.totalSpectra.spectra[Scan.UNRECOGNIZED_SEQUENCE])), 
-                                                k = len(self.totalSpectra.multipleScansSequences))
+        # negativeExamplesIndexes = random.sample(range(len(self.totalSpectra.spectra[Scan.UNRECOGNIZED_SEQUENCE])), 
+        #                                         k = len(self.totalSpectra.multipleScansSequences))
 
         #
         # Every 3 peaks corresponds to the following sequence: anchor, positive and negative examples.
@@ -71,8 +71,8 @@ class BatchLoader(object):
             # print("++++ negative peaks={}.".format(self.totalSpectra.spectra[self.totalSpectra.singleScanSequences[negativeExample]][0]['nzero_peaks']))
 
 
-            # negative = self.totalSpectra.spectra[self.totalSpectra.singleScanSequences[i % singleScanSequencesCount]][0]['nzero_peaks']
-            negative = self.totalSpectra.spectra[Scan.UNRECOGNIZED_SEQUENCE][negativeExamplesIndexes[i]]['nzero_peaks']
+            negative = self.totalSpectra.spectra[self.totalSpectra.singleScanSequences[i % singleScanSequencesCount]][0]['nzero_peaks']
+            # negative = self.totalSpectra.spectra[Scan.UNRECOGNIZED_SEQUENCE][negativeExamplesIndexes[i]]['nzero_peaks']
 
             peaksList.append(anchor)
             self.peaksLen.append(len(anchor))
@@ -112,6 +112,9 @@ class BatchLoader(object):
 
         self.epoch[:, :, 0] = (self.epoch[:, :, 0] - self.normalizationParameters['mz_mean']) / self.normalizationParameters['mz_std']
         self.epoch[:, :, 1] = (self.epoch[:, :, 1] - self.normalizationParameters['intensity_mean']) / self.normalizationParameters['intensity_std']
+
+        # self.epoch[:, :, 0] = torch.nn.functional.normalize(self.epoch[:, :, 0])
+        # self.epoch[:, :, 1] = torch.nn.functional.normalize(self.epoch[:, :, 1])
 
 
         BatchLoader.numberOfEpochs += 1
