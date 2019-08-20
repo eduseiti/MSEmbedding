@@ -21,12 +21,17 @@ class MatrixTripletMargin(nn.Module):
 
         out = {}
 
-        embeddings = networkOutput[0]
-        indexesSortedPeaks = networkOutput[1]
+        originalIndexes = torch.zeros(len(networkOutput[1]), dtype = torch.int32)
 
-        anchors = embeddings[indexesSortedPeaks[::3]]
-        positive = embeddings[indexesSortedPeaks[1::3]]
-        negative = embeddings[indexesSortedPeaks[2::3]]
+        for i in range(len(networkOutput[1])):
+            originalIndexes[networkOutput[1][i]] = i
+
+        embeddings = networkOutput[0]
+        originalIndexes = originalIndexes.tolist()
+
+        anchors = embeddings[originalIndexes[::3]]
+        positive = embeddings[originalIndexes[1::3]]
+        negative = embeddings[originalIndexes[2::3]]
 
         anchors = anchors.reshape(anchors.shape[0], -1)
         positive = positive.reshape(positive.shape[0], -1)
@@ -63,5 +68,6 @@ class MatrixTripletMargin(nn.Module):
         loss[range(loss.shape[0]), range(loss.shape[0])] = 0.0
 
         out['loss'] = torch.mean(loss)
+        out['originalIndexes'] = originalIndexes
 
         return out

@@ -28,9 +28,9 @@ class EmbeddingsDistance(torch.nn.Module):
     def forward(self, criterionOutput, networkOutput, batch):
 
         embeddings = networkOutput[0]
-        indexesSortedPeaks = networkOutput[1]
+        originalIndexes = criterionOutput['originalIndexes']
 
-        self.allEmbeddings.append(embeddings[indexesSortedPeaks])
+        self.allEmbeddings.append(embeddings[originalIndexes])
 
 
 

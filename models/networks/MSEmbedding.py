@@ -2,6 +2,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
+from torch.autograd import Variable
 from bootstrap.lib.options import Options
 
 
@@ -26,6 +27,24 @@ class MSEmbeddingNet(nn.Module):
                             bidirectional = self.bidirecionalLstm)
 
 
+
+
+    def init_hidden(self, batch_size):
+        # the weights are of the form (nb_layers, batch_size, nb_lstm_units)                                                                                                                                         
+
+        hidden_a = torch.randn(1, batch_size, self.lstmOutDim)
+        hidden_b = torch.randn(1, batch_size, self.lstmOutDim)
+
+        hidden_a = hidden_a.cuda()
+        hidden_b = hidden_b.cuda()
+
+        hidden_a = Variable(hidden_a)
+        hidden_b = Variable(hidden_b)
+
+        return (hidden_a, hidden_b)
+
+
+
     #
     # Receives a batch with the shape [<batch size>, <sequence len>, <2 = m/z + intensity pair>]
     #
@@ -42,6 +61,8 @@ class MSEmbeddingNet(nn.Module):
         sortedPeaks = batch['peaks'][indexesSortedPeaks]
 
         x = sortedPeaks
+
+        hidden = self.init_hidden(x.shape[0])
 
         print("--> Data shape: {}".format(x.shape))
 
@@ -64,7 +85,7 @@ class MSEmbeddingNet(nn.Module):
 
         transform = torch.nn.utils.rnn.pack_padded_sequence(transform, originalPeaksLen[indexesSortedPeaks], batch_first = True)
 
-        x, _ = self.lstm(transform)
+        x, _ = self.lstm(transform, hidden)
 
         # print('Output={}, hidden={}'.format(x.shape, hidden))
 
