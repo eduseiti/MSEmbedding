@@ -121,7 +121,7 @@ class BatchLoader(object):
 
         # if not self.normalizationParameters:
         #     if (BatchLoader.numberOfEpochs >= BatchLoader.SAVE_EPOCH_DATA_FIRST and BatchLoader.numberOfEpochs <= BatchLoader.SAVE_EPOCH_DATA_LAST):
-        #         self.dumpData(BatchLoader.numberOfEpochs, self.totalSpectra.multipleScansSequences, self.epoch)
+        #         self.dumpData(BatchLoader.numberOfEpochs, self.totalSpectra.multipleScansSequences, self.totalSpectra.singleScanSequences, self.epoch)
 
         return (self.epoch, self.peaksLen)
 
@@ -177,7 +177,7 @@ class BatchLoader(object):
         return self.numberOfBatches
 
 
-    def dumpData(self, epochNumber, multipleScansSequences, negativeExamplesIndexes, epoch):
+    def dumpData(self, epochNumber, multipleScansSequences, singleScanSequences, epoch):
         
         if os.path.isdir(self.dataDumpFolder) == False:
             os.makedirs(self.dataDumpFolder)
@@ -186,7 +186,7 @@ class BatchLoader(object):
 
             dumpedData = {}
             dumpedData['multipleScansSequences'] = multipleScansSequences
-            dumpedData['negativeExamplesIndexes'] = negativeExamplesIndexes
+            dumpedData['singleScanSequences'] = singleScanSequences
             dumpedData['epoch'] = epoch
 
             pickle.dump(dumpedData, outputFile, pickle.HIGHEST_PROTOCOL)
