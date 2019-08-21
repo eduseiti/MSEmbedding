@@ -10,6 +10,8 @@ import pickle
 
 class BatchLoader(object):
 
+    PADDING_VALUE_FOR_MASK = -999.999
+
     numberOfEpochs = 0
 
     SAVE_EPOCH_DATA_FIRST = 28
@@ -88,7 +90,9 @@ class BatchLoader(object):
         # Now, pad the sequence still on the original order: the batches will be sorted before going through the LSTM...
         #
 
-        self.epoch = torch.nn.utils.rnn.pad_sequence(peaksList, batch_first = True, padding_value = 0.0)
+        # use a specific padding value to allow creating a mask
+
+        self.epoch = torch.nn.utils.rnn.pad_sequence(peaksList, batch_first = True, padding_value = BatchLoader.PADDING_VALUE_FOR_MASK)
 
         print('********************* BatchLoader.createTripletBatch. self.epoch len: {}, shape: {}'.format(len(self.epoch), self.epoch.shape))
 
@@ -97,21 +101,58 @@ class BatchLoader(object):
         # Normalize the epoch data, both m/z and the intensity values
         #
 
+        # obtain a mask to ignore the padding
+
+        paddingMask = (self.epoch != BatchLoader.PADDING_VALUE_FOR_MASK).float()
+
         if not self.normalizationParameters:
 
             self.normalizationParameters = {}
 
-            self.normalizationParameters['mz_mean'] = self.epoch[:, :, 0].mean()
-            self.normalizationParameters['mz_std'] = self.epoch[:, :, 0].std()
+            totalNonZeroPeaks = sum(self.peaksLen)
 
-            self.normalizationParameters['intensity_mean'] = self.epoch[:, :, 1].mean()
-            self.normalizationParameters['intensity_std']  = self.epoch[:, :, 1].std()
+            paddedEpoch = self.epoch * paddingMask
+
+            mzMean = paddedEpoch[:, :, 0].sum() / totalNonZeroPeaks
+            intensityMean = paddedEpoch[:, :, 1].sum() / totalNonZeroPeaks
+
+            squaredMeanReduced = torch.pow((paddedEpoch - torch.tensor([mzMean, intensityMean])) * paddingMask, 2)
+
+            mzStd = torch.sqrt(squaredMeanReduced[:, :, 0].sum() / totalNonZeroPeaks)
+            intensityStd = torch.sqrt(squaredMeanReduced[:, :, 1].sum() / totalNonZeroPeaks)
+
+            self.normalizationParameters['mz_mean'] = mzMean
+            self.normalizationParameters['mz_std'] = mzStd
+            self.normalizationParameters['intensity_mean'] = intensityMean
+            self.normalizationParameters['intensity_std']  = intensityStd
 
             Logger()('mz mean: {}, mz std: {}'.format(self.normalizationParameters['mz_mean'], self.normalizationParameters['mz_std']))
             Logger()('intensity mean: {}, intensity std: {}'.format(self.normalizationParameters['intensity_mean'], self.normalizationParameters['intensity_std']))
 
+
         self.epoch[:, :, 0] = (self.epoch[:, :, 0] - self.normalizationParameters['mz_mean']) / self.normalizationParameters['mz_std']
         self.epoch[:, :, 1] = (self.epoch[:, :, 1] - self.normalizationParameters['intensity_mean']) / self.normalizationParameters['intensity_std']
+
+        self.epoch = self.epoch * paddingMask
+
+
+        # if not self.normalizationParameters:
+
+        #     self.normalizationParameters = {}
+
+        #     totalNonZeroPeaks = sum(self.peaksLen)
+
+        #     self.normalizationParameters['mz_mean'] = self.epoch[:, :, 0].mean()
+        #     self.normalizationParameters['mz_std'] = self.epoch[:, :, 0].std()
+
+        #     self.normalizationParameters['intensity_mean'] = self.epoch[:, :, 1].mean()
+        #     self.normalizationParameters['intensity_std']  = self.epoch[:, :, 1].std()
+
+        #     Logger()('mz mean: {}, mz std: {}'.format(self.normalizationParameters['mz_mean'], self.normalizationParameters['mz_std']))
+        #     Logger()('intensity mean: {}, intensity std: {}'.format(self.normalizationParameters['intensity_mean'], self.normalizationParameters['intensity_std']))
+
+        # self.epoch[:, :, 0] = (self.epoch[:, :, 0] - self.normalizationParameters['mz_mean']) / self.normalizationParameters['mz_std']
+        # self.epoch[:, :, 1] = (self.epoch[:, :, 1] - self.normalizationParameters['intensity_mean']) / self.normalizationParameters['intensity_std']
 
         # self.epoch[:, :, 0] = torch.nn.functional.normalize(self.epoch[:, :, 0])
         # self.epoch[:, :, 1] = torch.nn.functional.normalize(self.epoch[:, :, 1])

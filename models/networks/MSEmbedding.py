@@ -62,7 +62,7 @@ class MSEmbeddingNet(nn.Module):
 
         x = sortedPeaks
 
-        hidden = self.init_hidden(x.shape[0])
+        # hidden = self.init_hidden(x.shape[0])
 
         print("--> Data shape: {}".format(x.shape))
 
@@ -85,7 +85,8 @@ class MSEmbeddingNet(nn.Module):
 
         transform = torch.nn.utils.rnn.pack_padded_sequence(transform, originalPeaksLen[indexesSortedPeaks], batch_first = True)
 
-        x, _ = self.lstm(transform, hidden)
+        x, _ = self.lstm(transform)
+        # x, _ = self.lstm(transform, hidden)
 
         # print('Output={}, hidden={}'.format(x.shape, hidden))
 
