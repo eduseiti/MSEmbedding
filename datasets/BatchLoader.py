@@ -49,9 +49,6 @@ class BatchLoader(object):
         self.peaksLen = []
 
 
-        # negativeExamplesIndexes = random.sample(range(len(self.totalSpectra.spectra[Scan.UNRECOGNIZED_SEQUENCE])), 
-        #                                         k = len(self.totalSpectra.multipleScansSequences))
-
         #
         # Every 3 peaks corresponds to the following sequence: anchor, positive and negative examples.
         #
@@ -63,16 +60,7 @@ class BatchLoader(object):
             anchor = self.totalSpectra.spectra[sequence][positiveExamplesIndexes[0]]['nzero_peaks']
             positive = self.totalSpectra.spectra[sequence][positiveExamplesIndexes[1]]['nzero_peaks']
 
-            # negativeExample = random.choices(range(singleScanSequencesCount))[0]
-
-
-            # print("++++ which negative={}.".format(negativeExample))
-            # print("++++ negative seq={}.".format(self.totalSpectra.singleScanSequences[negativeExample]))
-            # print("++++ negative peaks={}.".format(self.totalSpectra.spectra[self.totalSpectra.singleScanSequences[negativeExample]][0]['nzero_peaks']))
-
-
             negative = self.totalSpectra.spectra[self.totalSpectra.singleScanSequences[i % singleScanSequencesCount]][0]['nzero_peaks']
-            # negative = self.totalSpectra.spectra[Scan.UNRECOGNIZED_SEQUENCE][negativeExamplesIndexes[i]]['nzero_peaks']
 
             peaksList.append(anchor)
             self.peaksLen.append(len(anchor))
@@ -125,28 +113,6 @@ class BatchLoader(object):
 
         self.epoch[:, :, 0] = (self.epoch[:, :, 0] - self.normalizationParameters['mz_mean']) / self.normalizationParameters['mz_std']
         self.epoch[:, :, 1] = (self.epoch[:, :, 1] - self.normalizationParameters['intensity_mean']) / self.normalizationParameters['intensity_std']
-
-
-        # if not self.normalizationParameters:
-
-        #     self.normalizationParameters = {}
-
-        #     totalNonZeroPeaks = sum(self.peaksLen)
-
-        #     self.normalizationParameters['mz_mean'] = self.epoch[:, :, 0].mean()
-        #     self.normalizationParameters['mz_std'] = self.epoch[:, :, 0].std()
-
-        #     self.normalizationParameters['intensity_mean'] = self.epoch[:, :, 1].mean()
-        #     self.normalizationParameters['intensity_std']  = self.epoch[:, :, 1].std()
-
-        #     Logger()('mz mean: {}, mz std: {}'.format(self.normalizationParameters['mz_mean'], self.normalizationParameters['mz_std']))
-        #     Logger()('intensity mean: {}, intensity std: {}'.format(self.normalizationParameters['intensity_mean'], self.normalizationParameters['intensity_std']))
-
-        # self.epoch[:, :, 0] = (self.epoch[:, :, 0] - self.normalizationParameters['mz_mean']) / self.normalizationParameters['mz_std']
-        # self.epoch[:, :, 1] = (self.epoch[:, :, 1] - self.normalizationParameters['intensity_mean']) / self.normalizationParameters['intensity_std']
-
-        # self.epoch[:, :, 0] = torch.nn.functional.normalize(self.epoch[:, :, 0])
-        # self.epoch[:, :, 1] = torch.nn.functional.normalize(self.epoch[:, :, 1])
 
 
         BatchLoader.numberOfEpochs += 1
