@@ -10,8 +10,6 @@ import pickle
 
 class BatchLoader(object):
 
-    PADDING_VALUE_FOR_MASK = -999.999
-
     numberOfEpochs = 0
 
     SAVE_EPOCH_DATA_FIRST = 28
@@ -90,9 +88,7 @@ class BatchLoader(object):
         # Now, pad the sequence still on the original order: the batches will be sorted before going through the LSTM...
         #
 
-        # use a specific padding value to allow creating a mask
-
-        self.epoch = torch.nn.utils.rnn.pad_sequence(peaksList, batch_first = True, padding_value = BatchLoader.PADDING_VALUE_FOR_MASK)
+        self.epoch = torch.nn.utils.rnn.pad_sequence(peaksList, batch_first = True, padding_value = 0.0)
 
         print('********************* BatchLoader.createTripletBatch. self.epoch len: {}, shape: {}'.format(len(self.epoch), self.epoch.shape))
 
@@ -101,22 +97,19 @@ class BatchLoader(object):
         # Normalize the epoch data, both m/z and the intensity values
         #
 
-        # obtain a mask to ignore the padding
-
-        paddingMask = (self.epoch != BatchLoader.PADDING_VALUE_FOR_MASK).float()
-
         if not self.normalizationParameters:
 
             self.normalizationParameters = {}
 
             totalNonZeroPeaks = sum(self.peaksLen)
 
-            paddedEpoch = self.epoch * paddingMask
+            mzMean = self.epoch[:, :, 0].sum() / totalNonZeroPeaks
+            intensityMean = self.epoch[:, :, 1].sum() / totalNonZeroPeaks
 
-            mzMean = paddedEpoch[:, :, 0].sum() / totalNonZeroPeaks
-            intensityMean = paddedEpoch[:, :, 1].sum() / totalNonZeroPeaks
+            squaredMeanReduced = torch.pow(self.epoch - torch.tensor([mzMean, intensityMean]), 2)
 
-            squaredMeanReduced = torch.pow((paddedEpoch - torch.tensor([mzMean, intensityMean])) * paddingMask, 2)
+            for i in range(self.epoch.shape[0]):
+                self.epoch[i, self.peaksLen[i]:, :] = torch.tensor([0.0, 0.0])
 
             mzStd = torch.sqrt(squaredMeanReduced[:, :, 0].sum() / totalNonZeroPeaks)
             intensityStd = torch.sqrt(squaredMeanReduced[:, :, 1].sum() / totalNonZeroPeaks)
@@ -132,8 +125,6 @@ class BatchLoader(object):
 
         self.epoch[:, :, 0] = (self.epoch[:, :, 0] - self.normalizationParameters['mz_mean']) / self.normalizationParameters['mz_std']
         self.epoch[:, :, 1] = (self.epoch[:, :, 1] - self.normalizationParameters['intensity_mean']) / self.normalizationParameters['intensity_std']
-
-        self.epoch = self.epoch * paddingMask
 
 
         # if not self.normalizationParameters:
