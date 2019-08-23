@@ -6,6 +6,7 @@ import torch.utils.data as data
 from .BatchLoader import BatchLoader
 
 from bootstrap.lib.options import Options
+from bootstrap.lib.logger import Logger
 
 
 class HumanProteome(data.Dataset):
@@ -83,7 +84,24 @@ class HumanProteome(data.Dataset):
 
             # Now, save the entire data
             self.dataset.totalSpectra.save_spectra(self.dataset.spectraFilename)
-            
+
+        else:
+
+            print("+-+-+ Spectra information complete")
+
+            self.dataset.totalSpectra.multipleScansSequences
+
+            Logger()('# of singleScanSequences: {}, # of multipleScansSequences: {}'.format(len(self.dataset.totalSpectra.multipleScansSequences), 
+                                                                                            len(self.dataset.totalSpectra.multipleScansSequences)))
+
+            Logger()('mz mean: {}, mz std: {}'.format(self.dataset.totalSpectra.normalizationParameters['mz_mean'], 
+                                                      self.dataset.totalSpectra.normalizationParameters['mz_std']))
+
+            Logger()('intensity mean: {}, intensity std: {}'.format(self.dataset.totalSpectra.normalizationParameters['intensity_mean'], 
+                                                                    self.dataset.totalSpectra.normalizationParameters['intensity_std']))
+
+
+
 
         numberOfSequences = len(self.dataset.totalSpectra.multipleScansSequences)
 

@@ -5,6 +5,7 @@ import time
 import pickle
 
 import datetime
+import math
 
 import numpy as np
 import re
@@ -280,10 +281,10 @@ class SpectraFound:
             os.makedirs(self.filesFolder)
         else:
             if os.path.exists(completeFilename):
-                os.rename(completeFilename, completeFilename + ".bkp_" + datetime.datetime.now())
+                os.rename(completeFilename, completeFilename + ".bkp_" + str(datetime.datetime.now()))
 
         with open(completeFilename, 'wb') as outputFile:
-            pickle.dump(self.spectra, outputFile, pickle.HIGHEST_PROTOCOL)
+            pickle.dump(entireData, outputFile, pickle.HIGHEST_PROTOCOL)
 
 
 
@@ -336,6 +337,7 @@ class SpectraFound:
         Logger()('Max number of scans in a single sequence = {}'.format(maxScansInSequence))
 
 
+
     def normalize_data(self, trainingDataset = None):
 
         if not trainingDataset:
@@ -349,30 +351,38 @@ class SpectraFound:
             allPeaksLists = []
             allPeaksListsLen = []
 
+            # Sum everything to calculate the mean
+
+            mzSum = 0.0
+            intensitySum = 0.0
+            totalNonZeroPeaks = 0
+
+            print("Start to calculate the mzMean and intensityMean...")
+
             for key in self.multipleScansSequences + self.singleScanSequences:
                 for peaksList in self.spectra[key]:
-                    allPeaksLists.append(peaksList['nzero_peaks'])
-                    allPeaksListsLen.append(len(peaksList['nzero_peaks']))
+                    mzSum += peaksList['nzero_peaks'][:, 0].sum()
+                    intensitySum += peaksList['nzero_peaks'][:, 1].sum()
+                    totalNonZeroPeaks += len(peaksList['nzero_peaks'])
 
-            # Now, create a huge tensor will all lists padded
-            allLists = torch.nn.utils.rnn.pad_sequence(allPeaksLists, batch_first = True, padding_value = 0.0)
-
-            # And calculate the parameters
 
             self.normalizationParameters = {}
 
-            totalNonZeroPeaks = sum(allPeaksListsLen)
+            mzMean = mzSum / totalNonZeroPeaks
+            intensityMean = intensitySum / totalNonZeroPeaks
 
-            mzMean = allLists[:, :, 0].sum() / totalNonZeroPeaks
-            intensityMean = allLists[:, :, 1].sum() / totalNonZeroPeaks
+            print("Start to calculate the mzStd and intensityStd...")
 
-            squaredMeanReduced = torch.pow(allLists - torch.tensor([mzMean, intensityMean]), 2)
+            mzSquaredMeanReducedSum = 0.0
+            intensitySquaredMeanReducedSum = 0.0
 
-            for i in range(allLists.shape[0]):
-                allLists[i, allLists[i]:, :] = torch.tensor([0.0, 0.0])
+            for key in self.multipleScansSequences + self.singleScanSequences:
+                for peaksList in self.spectra[key]:
+                    mzSquaredMeanReducedSum += torch.pow(peaksList['nzero_peaks'][:, 0] - mzMean, 2).sum()
+                    intensitySquaredMeanReducedSum += torch.pow(peaksList['nzero_peaks'][:, 1] - intensityMean, 2).sum()
 
-            mzStd = torch.sqrt(squaredMeanReduced[:, :, 0].sum() / totalNonZeroPeaks)
-            intensityStd = torch.sqrt(squaredMeanReduced[:, :, 1].sum() / totalNonZeroPeaks)
+            mzStd = math.sqrt(mzSquaredMeanReducedSum / totalNonZeroPeaks)
+            intensityStd = math.sqrt(intensitySquaredMeanReducedSum / totalNonZeroPeaks)
 
             self.normalizationParameters['mz_mean'] = mzMean
             self.normalizationParameters['mz_std'] = mzStd
@@ -383,12 +393,12 @@ class SpectraFound:
             Logger()('intensity mean: {}, intensity std: {}'.format(self.normalizationParameters['intensity_mean'], self.normalizationParameters['intensity_std']))
 
         else:
+            self.normalizationParameters = trainingDataset.dataset.totalSpectra.normalizationParameters
 
             Logger()("Will apply the following normalization parameters, from training dataset")
             Logger()('mz mean: {}, mz std: {}'.format(self.normalizationParameters['mz_mean'], self.normalizationParameters['mz_std']))
             Logger()('intensity mean: {}, intensity std: {}'.format(self.normalizationParameters['intensity_mean'], self.normalizationParameters['intensity_std']))
             
-            self.normalizationParameters = trainingDataset.dataset.totalSpectra.normalizationParameters
 
         #
         # Now, normalize the data
