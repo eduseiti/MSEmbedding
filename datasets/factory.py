@@ -14,6 +14,8 @@ def factory(engine=None):
             if dataset['train']:
                 dataset['eval'] = factory_humanProteome(Options()['dataset']['eval_split'], 
                                                         dataset['train'])
+            else:
+                raise RuntimeError("There is no associated training dataset.")
     else:
         raise ValueError()
 

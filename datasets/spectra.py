@@ -257,7 +257,7 @@ class SpectraFound:
             pickle.dump(self.spectra, outputFile, pickle.HIGHEST_PROTOCOL)
 
 
-    def listSingleAndMultipleScansSequences(self):
+    def list_single_and_multiple_scans_sequences(self):
 
         self.maxPeaksListLen = 0
         totalLen = 0
@@ -304,6 +304,82 @@ class SpectraFound:
         Logger()('Number of sequences with a single scan = {}'.format(sequencesWithSingleScan))
         Logger()('Number of sequences with more than 1 scan = {}'.format(sequencesWithMultipleScans))
         Logger()('Max number of scans in a single sequence = {}'.format(maxScansInSequence))
+
+
+    def normalize_data(self, trainingDataset = None, trainingPeaksFile = None):
+
+        if not trainingDataset:
+            if trainingPeaksFile:
+
+                normFile = 'norm_' + trainingPeaksFile
+
+                # Check if normalization file already exists
+
+                try:
+                    with open(os.path.join(self.filesFolder, normFile), 'rb') as inputFile:
+                        self.normalizationParameters = pickle.load(inputFile)
+                        
+                except Exception as e:
+                    print('Could not open normalization file {}. Calculating normalization data.'.format(os.path.join(self.filesFolder, normFile)))
+
+                    #
+                    # Need to calculate the normalization parameters
+                    #
+
+                    # First, create a list with all non-zero peaks lists
+
+                    allPeaksLists = []
+                    allPeaksListsLen = []
+
+                    for key in self.multipleScansSequences + self.singleScanSequences:
+
+                        for peaksList in self.spectra[key]:
+                            allPeaksLists.append(peaksList['nzero_peaks'])
+                            allPeaksListsLen.append(len(peaksList['nzero_peaks']))
+
+                    # Now, create a huge tensor will all lists padded
+
+                    allLists = torch.nn.utils.rnn.pad_sequence(allPeaksLists, batch_first = True, padding_value = 0.0)
+
+                    # And calculate the parameters
+
+                    self.normalizationParameters = {}
+
+                    totalNonZeroPeaks = sum(allPeaksListsLen)
+
+                    mzMean = allLists[:, :, 0].sum() / totalNonZeroPeaks
+                    intensityMean = allLists[:, :, 1].sum() / totalNonZeroPeaks
+
+                    squaredMeanReduced = torch.pow(allLists - torch.tensor([mzMean, intensityMean]), 2)
+
+                    for i in range(allLists.shape[0]):
+                        allLists[i, allLists[i]:, :] = torch.tensor([0.0, 0.0])
+
+                    mzStd = torch.sqrt(squaredMeanReduced[:, :, 0].sum() / totalNonZeroPeaks)
+                    intensityStd = torch.sqrt(squaredMeanReduced[:, :, 1].sum() / totalNonZeroPeaks)
+
+                    self.normalizationParameters['mz_mean'] = mzMean
+                    self.normalizationParameters['mz_std'] = mzStd
+                    self.normalizationParameters['intensity_mean'] = intensityMean
+                    self.normalizationParameters['intensity_std']  = intensityStd
+
+                    # Save the data
+
+                    if os.path.isdir(self.filesFolder) == False:
+                        os.makedirs(self.filesFolder)
+
+                    with open(os.path.join(self.filesFolder, normFile), 'wb') as outputFile:
+                        pickle.dump(self.normalizationParameters, outputFile, pickle.HIGHEST_PROTOCOL)                
+
+            else:
+                raise ValueError("Training peaks file must have been defined.")
+
+        else:
+            self.normalizationParameters = trainingDataset.dataset.totalSpectra.normalizationParameters
+
+        #
+        # Now, normalize the data
+        #
 
 
 class MGF:

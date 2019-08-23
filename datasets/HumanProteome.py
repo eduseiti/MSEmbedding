@@ -35,6 +35,8 @@ class HumanProteome(data.Dataset):
         except Exception:
             os.chdir(dataDirectory)
 
+        trainPeaksFile = None
+
         if split == 'train':
             if Options()['dataset']['train_peaks_file']:
                 trainPeaksFile = Options()['dataset']['train_peaks_file']
@@ -52,7 +54,7 @@ class HumanProteome(data.Dataset):
             self.dataset.read_spectra(MGF())
             # raise NotImplementedError('Missing implementation to generate the dataset spectra file.')
 
-        self.dataset.totalSpectra.listSingleAndMultipleScansSequences()
+        self.dataset.totalSpectra.list_single_and_multiple_scans_sequences()
 
         numberOfSequences = len(self.dataset.totalSpectra.multipleScansSequences)
 
