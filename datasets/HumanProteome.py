@@ -50,11 +50,40 @@ class HumanProteome(data.Dataset):
             self.dataset.load_identifications()
 
 
+        # Check if has processed the spectra yet
+
         if not self.dataset.totalSpectra.spectra:
+
+            print("+-+-+ Processing the original MGF files")
+
+            # Read the MGF files
+
             self.dataset.read_spectra(MGF())
+
             # raise NotImplementedError('Missing implementation to generate the dataset spectra file.')
 
-        self.dataset.totalSpectra.list_single_and_multiple_scans_sequences()
+            # Now, analyze the sequences
+            self.dataset.totalSpectra.list_single_and_multiple_scans_sequences()
+
+            # And finally normalize the data
+            self.dataset.totalSpectra.normalize_data(trainingDataset)
+
+            # Now, save the entire data
+            self.dataset.totalSpectra.save_spectra(self.dataset.spectraFilename)
+
+        elif not self.dataset.totalSpectra.multipleScansSequences:
+
+            print("+-+-+ Processing the spectra to include sequence and normalization information")
+
+            # Now, analyze the sequences
+            self.dataset.totalSpectra.list_single_and_multiple_scans_sequences()
+
+            # And finally normalize the data
+            self.dataset.totalSpectra.normalize_data(trainingDataset)
+
+            # Now, save the entire data
+            self.dataset.totalSpectra.save_spectra(self.dataset.spectraFilename)
+            
 
         numberOfSequences = len(self.dataset.totalSpectra.multipleScansSequences)
 
@@ -96,7 +125,7 @@ class HumanProteome(data.Dataset):
     def make_batch_loader(self):
 
         if self.split != 'train':
-            self.batchSampler = BatchLoader(self.dataset.totalSpectra, self.batch_size, trainingDataset = self.trainingDataset, dataDumpFolder = self.dataDirectory)
+            self.batchSampler = BatchLoader(self.dataset.totalSpectra, self.batch_size, dataDumpFolder = self.dataDirectory)
         else:
             self.batchSampler = BatchLoader(self.dataset.totalSpectra, self.batch_size, dataDumpFolder = self.dataDirectory)
 

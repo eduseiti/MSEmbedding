@@ -4,6 +4,8 @@ import json
 import time
 import pickle
 
+import datetime
+
 import numpy as np
 import re
 
@@ -177,7 +179,7 @@ class Scan:
         else:
             result = {}
         
-        # result['peaks']       = np.array(self.peaks)
+        # result['peaks'] = np.array(self.peaks)
         tmpResult = np.array(self.peaks, dtype = np.float32)
 
         result['nzero_peaks'] = torch.from_numpy(tmpResult[tmpResult[:, 1] > 0])
@@ -198,6 +200,7 @@ class SpectraFound:
         #
         # {<sequence>:[{'filename' : <filename>,
         #               'peaks' : [[<mz>, <intensity>], ...],
+        #               'nzero_peaks' : [[<mz>, <intensity>], ...],
         #               'pepmass' : [<value>],
         #               'charge' : <value>}, ...]
         #
@@ -242,19 +245,46 @@ class SpectraFound:
     
         try:
             with open(os.path.join(self.filesFolder, spectraName), 'rb') as inputFile:
-                self.spectra = pickle.load(inputFile)
-                
-        except Exception as e:
+                entireData = pickle.load(inputFile)
+
+        except Exception:
             print('Could not open spectra file {}'.format(os.path.join(self.filesFolder, spectraName)))
-                      
-            
+                    
+        # Check if the data is already saved in the complete format
+
+        if 'spectra' in entireData.keys():
+            self.spectra = entireData['spectra']
+            self.multipleScansSequences = entireData['multipleScansSequences']
+            self.singleScanSequences = entireData['singleScanSequences']
+            self.normalizationParameters = entireData['normalizationParameters']
+        else:
+            self.spectra = entireData
+
+            self.multipleScansSequences = None
+            self.singleScanSequences = None
+            self.normalizationParameters = None
+
+
+
     def save_spectra(self, spectraName):
         
+        entireData = {}
+        entireData['spectra'] = self.spectra
+        entireData['multipleScansSequences'] = self.multipleScansSequences
+        entireData['singleScanSequences'] = self.singleScanSequences
+        entireData['normalizationParameters'] = self.normalizationParameters
+
+        completeFilename = os.path.join(self.filesFolder, spectraName) 
+
         if os.path.isdir(self.filesFolder) == False:
             os.makedirs(self.filesFolder)
+        else:
+            if os.path.exists(completeFilename):
+                os.rename(completeFilename, completeFilename + ".bkp_" + datetime.datetime.now())
 
-        with open(os.path.join(self.filesFolder, spectraName), 'wb') as outputFile:
+        with open(completeFilename, 'wb') as outputFile:
             pickle.dump(self.spectra, outputFile, pickle.HIGHEST_PROTOCOL)
+
 
 
     def list_single_and_multiple_scans_sequences(self):
@@ -306,80 +336,71 @@ class SpectraFound:
         Logger()('Max number of scans in a single sequence = {}'.format(maxScansInSequence))
 
 
-    def normalize_data(self, trainingDataset = None, trainingPeaksFile = None):
+    def normalize_data(self, trainingDataset = None):
 
         if not trainingDataset:
-            if trainingPeaksFile:
 
-                normFile = 'norm_' + trainingPeaksFile
+            #
+            # Need to calculate the normalization parameters
+            #
 
-                # Check if normalization file already exists
+            # First, create a list with all non-zero peaks lists
 
-                try:
-                    with open(os.path.join(self.filesFolder, normFile), 'rb') as inputFile:
-                        self.normalizationParameters = pickle.load(inputFile)
-                        
-                except Exception as e:
-                    print('Could not open normalization file {}. Calculating normalization data.'.format(os.path.join(self.filesFolder, normFile)))
+            allPeaksLists = []
+            allPeaksListsLen = []
 
-                    #
-                    # Need to calculate the normalization parameters
-                    #
+            for key in self.multipleScansSequences + self.singleScanSequences:
+                for peaksList in self.spectra[key]:
+                    allPeaksLists.append(peaksList['nzero_peaks'])
+                    allPeaksListsLen.append(len(peaksList['nzero_peaks']))
 
-                    # First, create a list with all non-zero peaks lists
+            # Now, create a huge tensor will all lists padded
+            allLists = torch.nn.utils.rnn.pad_sequence(allPeaksLists, batch_first = True, padding_value = 0.0)
 
-                    allPeaksLists = []
-                    allPeaksListsLen = []
+            # And calculate the parameters
 
-                    for key in self.multipleScansSequences + self.singleScanSequences:
+            self.normalizationParameters = {}
 
-                        for peaksList in self.spectra[key]:
-                            allPeaksLists.append(peaksList['nzero_peaks'])
-                            allPeaksListsLen.append(len(peaksList['nzero_peaks']))
+            totalNonZeroPeaks = sum(allPeaksListsLen)
 
-                    # Now, create a huge tensor will all lists padded
+            mzMean = allLists[:, :, 0].sum() / totalNonZeroPeaks
+            intensityMean = allLists[:, :, 1].sum() / totalNonZeroPeaks
 
-                    allLists = torch.nn.utils.rnn.pad_sequence(allPeaksLists, batch_first = True, padding_value = 0.0)
+            squaredMeanReduced = torch.pow(allLists - torch.tensor([mzMean, intensityMean]), 2)
 
-                    # And calculate the parameters
+            for i in range(allLists.shape[0]):
+                allLists[i, allLists[i]:, :] = torch.tensor([0.0, 0.0])
 
-                    self.normalizationParameters = {}
+            mzStd = torch.sqrt(squaredMeanReduced[:, :, 0].sum() / totalNonZeroPeaks)
+            intensityStd = torch.sqrt(squaredMeanReduced[:, :, 1].sum() / totalNonZeroPeaks)
 
-                    totalNonZeroPeaks = sum(allPeaksListsLen)
+            self.normalizationParameters['mz_mean'] = mzMean
+            self.normalizationParameters['mz_std'] = mzStd
+            self.normalizationParameters['intensity_mean'] = intensityMean
+            self.normalizationParameters['intensity_std']  = intensityStd
 
-                    mzMean = allLists[:, :, 0].sum() / totalNonZeroPeaks
-                    intensityMean = allLists[:, :, 1].sum() / totalNonZeroPeaks
-
-                    squaredMeanReduced = torch.pow(allLists - torch.tensor([mzMean, intensityMean]), 2)
-
-                    for i in range(allLists.shape[0]):
-                        allLists[i, allLists[i]:, :] = torch.tensor([0.0, 0.0])
-
-                    mzStd = torch.sqrt(squaredMeanReduced[:, :, 0].sum() / totalNonZeroPeaks)
-                    intensityStd = torch.sqrt(squaredMeanReduced[:, :, 1].sum() / totalNonZeroPeaks)
-
-                    self.normalizationParameters['mz_mean'] = mzMean
-                    self.normalizationParameters['mz_std'] = mzStd
-                    self.normalizationParameters['intensity_mean'] = intensityMean
-                    self.normalizationParameters['intensity_std']  = intensityStd
-
-                    # Save the data
-
-                    if os.path.isdir(self.filesFolder) == False:
-                        os.makedirs(self.filesFolder)
-
-                    with open(os.path.join(self.filesFolder, normFile), 'wb') as outputFile:
-                        pickle.dump(self.normalizationParameters, outputFile, pickle.HIGHEST_PROTOCOL)                
-
-            else:
-                raise ValueError("Training peaks file must have been defined.")
+            Logger()('mz mean: {}, mz std: {}'.format(self.normalizationParameters['mz_mean'], self.normalizationParameters['mz_std']))
+            Logger()('intensity mean: {}, intensity std: {}'.format(self.normalizationParameters['intensity_mean'], self.normalizationParameters['intensity_std']))
 
         else:
+
+            Logger()("Will apply the following normalization parameters, from training dataset")
+            Logger()('mz mean: {}, mz std: {}'.format(self.normalizationParameters['mz_mean'], self.normalizationParameters['mz_std']))
+            Logger()('intensity mean: {}, intensity std: {}'.format(self.normalizationParameters['intensity_mean'], self.normalizationParameters['intensity_std']))
+            
             self.normalizationParameters = trainingDataset.dataset.totalSpectra.normalizationParameters
 
         #
         # Now, normalize the data
         #
+
+        print("Now, normalize the entire spectra (excluding unrecognized scans).")
+
+        for key in self.multipleScansSequences + self.singleScanSequences:
+            for peaksList in self.spectra[key]:
+                peaksList['nzero_peaks'][:, 0] = (peaksList['nzero_peaks'][:, 0] - self.normalizationParameters['mz_mean']) / self.normalizationParameters['mz_std']
+                peaksList['nzero_peaks'][:, 1] = (peaksList['nzero_peaks'][:, 1] - self.normalizationParameters['intensity_mean']) / self.normalizationParameters['intensity_std']
+
 
 
 class MGF:
