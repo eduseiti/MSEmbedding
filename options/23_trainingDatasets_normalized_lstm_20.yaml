@@ -1,6 +1,6 @@
 __include__: abstract.yaml
 exp:
-  dir: logs/MSEmbedding/23_trainingDatasets_newNorm_cosine_adam_lstm_20_LR1e-2_margin0.3_100_epochs_wd1e-5_matrixCriterion_packed
+  dir: logs/MSEmbedding/23_trainingDatasets_allNorm_cosine_madamw_lstm_20_LR1e-3_margin0.3_100_epochs_wd1e-5_matrixCriterion_packed
 dataset:
   train_filtered_files_list: ['b01', 'b03', 'b04', 'b05', 'b06', 'b07', 'b08', 'b09', 'b10', 'b11', 'b12', 'b13', 'b14', 'b15', 'b16', 'b17', 'b18', 'b19', 'b20', 'b21', 'b22', 'b23', 'b24']
   train_peaks_file: train_b01_03_04_05_06_07_08_09_10_11_12_13_14_15_16_17_18_19_20_21_22_23_24.pkl
@@ -13,9 +13,9 @@ model:
   criterion:
     name: MatrixTripletMargin    
 optimizer:
-  # import: MSEmbedding.models.optimizers.factory
-  name: adam
-  lr: 0.01 
+  import: MSEmbedding.models.optimizers.factory
+  name: madamw
+  lr: 0.001 
   weight_decay: 0.00001
 misc:
   cuda: True

@@ -116,7 +116,7 @@ class EmbeddingsDistance(torch.nn.Module):
 
         out = {}
 
-        MedR = np.mean(ranks)
+        MedR = np.median(ranks)
 
         print('Validation MedR={}'.format(MedR))
 
