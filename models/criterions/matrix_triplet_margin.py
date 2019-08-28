@@ -68,10 +68,12 @@ class MatrixTripletMargin(nn.Module):
 
         loss[range(loss.shape[0]), range(loss.shape[0])] = 0.0
 
+        print("-------------> aggregation={}".format(self.aggregation))
+
         if self.aggregation == "valid":
             zeroed_losses = (loss == 0.0).float().sum()
 
-            out['ĺoss'] = torch.sum(loss) / (loss.numel() - zeroed_losses)
+            out['loss'] = torch.sum(loss) / (loss.numel() - zeroed_losses)
         else:
             out['loss'] = torch.mean(loss)
 
