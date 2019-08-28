@@ -15,6 +15,7 @@ class MatrixTripletMargin(nn.Module):
         super(MatrixTripletMargin, self).__init__()
 
         self.margin = Options()['model']['criterion']['loss_margin']
+        self.aggregation = Options()['model']['criterion'].get('aggregation', 'mean')
 
 
     def forward(self, networkOutput, batch):
@@ -67,7 +68,13 @@ class MatrixTripletMargin(nn.Module):
 
         loss[range(loss.shape[0]), range(loss.shape[0])] = 0.0
 
-        out['loss'] = torch.mean(loss)
+        if self.aggregation == "valid":
+            zeroed_losses = (loss == 0.0).float().sum()
+
+            out['ĺoss'] = torch.sum(loss) / (loss.numel() - zeroed_losses)
+        else:
+            out['loss'] = torch.mean(loss)
+
         out['originalIndexes'] = originalIndexes
 
         return out
