@@ -16,6 +16,7 @@ class MatrixTripletMargin(nn.Module):
 
         self.margin = Options()['model']['criterion']['loss_margin']
         self.aggregation = Options()['model']['criterion'].get('aggregation', 'mean')
+        self.epsilon = Options()['model']['criterion'].get('epsilon', 0.00000001)
 
 
     def forward(self, networkOutput, batch):
@@ -71,9 +72,9 @@ class MatrixTripletMargin(nn.Module):
         print("-------------> aggregation={}".format(self.aggregation))
 
         if self.aggregation == "valid":
-            zeroed_losses = (loss == 0.0).float().sum()
+            non_zeroed_losses = (loss < self.epsilon).float().sum()
 
-            out['loss'] = torch.sum(loss) / (loss.numel() - zeroed_losses)
+            out['loss'] = torch.sum(loss) / non_zeroed_losses
         else:
             out['loss'] = torch.mean(loss)
 
