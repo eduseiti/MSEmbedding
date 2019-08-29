@@ -72,7 +72,7 @@ class MatrixTripletMargin(nn.Module):
         print("-------------> aggregation={}".format(self.aggregation))
 
         if self.aggregation == "valid":
-            non_zeroed_losses = (loss < self.epsilon).float().sum()
+            non_zeroed_losses = (loss > self.epsilon).float().sum()
 
             out['loss'] = torch.sum(loss) / non_zeroed_losses
         else:
