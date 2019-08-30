@@ -15,7 +15,7 @@ model:
     aggregation: valid
     epsilon: 0.00000001
 optimizer:
-  import: MSEmbedding.models.optimizers.factory
+#  import: MSEmbedding.models.optimizers.factory
   name: adam
   lr: 0.001
   weight_decay: 0.00001
