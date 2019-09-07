@@ -15,6 +15,10 @@ def factory(model=None, engine=None):
         optimizer = MAdamW(filter(lambda p: p.requires_grad, model.network.parameters()),
                            lr = Options()['optimizer']['lr'],
                            weight_decay = Options()['optimizer'].get('weight_decay', 0))
+    elif (Options()['optimizer']['name'] == 'radam'):
+        optimizer = RAdam(filter(lambda p: p.requires_grad, model.network.parameters()),
+                          lr = Options()['optimizer']['lr'],
+                          weight_decay = Options()['optimizer'].get('weight_decay', 0))
     else:
         raise ValueError()
 
