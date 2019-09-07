@@ -2,6 +2,7 @@ from bootstrap.lib.options import Options
 from bootstrap.lib.logger import Logger
 
 from .madamw import MAdamW
+from .radam import RAdam
 
 #
 # mode: depending on the split (?)
