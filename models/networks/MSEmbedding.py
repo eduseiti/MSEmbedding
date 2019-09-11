@@ -26,6 +26,9 @@ class MSEmbeddingNet(nn.Module):
                             batch_first = True, 
                             bidirectional = self.bidirecionalLstm)
 
+        if self.bidirecionalLstm:
+            self.fusion = nn.Linear(self.lstmOutDim * 2, self.lstmOutDim)
+
 
 
 
@@ -78,7 +81,25 @@ class MSEmbeddingNet(nn.Module):
         # for i in range(x.shape[1]):
         #     print("x[0,{}]={}; x[1,{}]={}; x[2,{}]={}".format(i, x[0, i], i, x[1, i], i, x[2, i]))
 
-        return (x, indexesSortedPeaks)
+        #
+        # Now, return the embeddings to their original sort order, to recover the triplets sequence ― (anchor, positive example, negative example)
+        #
+
+        originalIndexes = x.new_zeros(len(indexesSortedPeaks), dtype = torch.int32)
+
+        for i in range(len(indexesSortedPeaks)):
+            originalIndexes[indexesSortedPeaks[i]] = i
+
+        x = x[originalIndexes.tolist()]
+
+        #
+        # Then, apply the fusion layer if using bi-LSTM
+        #
+
+        if self.bidirecionalLstm:
+            x = F.relu(self.fusion(x))
+            
+        return x
 
 
 
