@@ -16,7 +16,11 @@ class MatrixTripletMargin(nn.Module):
 
         self.margin = Options()['model']['criterion']['loss_margin']
         self.aggregation = Options()['model']['criterion'].get('aggregation', 'mean')
-        self.epsilon = Options()['model']['criterion'].get('epsilon', 0.00000001)
+        self.epsilon = Options()['model']['criterion'].get('epsilon', 0.000001)
+        self.variableMargin = Options()['model']['criterion'].get('variable_margin', False)
+        
+        if self.variableMargin:
+            self.variableMarginStep = Options()['model']['criterion'].get('variable_margin_step', 0.1)
 
 
     def forward(self, networkOutput, batch):
@@ -34,12 +38,6 @@ class MatrixTripletMargin(nn.Module):
         anchors = embeddings[originalIndexes[::3]]
         positive = embeddings[originalIndexes[1::3]]
         negative = embeddings[originalIndexes[2::3]]
-
-        # embeddings = networkOutput
-
-        # anchors = embeddings[::3]
-        # positive = embeddings[1::3]
-        # negative = embeddings[2::3]
 
         anchors = anchors.reshape(anchors.shape[0], -1)
         positive = positive.reshape(positive.shape[0], -1)
@@ -70,17 +68,27 @@ class MatrixTripletMargin(nn.Module):
 
         anchorPositiveDistances = allPositiveCosineDistances.diag().unsqueeze(1)
 
-        loss = torch.max(anchorPositiveDistances - torch.cat((allPositiveCosineDistances, allNegativeCosineDistances), dim = 1) + self.margin, 
-                         anchorPositiveDistances.new_zeros(1))
+        anchorDistances = anchorPositiveDistances - torch.cat((allPositiveCosineDistances, allNegativeCosineDistances), dim = 1) 
+
+        comparissonBase = anchorPositiveDistances.new_zeros(1)
+
+        loss = torch.max(anchorDistances + self.margin, comparissonBase)
 
         loss[range(loss.shape[0]), range(loss.shape[0])] = 0.0
 
-        print("-------------> aggregation={}".format(self.aggregation))
-
         if self.aggregation == "valid":
-            non_zeroed_losses = (loss > self.epsilon).float().sum()
+            if self.variableMargin:
+                zeroedLosses = loss <= self.epsilon
+                countOfNonZeroedLosses = loss.numel() - zeroedLosses.float().sum()
 
-            out['loss'] = torch.sum(loss) / non_zeroed_losses
+                loss2 = torch.max(anchorDistances + self.margin + self.variableMarginStep, comparissonBase)
+                countOfNonZeroedLosses_2 = (loss2[zeroedLosses] > self.epsilon).float().sum()
+
+                out['loss'] = torch.sum(loss) / countOfNonZeroedLosses + torch.sum(loss2) / countOfNonZeroedLosses_2
+            else:
+                countOfNonZeroedLosses = (loss > self.epsilon).float().sum()
+
+                out['loss'] = torch.sum(loss) / countOfNonZeroedLosses
         else:
             out['loss'] = torch.mean(loss)
 
