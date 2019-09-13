@@ -82,6 +82,8 @@ class MatrixTripletMargin(nn.Module):
                 countOfNonZeroedLosses = loss.numel() - zeroedLosses.float().sum()
 
                 loss2 = torch.max(anchorDistances + self.margin + self.variableMarginStep, comparissonBase)
+                loss2[range(loss.shape[0]), range(loss.shape[0])] = 0.0
+                
                 countOfNonZeroedLosses_2 = (loss2[zeroedLosses] > self.epsilon).float().sum()
 
                 out['loss'] = torch.sum(loss) / countOfNonZeroedLosses + torch.sum(loss2) / countOfNonZeroedLosses_2
