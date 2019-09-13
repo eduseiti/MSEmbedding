@@ -1,6 +1,7 @@
 import torch
 from torch import nn
 from bootstrap.lib.options import Options
+from bootstrap.lib.logger import Logger
 
 import pickle
 import os
@@ -81,7 +82,7 @@ class MatrixTripletMargin(nn.Module):
                 zeroedLosses = loss <= self.epsilon
                 countOfNonZeroedLosses = loss.numel() - zeroedLosses.float().sum()
 
-                print("zeroedLosses={}, countOfNonZeroedLosses={}".format(zeroedLosses.float().sum(), countOfNonZeroedLosses))
+                Logger()("zeroedLosses={}, countOfNonZeroedLosses={}".format(zeroedLosses.float().sum(), countOfNonZeroedLosses))
 
                 computedLoss = 0.0
 
@@ -91,7 +92,7 @@ class MatrixTripletMargin(nn.Module):
 
                     countOfNonZeroedLosses_2 = (loss2[zeroedLosses] > self.epsilon).float().sum()
 
-                    print("countOfNonZeroedLosses_2={}".format(countOfNonZeroedLosses_2))
+                    Logger()("countOfNonZeroedLosses_2={}".format(countOfNonZeroedLosses_2))
                     
                     if countOfNonZeroedLosses_2 > 0:
                         computedLoss += torch.sum(loss2[zeroedLosses]) / countOfNonZeroedLosses_2
