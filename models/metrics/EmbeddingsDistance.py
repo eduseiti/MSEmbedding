@@ -73,6 +73,10 @@ class EmbeddingsDistance(torch.nn.Module):
 
         ranks = []
 
+        recall_at_1 = 0
+        recall_at_5 = 0
+        recall_at_10 = 0
+
         for i in range(len(epochEmbeddings) // 3):
 
             allCosineDistances[i * 3, i * 3] = -1 # Make sure the same embedding distance is always the first after sorting
@@ -107,8 +111,14 @@ class EmbeddingsDistance(torch.nn.Module):
             #     quit()
 
 
-
             ranks.append(positiveExampleRankFast)
+
+            if positiveExampleRankFast == 0:
+                recall_at_1 += 1
+            elif positiveExampleRankFast <= 4:
+                recall_at_5 += 1
+            elif positiveExampleRankFast <= 9:
+                recall_at_10 += 1
 
             Logger()('{} - Same rank Fast={}, Same distance Fast={}, Positive rank Fast={}, Negative rank Fast={}'.format(i, 
                 sameRankFast, allCosineDistances[orderedListFast[sameRankFast], orderedListFast[sameRankFast]], 
@@ -122,6 +132,9 @@ class EmbeddingsDistance(torch.nn.Module):
         print('Validation MedR={}'.format(MedR))
 
         out['MedR'] = MedR
+        out['recall_at_1'] = recall_at_1 / len(ranks)
+        out['recall_at_5'] = recall_at_5 / len(ranks)
+        out['recall_at_10'] = recall_at_10 / len(ranks)
 
         for key, value in out.items():
             Logger().log_value('{}_epoch.metric.{}'.format(self.mode, key), float(value), should_print = True)
