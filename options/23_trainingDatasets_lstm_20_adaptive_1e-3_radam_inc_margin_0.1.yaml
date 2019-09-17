@@ -27,6 +27,11 @@ misc:
   cuda: True
 views:
   items:  
+    - logs:train_batch.loss
+    - logs:train_epoch.loss
+    - logs:eval_batch.loss
+    - logs:eval_epoch.loss
+    - logs:eval_epoch.metric.MedR
     - logs:eval_epoch.metric.recall_at_1
     - logs:eval_epoch.metric.recall_at_5
     - logs:eval_epoch.metric.recall_at_10
