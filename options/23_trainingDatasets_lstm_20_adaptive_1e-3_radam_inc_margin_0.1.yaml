@@ -1,0 +1,32 @@
+__include__: abstract.yaml
+exp:
+  dir: logs/MSEmbedding/23_trainingDatasets_radam_bi-lstm_20_LR1e-3_margin0.3_700_epochs_wd1e-5_adaptive_epsilon_1e-6_0.1_inc
+dataset:
+  train_filtered_files_list: ['b01', 'b03', 'b04', 'b05', 'b06', 'b07', 'b08', 'b09', 'b10', 'b11', 'b12', 'b13', 'b14', 'b15', 'b16', 'b17', 'b18', 'b19', 'b20', 'b21', 'b22', 'b23', 'b24']
+  train_peaks_file: train_b01_03_04_05_06_07_08_09_10_11_12_13_14_15_16_17_18_19_20_21_22_23_24.pkl
+  batch_size: 171
+  # batch_size: 591
+engine:
+  nb_epochs: 700
+model:
+  network:
+    lstm_out_dim: 20
+    bidirecional_lstm: True
+  criterion:
+    name: MatrixTripletMargin
+    aggregation: valid
+    epsilon: 0.000001
+    variable_margin: True
+    variable_margin_step: 0.1
+optimizer:
+  import: MSEmbedding.models.optimizers.factory
+  name: radam
+  lr: 0.001 
+  weight_decay: 0.00001
+misc:
+  cuda: True
+views:
+  items:  
+    - logs:eval_epoch.metric.recall_at_1
+    - logs:eval_epoch.metric.recall_at_5
+    - logs:eval_epoch.metric.recall_at_10
