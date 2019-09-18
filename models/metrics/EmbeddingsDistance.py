@@ -115,9 +115,11 @@ class EmbeddingsDistance(torch.nn.Module):
 
             if positiveExampleRankFast == 0:
                 recall_at_1 += 1
-            elif positiveExampleRankFast <= 4:
+
+            if positiveExampleRankFast <= 4:
                 recall_at_5 += 1
-            elif positiveExampleRankFast <= 9:
+
+            if positiveExampleRankFast <= 9:
                 recall_at_10 += 1
 
             Logger()('{} - Same rank Fast={}, Same distance Fast={}, Positive rank Fast={}, Negative rank Fast={}'.format(i, 
