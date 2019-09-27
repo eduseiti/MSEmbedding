@@ -63,7 +63,7 @@ def main():
 
         # quit()
 
-        all_spectra = all_spectra[:, :, 0] * all_spectra[:, :, 1]
+        all_spectra = all_spectra[:, :, 0] * torch.sqrt(all_spectra[:, :, 1])
 
         all_spectra_norm = nn.functional.normalize(all_spectra)
 
