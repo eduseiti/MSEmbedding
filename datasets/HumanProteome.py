@@ -39,15 +39,16 @@ class HumanProteome(data.Dataset):
         trainPeaksFile = None
 
         if split == 'train':
-            if Options()['dataset']['train_peaks_file']:
-                trainPeaksFile = Options()['dataset']['train_peaks_file']
-            else:
-                trainPeaksFile = HumanProteome.TRAIN_DATASET
+
+            trainPeaksFile = Options().get("dataset.train_peaks_file", HumanProteome.TRAIN_DATASET)
 
             self.dataset = PXD000561(spectraFilename = trainPeaksFile)
             self.dataset.load_identifications(filteredFilesList = Options()['dataset']['train_filtered_files_list'])
         else:
-            self.dataset = PXD000561(spectraFilename = HumanProteome.TEST_DATASET)
+            evalMatchesFile = Options().get("dataset.eval_matches_file", HumanProteome.TEST_DATASET)
+            evalPeaksFile = Options().get("dataset.eval_peaks_file", "Gel_Elite_49.csv")
+
+            self.dataset = PXD000561(identificationsFilename = evalMatchesFile, spectraFilename = evalPeaksFile)
             self.dataset.load_identifications()
 
 

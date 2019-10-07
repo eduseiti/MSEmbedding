@@ -19,8 +19,41 @@ class PXD000561:
 
     SCAN_SEQUENCE_MAX_DIGITS = 8
     SCAN_SEQUENCE_OVER_LIMIT = 999999999
-    
-    SPECTRA_FILES = {
+
+    FETAL_BRAIN_GEL_VELOS_FILES = {
+		"E1" : "Fetal_Brain_Gel_Velos_16_f01.mgf",
+		"E1rep" : "Fetal_Brain_Gel_Velos_16_f02.mgf",
+		"E2" : "Fetal_Brain_Gel_Velos_16_f03.mgf",
+		"E3" : "Fetal_Brain_Gel_Velos_16_f04.mgf",
+		"E3rep" : "Fetal_Brain_Gel_Velos_16_f05.mgf",
+		"E4" : "Fetal_Brain_Gel_Velos_16_f06.mgf",
+		"E5" : "Fetal_Brain_Gel_Velos_16_f07.mgf",
+		"E6" : "Fetal_Brain_Gel_Velos_16_f08.mgf",
+		"E7" : "Fetal_Brain_Gel_Velos_16_f09.mgf",
+		"E8" : "Fetal_Brain_Gel_Velos_16_f10.mgf",
+		"E9" : "Fetal_Brain_Gel_Velos_16_f11.mgf",
+		"E10" : "Fetal_Brain_Gel_Velos_16_f12.mgf",
+		"E11" : "Fetal_Brain_Gel_Velos_16_f13.mgf",
+		"E12" : "Fetal_Brain_Gel_Velos_16_f14.mgf",
+		"F1" : "Fetal_Brain_Gel_Velos_16_f15.mgf",
+		"F2" : "Fetal_Brain_Gel_Velos_16_f16.mgf",
+		"F3" : "Fetal_Brain_Gel_Velos_16_f17.mgf",
+		"F4" : "Fetal_Brain_Gel_Velos_16_f18.mgf",
+		"F5" : "Fetal_Brain_Gel_Velos_16_f19.mgf",
+		"F6" : "Fetal_Brain_Gel_Velos_16_f20.mgf",
+		"F7" : "Fetal_Brain_Gel_Velos_16_f21.mgf",
+		"F8" : "Fetal_Brain_Gel_Velos_16_f22.mgf",
+		"F9" : "Fetal_Brain_Gel_Velos_16_f23.mgf",
+		"F10" : "Fetal_Brain_Gel_Velos_16_f24.mgf",
+		"F11" : "Fetal_Brain_Gel_Velos_16_f25.mgf",
+		"F12" : "Fetal_Brain_Gel_Velos_16_f26.mgf",
+		"G1" : "Fetal_Brain_Gel_Velos_16_f27.mgf",
+		"G2" : "Fetal_Brain_Gel_Velos_16_f28.mgf",
+		"G3" : "Fetal_Brain_Gel_Velos_16_f29.mgf"
+    }
+
+
+    ADULT_ADRENALGLAND_GEL_ELITE_FILES = {
         'b01' : 'Adult_Adrenalgland_Gel_Elite_49_f01.mgf',
         'b02' : 'Adult_Adrenalgland_Gel_Elite_49_f02.mgf',
         'b03' : 'Adult_Adrenalgland_Gel_Elite_49_f03.mgf',
@@ -47,6 +80,13 @@ class PXD000561:
         'b24' : 'Adult_Adrenalgland_Gel_Elite_49_f24.mgf'
     }
 
+
+    MATCHES_TO_FILES_LIST = {
+        "Gel_Elite_49.csv" : ADULT_ADRENALGLAND_GEL_ELITE_FILES,
+        "fetal_brain_gel_velos_16.csv" : FETAL_BRAIN_GEL_VELOS_FILES
+    }
+
+
     def __init__(self, identificationsFilename = 'Gel_Elite_49.csv', spectraFilename = None):
     
         self.identificationsFilename = identificationsFilename
@@ -57,7 +97,6 @@ class PXD000561:
     
     def load_identifications(self, verbose = False, filteredFilesList = None):
 
-        
         #
         # First check if the spectra has already been loaded
         #
@@ -69,24 +108,24 @@ class PXD000561:
         
         print('Loading file: {}. dir:{}'.format(self.identificationsFilename, os.getcwd()))
 
-        gel_elite_49 = pd.read_csv(self.identificationsFilename)
+        matches_file = pd.read_csv(self.identificationsFilename)
 
         if verbose:
-            print(gel_elite_49)
+            print(matches_file)
 
-        print('Number of unique sequences found: {}'.format(len(gel_elite_49['Sequence'].unique())))
+        print('Number of unique sequences found: {}'.format(len(matches_file['Sequence'].unique())))
 
         #
         # Inject new columns to hold the scan sequence within the file and the file name, recovered from the 
         # "Spectrum Title" information.
         #
 
-        gel_elite_49['File Sequence'] = \
-            gel_elite_49['Spectrum Title'].str.split("_", expand = True).iloc[:, 3].str.zfill(PXD000561.SCAN_SEQUENCE_MAX_DIGITS)
+        matches_file['File Sequence'] = \
+            matches_file['Spectrum Title'].str.split("_", expand = True).iloc[:, 3].str.zfill(PXD000561.SCAN_SEQUENCE_MAX_DIGITS)
         
-        gel_elite_49['File'] = gel_elite_49['Spectrum Title'].str.split("_", expand = True).iloc[:, 2]
+        matches_file['File'] = matches_file['Spectrum Title'].str.split("_", expand = True).iloc[:, 2]
 
-        ordered = gel_elite_49.sort_values(['File', 'File Sequence'])
+        ordered = matches_file.sort_values(['File', 'File Sequence'])
 
 
         #
@@ -100,8 +139,8 @@ class PXD000561:
         self.uniqueCombination = ordered[~duplicatesIndication]
         print('Unique combinations found: {}'.format(self.uniqueCombination.shape))
 
-        print('Unique combinations file {}: {}'.format('b01', 
-                                                       self.uniqueCombination[self.uniqueCombination['File'] == 'b01'].shape))
+        # print('Unique combinations file {}: {}'.format('b01', 
+        #                                                self.uniqueCombination[self.uniqueCombination['File'] == 'b01'].shape))
 
         if filteredFilesList:
             self.uniqueCombination = self.uniqueCombination[self.uniqueCombination['File'].isin(filteredFilesList)]
@@ -116,8 +155,10 @@ class PXD000561:
 
         startTime = time.time()
 
+        spectraFiles = PXD000561.MATCHES_TO_FILES_LIST[self.identificationsFilename]
+
         for index, row in self.uniqueCombination.iterrows():
-            if (PXD000561.SPECTRA_FILES[row['File']] != currentFileName):
+            if (spectraFiles[row['File']] != currentFileName):
                 if (currentFile != None):
 
                     #
@@ -137,7 +178,7 @@ class PXD000561:
                     # break
 
                 currentFileNamePrefix = row['File']
-                currentFileName = PXD000561.SPECTRA_FILES[currentFileNamePrefix]
+                currentFileName = spectraFiles[currentFileNamePrefix]
 
                 print('Will open file \"{}\"'.format(currentFileName))
 
@@ -248,22 +289,23 @@ class SpectraFound:
             with open(os.path.join(self.filesFolder, spectraName), 'rb') as inputFile:
                 entireData = pickle.load(inputFile)
 
+            # Check if the data is already saved in the complete format
+
+            if 'spectra' in entireData.keys():
+                self.spectra = entireData['spectra']
+                self.multipleScansSequences = entireData['multipleScansSequences']
+                self.singleScanSequences = entireData['singleScanSequences']
+                self.normalizationParameters = entireData['normalizationParameters']
+            else:
+                self.spectra = entireData
+
+                self.multipleScansSequences = None
+                self.singleScanSequences = None
+                self.normalizationParameters = None
+
         except Exception:
             print('Could not open spectra file {}'.format(os.path.join(self.filesFolder, spectraName)))
                     
-        # Check if the data is already saved in the complete format
-
-        if 'spectra' in entireData.keys():
-            self.spectra = entireData['spectra']
-            self.multipleScansSequences = entireData['multipleScansSequences']
-            self.singleScanSequences = entireData['singleScanSequences']
-            self.normalizationParameters = entireData['normalizationParameters']
-        else:
-            self.spectra = entireData
-
-            self.multipleScansSequences = None
-            self.singleScanSequences = None
-            self.normalizationParameters = None
 
 
 
