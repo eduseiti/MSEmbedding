@@ -49,7 +49,7 @@ class HumanProteome(data.Dataset):
             evalPeaksFile = Options().get("dataset.eval_peaks_file", "Gel_Elite_49.csv")
 
             self.dataset = PXD000561(identificationsFilename = evalMatchesFile, spectraFilename = evalPeaksFile)
-            self.dataset.load_identifications()
+            self.dataset.load_identifications(filteredFilesList = Options()['dataset']['eval_filtered_files_list'])
 
 
         # Check if has processed the spectra yet

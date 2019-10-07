@@ -285,6 +285,10 @@ class SpectraFound:
     
     def load_spectra(self, spectraName):
     
+        self.multipleScansSequences = None
+        self.singleScanSequences = None
+        self.normalizationParameters = None
+
         try:
             with open(os.path.join(self.filesFolder, spectraName), 'rb') as inputFile:
                 entireData = pickle.load(inputFile)
@@ -299,9 +303,7 @@ class SpectraFound:
             else:
                 self.spectra = entireData
 
-                self.multipleScansSequences = None
-                self.singleScanSequences = None
-                self.normalizationParameters = None
+
 
         except Exception:
             print('Could not open spectra file {}'.format(os.path.join(self.filesFolder, spectraName)))
