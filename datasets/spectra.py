@@ -81,9 +81,83 @@ class PXD000561:
     }
 
 
+
+    ADULT_ADRENALGLAND_GEL_VELOS_FILES = {
+        'D1' : 'Adult_Adrenalgland_Gel_Velos_2_f01.mgf',
+        'D2' : 'Adult_Adrenalgland_Gel_Velos_2_f02.mgf',
+        'D3' : 'Adult_Adrenalgland_Gel_Velos_2_f03.mgf',
+        'D4' : 'Adult_Adrenalgland_Gel_Velos_2_f04.mgf',
+        'D5' : 'Adult_Adrenalgland_Gel_Velos_2_f05.mgf',
+        'D6' : 'Adult_Adrenalgland_Gel_Velos_2_f06.mgf',
+        'D7' : 'Adult_Adrenalgland_Gel_Velos_2_f07.mgf',
+        'D8' : 'Adult_Adrenalgland_Gel_Velos_2_f08.mgf',
+        'D9' : 'Adult_Adrenalgland_Gel_Velos_2_f09.mgf',
+        'D10' : 'Adult_Adrenalgland_Gel_Velos_2_f10.mgf',
+        'D11' : 'Adult_Adrenalgland_Gel_Velos_2_f11.mgf',
+        'D12' : 'Adult_Adrenalgland_Gel_Velos_2_f12.mgf',
+        'E1' : 'Adult_Adrenalgland_Gel_Velos_2_f13.mgf',
+        'E1Re' : 'Adult_Adrenalgland_Gel_Velos_2_f14.mgf',
+        'E2' : 'Adult_Adrenalgland_Gel_Velos_2_f15.mgf',
+        'E3' : 'Adult_Adrenalgland_Gel_Velos_2_f16.mgf',
+        'E4' : 'Adult_Adrenalgland_Gel_Velos_2_f17.mgf',
+        'E5' : 'Adult_Adrenalgland_Gel_Velos_2_f18.mgf',
+        'E6' : 'Adult_Adrenalgland_Gel_Velos_2_f19.mgf',
+        'E6-110108181623' : 'Adult_Adrenalgland_Gel_Velos_2_f20.mgf',
+        'E7' : 'Adult_Adrenalgland_Gel_Velos_2_f21.mgf',
+        'E8' : 'Adult_Adrenalgland_Gel_Velos_2_f22.mgf',
+        'E9' : 'Adult_Adrenalgland_Gel_Velos_2_f23.mgf',
+        'E10' : 'Adult_Adrenalgland_Gel_Velos_2_f24.mgf',
+        'E11' : 'Adult_Adrenalgland_Gel_Velos_2_f25.mgf',
+        'E12' : 'Adult_Adrenalgland_Gel_Velos_2_f26.mgf'
+    }
+
+
+
+    ADULT_ADRENALGLAND_BRP_VELOS_FILES = {
+        'A1' : 'Adult_Adrenalgland_bRP_Velos_1_f01.mgf',
+        'A2' : 'Adult_Adrenalgland_bRP_Velos_1_f02.mgf',
+        'A3' : 'Adult_Adrenalgland_bRP_Velos_1_f03.mgf',
+        'A4' : 'Adult_Adrenalgland_bRP_Velos_1_f04.mgf',
+        'A5' : 'Adult_Adrenalgland_bRP_Velos_1_f05.mgf',
+        'A6' : 'Adult_Adrenalgland_bRP_Velos_1_f06.mgf',
+        'A7' : 'Adult_Adrenalgland_bRP_Velos_1_f07.mgf',
+        'A8' : 'Adult_Adrenalgland_bRP_Velos_1_f08.mgf',
+        'A9' : 'Adult_Adrenalgland_bRP_Velos_1_f09.mgf',
+        'A10' : 'Adult_Adrenalgland_bRP_Velos_1_f10.mgf',
+        'A11' : 'Adult_Adrenalgland_bRP_Velos_1_f11.mgf',
+        'A12' : 'Adult_Adrenalgland_bRP_Velos_1_f12.mgf',
+        'B1' : 'Adult_Adrenalgland_bRP_Velos_1_f13.mgf',
+        'B2' : 'Adult_Adrenalgland_bRP_Velos_1_f14.mgf',
+        'B3' : 'Adult_Adrenalgland_bRP_Velos_1_f15.mgf',
+        'B4' : 'Adult_Adrenalgland_bRP_Velos_1_f16.mgf',
+        'B5' : 'Adult_Adrenalgland_bRP_Velos_1_f17.mgf',
+        'B6' : 'Adult_Adrenalgland_bRP_Velos_1_f18.mgf',
+        'B7' : 'Adult_Adrenalgland_bRP_Velos_1_f19.mgf',
+        'B8' : 'Adult_Adrenalgland_bRP_Velos_1_f20.mgf',
+        'B9' : 'Adult_Adrenalgland_bRP_Velos_1_f21.mgf',
+        'B10' : 'Adult_Adrenalgland_bRP_Velos_1_f22.mgf',
+        'B11' : 'Adult_Adrenalgland_bRP_Velos_1_f23.mgf',
+        'B12' : 'Adult_Adrenalgland_bRP_Velos_1_f24.mgf',
+        'C1' : 'Adult_Adrenalgland_bRP_Velos_1_f25.mgf',
+        'C2' : 'Adult_Adrenalgland_bRP_Velos_1_f26.mgf',
+        'C3' : 'Adult_Adrenalgland_bRP_Velos_1_f27.mgf',
+        'C4' : 'Adult_Adrenalgland_bRP_Velos_1_f28.mgf',
+        'C5' : 'Adult_Adrenalgland_bRP_Velos_1_f29.mgf',
+        'C6' : 'Adult_Adrenalgland_bRP_Velos_1_f30.mgf',
+        'C7' : 'Adult_Adrenalgland_bRP_Velos_1_f31.mgf',
+        'C8' : 'Adult_Adrenalgland_bRP_Velos_1_f32.mgf',
+        'C9' : 'Adult_Adrenalgland_bRP_Velos_1_f33.mgf',
+        'C10' : 'Adult_Adrenalgland_bRP_Velos_1_f34.mgf',
+        'C11' : 'Adult_Adrenalgland_bRP_Velos_1_f35.mgf',
+        'C12' : 'Adult_Adrenalgland_bRP_Velos_1_f36.mgf'
+    }
+
+
     MATCHES_TO_FILES_LIST = {
         "Gel_Elite_49.csv" : ADULT_ADRENALGLAND_GEL_ELITE_FILES,
-        "fetal_brain_gel_velos_16.csv" : FETAL_BRAIN_GEL_VELOS_FILES
+        "fetal_brain_gel_velos_16.csv" : FETAL_BRAIN_GEL_VELOS_FILES,
+        "adult_adrenalgland_gel_velos.csv" : ADULT_ADRENALGLAND_GEL_VELOS_FILES,
+        "adult_adrenalgland_bRP_velos.csv" : ADULT_ADRENALGLAND_BRP_VELOS_FILES
     }
 
 
