@@ -9,13 +9,22 @@ dataset:
   # eval_filtered_files_list: ['A1', 'B4', 'C11']
   # eval_peaks_file: eval_adult_adrenalgland_bRP_velos_A1_B4_C11.pkl
 
-  eval_matches_file: adult_adrenalgland_gel_velos.csv
-  eval_filtered_files_list: ['D3', 'E3', 'E7']
-  eval_peaks_file: eval_adult_adrenalgland_gel_velos_D3_E3_E7.pkl
-
   # eval_matches_file: fetal_brain_gel_velos_16.csv
   # eval_filtered_files_list: ['E1', 'E8', 'F9']
   # eval_peaks_file: eval_fetal_brain_gel_velos_E1_E8_F9.pkl
+
+  # eval_matches_file: adult_adrenalgland_gel_velos.csv
+  # eval_filtered_files_list: ['D3', 'E3', 'E7']
+  # eval_peaks_file: eval_adult_adrenalgland_gel_velos_D3_E3_E7.pkl
+
+  # eval_matches_file: adult_urinarybladder_gel_elite.csv
+  # eval_filtered_files_list: ['b1', 'b12', 'b24']
+  # eval_peaks_file: eval_urinarybladder_gel_elite_b1_b12_b24.pkl
+
+  eval_matches_file: adult_platelets_gel_elite.csv
+  eval_filtered_files_list: ['b1', 'b18', 'b24']
+  eval_peaks_file: eval_adult_platelets_gel_elite_b1_b18_b24.pkl
+
   batch_size: 171
 engine:
   nb_epochs: 700

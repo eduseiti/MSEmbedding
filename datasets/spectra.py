@@ -253,7 +253,9 @@ class PXD000561:
         "Gel_Elite_49.csv" : ADULT_ADRENALGLAND_GEL_ELITE_FILES,
         "fetal_brain_gel_velos_16.csv" : FETAL_BRAIN_GEL_VELOS_FILES,
         "adult_adrenalgland_gel_velos.csv" : ADULT_ADRENALGLAND_GEL_VELOS_FILES,
-        "adult_adrenalgland_bRP_velos.csv" : ADULT_ADRENALGLAND_BRP_VELOS_FILES
+        "adult_adrenalgland_bRP_velos.csv" : ADULT_ADRENALGLAND_BRP_VELOS_FILES,
+        "adult_urinarybladder_gel_elite.csv" : ADULT_URINARYBLADDER_GEL_ELITE_FILES,
+        "adult_platelets_gel_elite.csv" : ADULT_PLATELETS_GEL_ELITE_FILES
     }
 
 
