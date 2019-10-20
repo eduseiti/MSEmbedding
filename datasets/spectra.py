@@ -15,419 +15,6 @@ import torch
 from bootstrap.lib.logger import Logger
 
 
-class PXD000561:
-
-    SCAN_SEQUENCE_MAX_DIGITS = 8
-    SCAN_SEQUENCE_OVER_LIMIT = 999999999
-
-    FETAL_BRAIN_GEL_VELOS_FILES = {
-		"E1" : "Fetal_Brain_Gel_Velos_16_f01.mgf",
-		"E1rep" : "Fetal_Brain_Gel_Velos_16_f02.mgf",
-		"E2" : "Fetal_Brain_Gel_Velos_16_f03.mgf",
-		"E3" : "Fetal_Brain_Gel_Velos_16_f04.mgf",
-		"E3rep" : "Fetal_Brain_Gel_Velos_16_f05.mgf",
-		"E4" : "Fetal_Brain_Gel_Velos_16_f06.mgf",
-		"E5" : "Fetal_Brain_Gel_Velos_16_f07.mgf",
-		"E6" : "Fetal_Brain_Gel_Velos_16_f08.mgf",
-		"E7" : "Fetal_Brain_Gel_Velos_16_f09.mgf",
-		"E8" : "Fetal_Brain_Gel_Velos_16_f10.mgf",
-		"E9" : "Fetal_Brain_Gel_Velos_16_f11.mgf",
-		"E10" : "Fetal_Brain_Gel_Velos_16_f12.mgf",
-		"E11" : "Fetal_Brain_Gel_Velos_16_f13.mgf",
-		"E12" : "Fetal_Brain_Gel_Velos_16_f14.mgf",
-		"F1" : "Fetal_Brain_Gel_Velos_16_f15.mgf",
-		"F2" : "Fetal_Brain_Gel_Velos_16_f16.mgf",
-		"F3" : "Fetal_Brain_Gel_Velos_16_f17.mgf",
-		"F4" : "Fetal_Brain_Gel_Velos_16_f18.mgf",
-		"F5" : "Fetal_Brain_Gel_Velos_16_f19.mgf",
-		"F6" : "Fetal_Brain_Gel_Velos_16_f20.mgf",
-		"F7" : "Fetal_Brain_Gel_Velos_16_f21.mgf",
-		"F8" : "Fetal_Brain_Gel_Velos_16_f22.mgf",
-		"F9" : "Fetal_Brain_Gel_Velos_16_f23.mgf",
-		"F10" : "Fetal_Brain_Gel_Velos_16_f24.mgf",
-		"F11" : "Fetal_Brain_Gel_Velos_16_f25.mgf",
-		"F12" : "Fetal_Brain_Gel_Velos_16_f26.mgf",
-		"G1" : "Fetal_Brain_Gel_Velos_16_f27.mgf",
-		"G2" : "Fetal_Brain_Gel_Velos_16_f28.mgf",
-		"G3" : "Fetal_Brain_Gel_Velos_16_f29.mgf"
-    }
-
-
-    ADULT_ADRENALGLAND_GEL_ELITE_FILES = {
-        'b01' : 'Adult_Adrenalgland_Gel_Elite_49_f01.mgf',
-        'b02' : 'Adult_Adrenalgland_Gel_Elite_49_f02.mgf',
-        'b03' : 'Adult_Adrenalgland_Gel_Elite_49_f03.mgf',
-        'b04' : 'Adult_Adrenalgland_Gel_Elite_49_f04.mgf',
-        'b05' : 'Adult_Adrenalgland_Gel_Elite_49_f05.mgf',
-        'b06' : 'Adult_Adrenalgland_Gel_Elite_49_f06.mgf',
-        'b07' : 'Adult_Adrenalgland_Gel_Elite_49_f07.mgf',
-        'b08' : 'Adult_Adrenalgland_Gel_Elite_49_f08.mgf',
-        'b09' : 'Adult_Adrenalgland_Gel_Elite_49_f09.mgf',
-        'b10' : 'Adult_Adrenalgland_Gel_Elite_49_f10.mgf',
-        'b11' : 'Adult_Adrenalgland_Gel_Elite_49_f11.mgf',
-        'b12' : 'Adult_Adrenalgland_Gel_Elite_49_f12.mgf',
-        'b13' : 'Adult_Adrenalgland_Gel_Elite_49_f13.mgf',
-        'b14' : 'Adult_Adrenalgland_Gel_Elite_49_f14.mgf',
-        'b15' : 'Adult_Adrenalgland_Gel_Elite_49_f15.mgf',
-        'b16' : 'Adult_Adrenalgland_Gel_Elite_49_f16.mgf',
-        'b17' : 'Adult_Adrenalgland_Gel_Elite_49_f17.mgf',
-        'b18' : 'Adult_Adrenalgland_Gel_Elite_49_f18.mgf',
-        'b19' : 'Adult_Adrenalgland_Gel_Elite_49_f19.mgf',
-        'b20' : 'Adult_Adrenalgland_Gel_Elite_49_f20.mgf',
-        'b21' : 'Adult_Adrenalgland_Gel_Elite_49_f21.mgf',
-        'b22' : 'Adult_Adrenalgland_Gel_Elite_49_f22.mgf',
-        'b23' : 'Adult_Adrenalgland_Gel_Elite_49_f23.mgf',
-        'b24' : 'Adult_Adrenalgland_Gel_Elite_49_f24.mgf'
-    }
-
-
-
-    ADULT_ADRENALGLAND_GEL_VELOS_FILES = {
-        'D1' : 'Adult_Adrenalgland_Gel_Velos_2_f01.mgf',
-        'D2' : 'Adult_Adrenalgland_Gel_Velos_2_f02.mgf',
-        'D3' : 'Adult_Adrenalgland_Gel_Velos_2_f03.mgf',
-        'D4' : 'Adult_Adrenalgland_Gel_Velos_2_f04.mgf',
-        'D5' : 'Adult_Adrenalgland_Gel_Velos_2_f05.mgf',
-        'D6' : 'Adult_Adrenalgland_Gel_Velos_2_f06.mgf',
-        'D7' : 'Adult_Adrenalgland_Gel_Velos_2_f07.mgf',
-        'D8' : 'Adult_Adrenalgland_Gel_Velos_2_f08.mgf',
-        'D9' : 'Adult_Adrenalgland_Gel_Velos_2_f09.mgf',
-        'D10' : 'Adult_Adrenalgland_Gel_Velos_2_f10.mgf',
-        'D11' : 'Adult_Adrenalgland_Gel_Velos_2_f11.mgf',
-        'D12' : 'Adult_Adrenalgland_Gel_Velos_2_f12.mgf',
-        'E1' : 'Adult_Adrenalgland_Gel_Velos_2_f13.mgf',
-        'E1Re' : 'Adult_Adrenalgland_Gel_Velos_2_f14.mgf',
-        'E2' : 'Adult_Adrenalgland_Gel_Velos_2_f15.mgf',
-        'E3' : 'Adult_Adrenalgland_Gel_Velos_2_f16.mgf',
-        'E4' : 'Adult_Adrenalgland_Gel_Velos_2_f17.mgf',
-        'E5' : 'Adult_Adrenalgland_Gel_Velos_2_f18.mgf',
-        'E6' : 'Adult_Adrenalgland_Gel_Velos_2_f19.mgf',
-        'E6-110108181623' : 'Adult_Adrenalgland_Gel_Velos_2_f20.mgf',
-        'E7' : 'Adult_Adrenalgland_Gel_Velos_2_f21.mgf',
-        'E8' : 'Adult_Adrenalgland_Gel_Velos_2_f22.mgf',
-        'E9' : 'Adult_Adrenalgland_Gel_Velos_2_f23.mgf',
-        'E10' : 'Adult_Adrenalgland_Gel_Velos_2_f24.mgf',
-        'E11' : 'Adult_Adrenalgland_Gel_Velos_2_f25.mgf',
-        'E12' : 'Adult_Adrenalgland_Gel_Velos_2_f26.mgf'
-    }
-
-
-
-    ADULT_ADRENALGLAND_BRP_VELOS_FILES = {
-        'A1' : 'Adult_Adrenalgland_bRP_Velos_1_f01.mgf',
-        'A2' : 'Adult_Adrenalgland_bRP_Velos_1_f02.mgf',
-        'A3' : 'Adult_Adrenalgland_bRP_Velos_1_f03.mgf',
-        'A4' : 'Adult_Adrenalgland_bRP_Velos_1_f04.mgf',
-        'A5' : 'Adult_Adrenalgland_bRP_Velos_1_f05.mgf',
-        'A6' : 'Adult_Adrenalgland_bRP_Velos_1_f06.mgf',
-        'A7' : 'Adult_Adrenalgland_bRP_Velos_1_f07.mgf',
-        'A8' : 'Adult_Adrenalgland_bRP_Velos_1_f08.mgf',
-        'A9' : 'Adult_Adrenalgland_bRP_Velos_1_f09.mgf',
-        'A10' : 'Adult_Adrenalgland_bRP_Velos_1_f10.mgf',
-        'A11' : 'Adult_Adrenalgland_bRP_Velos_1_f11.mgf',
-        'A12' : 'Adult_Adrenalgland_bRP_Velos_1_f12.mgf',
-        'B1' : 'Adult_Adrenalgland_bRP_Velos_1_f13.mgf',
-        'B2' : 'Adult_Adrenalgland_bRP_Velos_1_f14.mgf',
-        'B3' : 'Adult_Adrenalgland_bRP_Velos_1_f15.mgf',
-        'B4' : 'Adult_Adrenalgland_bRP_Velos_1_f16.mgf',
-        'B5' : 'Adult_Adrenalgland_bRP_Velos_1_f17.mgf',
-        'B6' : 'Adult_Adrenalgland_bRP_Velos_1_f18.mgf',
-        'B7' : 'Adult_Adrenalgland_bRP_Velos_1_f19.mgf',
-        'B8' : 'Adult_Adrenalgland_bRP_Velos_1_f20.mgf',
-        'B9' : 'Adult_Adrenalgland_bRP_Velos_1_f21.mgf',
-        'B10' : 'Adult_Adrenalgland_bRP_Velos_1_f22.mgf',
-        'B11' : 'Adult_Adrenalgland_bRP_Velos_1_f23.mgf',
-        'B12' : 'Adult_Adrenalgland_bRP_Velos_1_f24.mgf',
-        'C1' : 'Adult_Adrenalgland_bRP_Velos_1_f25.mgf',
-        'C2' : 'Adult_Adrenalgland_bRP_Velos_1_f26.mgf',
-        'C3' : 'Adult_Adrenalgland_bRP_Velos_1_f27.mgf',
-        'C4' : 'Adult_Adrenalgland_bRP_Velos_1_f28.mgf',
-        'C5' : 'Adult_Adrenalgland_bRP_Velos_1_f29.mgf',
-        'C6' : 'Adult_Adrenalgland_bRP_Velos_1_f30.mgf',
-        'C7' : 'Adult_Adrenalgland_bRP_Velos_1_f31.mgf',
-        'C8' : 'Adult_Adrenalgland_bRP_Velos_1_f32.mgf',
-        'C9' : 'Adult_Adrenalgland_bRP_Velos_1_f33.mgf',
-        'C10' : 'Adult_Adrenalgland_bRP_Velos_1_f34.mgf',
-        'C11' : 'Adult_Adrenalgland_bRP_Velos_1_f35.mgf',
-        'C12' : 'Adult_Adrenalgland_bRP_Velos_1_f36.mgf'
-    }
-
-
-    ADULT_PLATELETS_GEL_ELITE_FILES = {
-        'b1' : 'Adult_Platelets_Gel_Elite_48_f01.mgf',
-        'b2' : 'Adult_Platelets_Gel_Elite_48_f02.mgf',
-        'b3' : 'Adult_Platelets_Gel_Elite_48_f03.mgf',
-        'b4' : 'Adult_Platelets_Gel_Elite_48_f04.mgf',
-        'b5' : 'Adult_Platelets_Gel_Elite_48_f05.mgf',
-        'b6' : 'Adult_Platelets_Gel_Elite_48_f06.mgf',
-        'b7' : 'Adult_Platelets_Gel_Elite_48_f07.mgf',
-        'b8' : 'Adult_Platelets_Gel_Elite_48_f08.mgf',
-        'b9' : 'Adult_Platelets_Gel_Elite_48_f09.mgf',
-        'b10' : 'Adult_Platelets_Gel_Elite_48_f10.mgf',
-        'b11' : 'Adult_Platelets_Gel_Elite_48_f11.mgf',
-        'b12' : 'Adult_Platelets_Gel_Elite_48_f12.mgf',
-        'b13' : 'Adult_Platelets_Gel_Elite_48_f13.mgf',
-        'b14' : 'Adult_Platelets_Gel_Elite_48_f14.mgf',
-        'b15' : 'Adult_Platelets_Gel_Elite_48_f15.mgf',
-        'b16' : 'Adult_Platelets_Gel_Elite_48_f16.mgf',
-        'b17' : 'Adult_Platelets_Gel_Elite_48_f17.mgf',
-        'b18' : 'Adult_Platelets_Gel_Elite_48_f18.mgf',
-        'b19' : 'Adult_Platelets_Gel_Elite_48_f19.mgf',
-        'b20' : 'Adult_Platelets_Gel_Elite_48_f20.mgf',
-        'b21' : 'Adult_Platelets_Gel_Elite_48_f21.mgf',
-        'b22' : 'Adult_Platelets_Gel_Elite_48_f22.mgf',
-        'b23' : 'Adult_Platelets_Gel_Elite_48_f23.mgf',
-        'b24' : 'Adult_Platelets_Gel_Elite_48_f24.mgf',
-    }
-
-
-    ADULT_URINARYBLADDER_GEL_ELITE_FILES = {
-        'b1' : 'Adult_Urinarybladder_Gel_Elite_70_f01.mgf',
-        'b2' : 'Adult_Urinarybladder_Gel_Elite_70_f02.mgf',
-        'b3' : 'Adult_Urinarybladder_Gel_Elite_70_f03.mgf',
-        'b4' : 'Adult_Urinarybladder_Gel_Elite_70_f04.mgf',
-        'b5' : 'Adult_Urinarybladder_Gel_Elite_70_f05.mgf',
-        'b6' : 'Adult_Urinarybladder_Gel_Elite_70_f06.mgf',
-        'b7' : 'Adult_Urinarybladder_Gel_Elite_70_f07.mgf',
-        'b8' : 'Adult_Urinarybladder_Gel_Elite_70_f08.mgf',
-        'b9' : 'Adult_Urinarybladder_Gel_Elite_70_f09.mgf',
-        'b9r' : 'Adult_Urinarybladder_Gel_Elite_70_f1.mgf',
-        'b10' : 'Adult_Urinarybladder_Gel_Elite_70_f11.mgf',
-        'b11' : 'Adult_Urinarybladder_Gel_Elite_70_f12.mgf',
-        'b12' : 'Adult_Urinarybladder_Gel_Elite_70_f13.mgf',
-        'b13' : 'Adult_Urinarybladder_Gel_Elite_70_f14.mgf',
-        'b14' : 'Adult_Urinarybladder_Gel_Elite_70_f15.mgf',
-        'b15' : 'Adult_Urinarybladder_Gel_Elite_70_f16.mgf',
-        'b16' : 'Adult_Urinarybladder_Gel_Elite_70_f17.mgf',
-        'b17' : 'Adult_Urinarybladder_Gel_Elite_70_f18.mgf',
-        'b18' : 'Adult_Urinarybladder_Gel_Elite_70_f19.mgf',
-        'b19' : 'Adult_Urinarybladder_Gel_Elite_70_f20.mgf',
-        'b20' : 'Adult_Urinarybladder_Gel_Elite_70_f21.mgf',
-        'b21' : 'Adult_Urinarybladder_Gel_Elite_70_f22.mgf',
-        'b22' : 'Adult_Urinarybladder_Gel_Elite_70_f23.mgf',
-        'b23' : 'Adult_Urinarybladder_Gel_Elite_70_f24.mgf',
-        'b24' : 'Adult_Urinarybladder_Gel_Elite_70_f25.mgf',
-    }
-
-
-    FETAL_LIVER_BRP_ELITE_FILES = {
-        '01' : 'Fetal_Liver_bRP_Elite_22_f01.mgf',
-        '02' : 'Fetal_Liver_bRP_Elite_22_f02.mgf',
-        '03' : 'Fetal_Liver_bRP_Elite_22_f03.mgf',
-        '04' : 'Fetal_Liver_bRP_Elite_22_f04.mgf',
-        '05' : 'Fetal_Liver_bRP_Elite_22_f05.mgf',
-        '06' : 'Fetal_Liver_bRP_Elite_22_f06.mgf',
-        '07' : 'Fetal_Liver_bRP_Elite_22_f07.mgf',
-        '08' : 'Fetal_Liver_bRP_Elite_22_f08.mgf',
-        '08-NCE27' : 'Fetal_Liver_bRP_Elite_22_f09.mgf',
-        '08-NCE27-1' : 'Fetal_Liver_bRP_Elite_22_f10.mgf',
-        '08-NCE27-32' : 'Fetal_Liver_bRP_Elite_22_f11.mgf',
-        '08-NCE27-32-1' : 'Fetal_Liver_bRP_Elite_22_f12.mgf',
-        '08-1' : 'Fetal_Liver_bRP_Elite_22_f13.mgf',
-        '09' : 'Fetal_Liver_bRP_Elite_22_f14.mgf',
-        '10' : 'Fetal_Liver_bRP_Elite_22_f15.mgf',
-        '11' : 'Fetal_Liver_bRP_Elite_22_f16.mgf',
-        '12' : 'Fetal_Liver_bRP_Elite_22_f17.mgf',
-        '13-120502235957' : 'Fetal_Liver_bRP_Elite_22_f18.mgf',
-        '13' : 'Fetal_Liver_bRP_Elite_22_f19.mgf',
-        '14-120503014940' : 'Fetal_Liver_bRP_Elite_22_f20.mgf',
-        '14' : 'Fetal_Liver_bRP_Elite_22_f21.mgf',
-        '15-120503033941' : 'Fetal_Liver_bRP_Elite_22_f22.mgf',
-        '15' : 'Fetal_Liver_bRP_Elite_22_f23.mgf',
-        '16-120503052933' : 'Fetal_Liver_bRP_Elite_22_f24.mgf',
-        '16' : 'Fetal_Liver_bRP_Elite_22_f25.mgf',
-        '17-120503071920' : 'Fetal_Liver_bRP_Elite_22_f26.mgf',
-        '17' : 'Fetal_Liver_bRP_Elite_22_f27.mgf',
-        '18' : 'Fetal_Liver_bRP_Elite_22_f28.mgf',
-        '19' : 'Fetal_Liver_bRP_Elite_22_f29.mgf',
-        '20' : 'Fetal_Liver_bRP_Elite_22_f30.mgf',
-        '21' : 'Fetal_Liver_bRP_Elite_22_f31.mgf',
-        '22' : 'Fetal_Liver_bRP_Elite_22_f32.mgf',
-        '23401' : 'Fetal_Liver_bRP_Elite_22_f33.mgf',
-        '23' : 'Fetal_Liver_bRP_Elite_22_f34.mgf',
-        '24' : 'Fetal_Liver_bRP_Elite_22_f35.mgf',
-    }
-
-
-    FETAL_OVARY_BRP_VELOS_FILES = {
-        'E1' : 'Fetal_Ovary_bRP_Velos_41_f01.mgf',
-        'E2' : 'Fetal_Ovary_bRP_Velos_41_f02.mgf',
-        'E3' : 'Fetal_Ovary_bRP_Velos_41_f03.mgf',
-        'E4' : 'Fetal_Ovary_bRP_Velos_41_f04.mgf',
-        'E5' : 'Fetal_Ovary_bRP_Velos_41_f05.mgf',
-        'E6' : 'Fetal_Ovary_bRP_Velos_41_f06.mgf',
-        'E1-E6' : 'Fetal_Ovary_bRP_Velos_41_f07.mgf',
-        'E7' : 'Fetal_Ovary_bRP_Velos_41_f08.mgf',
-        'E8' : 'Fetal_Ovary_bRP_Velos_41_f09.mgf',
-        'E9' : 'Fetal_Ovary_bRP_Velos_41_f26.mgf',
-        'E11' : 'Fetal_Ovary_bRP_Velos_41_f10.mgf',
-        'E12' : 'Fetal_Ovary_bRP_Velos_41_f11.mgf',
-        'E7-E12' : 'Fetal_Ovary_bRP_Velos_41_f12.mgf',
-        'F01' : 'Fetal_Ovary_bRP_Velos_41_f13.mgf',
-        'F02' : 'Fetal_Ovary_bRP_Velos_41_f14.mgf',
-        'F03' : 'Fetal_Ovary_bRP_Velos_41_f15.mgf',
-        'F04' : 'Fetal_Ovary_bRP_Velos_41_f16.mgf',
-        'F05' : 'Fetal_Ovary_bRP_Velos_41_f17.mgf',
-        'F06' : 'Fetal_Ovary_bRP_Velos_41_f18.mgf',
-        'F1-F6' : 'Fetal_Ovary_bRP_Velos_41_f19.mgf',
-        'F07' : 'Fetal_Ovary_bRP_Velos_41_f20.mgf',
-        'F08' : 'Fetal_Ovary_bRP_Velos_41_f21.mgf',
-        'F09' : 'Fetal_Ovary_bRP_Velos_41_f22.mgf',
-        'F10' : 'Fetal_Ovary_bRP_Velos_41_f23.mgf',
-        'F11' : 'Fetal_Ovary_bRP_Velos_41_f24.mgf',
-        'F12' : 'Fetal_Ovary_bRP_Velos_41_f25.mgf',
-    }
-
-
-    FETAL_OVARY_BRP_ELITE_FILES = {
-        '1' : 'Fetal_Ovary_bRP_Elite_25_f01.mgf',
-        '2' : 'Fetal_Ovary_bRP_Elite_25_f02.mgf',
-        '3' : 'Fetal_Ovary_bRP_Elite_25_f03.mgf',
-        '4' : 'Fetal_Ovary_bRP_Elite_25_f04.mgf',
-        '5' : 'Fetal_Ovary_bRP_Elite_25_f05.mgf',
-        '6' : 'Fetal_Ovary_bRP_Elite_25_f06.mgf',
-        '7' : 'Fetal_Ovary_bRP_Elite_25_f07.mgf',
-        '8' : 'Fetal_Ovary_bRP_Elite_25_f08.mgf',
-        '9' : 'Fetal_Ovary_bRP_Elite_25_f09.mgf',
-        '10' : 'Fetal_Ovary_bRP_Elite_25_f10.mgf',
-        '11' : 'Fetal_Ovary_bRP_Elite_25_f11.mgf',
-        '12' : 'Fetal_Ovary_bRP_Elite_25_f12.mgf',
-        '13' : 'Fetal_Ovary_bRP_Elite_25_f13.mgf',
-        '14' : 'Fetal_Ovary_bRP_Elite_25_f14.mgf',
-        '15' : 'Fetal_Ovary_bRP_Elite_25_f15.mgf',
-        '16' : 'Fetal_Ovary_bRP_Elite_25_f16.mgf',
-        '17' : 'Fetal_Ovary_bRP_Elite_25_f17.mgf',
-        '18' : 'Fetal_Ovary_bRP_Elite_25_f18.mgf',
-        '19' : 'Fetal_Ovary_bRP_Elite_25_f19.mgf',
-        '20' : 'Fetal_Ovary_bRP_Elite_25_f20.mgf',
-        '21' : 'Fetal_Ovary_bRP_Elite_25_f21.mgf',
-        '22' : 'Fetal_Ovary_bRP_Elite_25_f22.mgf',
-        '23' : 'Fetal_Ovary_bRP_Elite_25_f23.mgf',
-        '24' : 'Fetal_Ovary_bRP_Elite_25_f24.mgf',
-    }
-
-
-    MATCHES_TO_FILES_LIST = {
-        "Gel_Elite_49.csv" : ADULT_ADRENALGLAND_GEL_ELITE_FILES,
-        "fetal_brain_gel_velos_16.csv" : FETAL_BRAIN_GEL_VELOS_FILES,
-        "fetal_ovary_brp_velos.csv" : FETAL_OVARY_BRP_VELOS_FILES,
-        "fetal_ovary_brp_elite.csv" : FETAL_OVARY_BRP_ELITE_FILES,
-        "adult_adrenalgland_gel_velos.csv" : ADULT_ADRENALGLAND_GEL_VELOS_FILES,
-        "adult_adrenalgland_bRP_velos.csv" : ADULT_ADRENALGLAND_BRP_VELOS_FILES,
-        "adult_urinarybladder_gel_elite.csv" : ADULT_URINARYBLADDER_GEL_ELITE_FILES,
-        "adult_platelets_gel_elite.csv" : ADULT_PLATELETS_GEL_ELITE_FILES
-    }
-
-
-    def __init__(self, identificationsFilename = 'Gel_Elite_49.csv', spectraFilename = None):
-    
-        self.identificationsFilename = identificationsFilename
-        self.spectraFilename = spectraFilename
-    
-        self.totalSpectra = SpectraFound(False, 'sequences')
-    
-    
-    def load_identifications(self, verbose = False, filteredFilesList = None):
-
-        #
-        # First check if the spectra has already been loaded
-        #
-        
-        self.totalSpectra.load_spectra(self.spectraFilename)
-        
-        if self.totalSpectra.spectra: 
-            return
-        
-        print('Loading file: {}. dir:{}'.format(self.identificationsFilename, os.getcwd()))
-
-        matches_file = pd.read_csv(self.identificationsFilename)
-
-        if verbose:
-            print(matches_file)
-
-        print('Number of unique sequences found: {}'.format(len(matches_file['Sequence'].unique())))
-
-        #
-        # Inject new columns to hold the scan sequence within the file and the file name, recovered from the 
-        # "Spectrum Title" information.
-        #
-
-        matches_file['File Sequence'] = \
-            matches_file['Spectrum Title'].str.split("_", expand = True).iloc[:, 3].str.zfill(PXD000561.SCAN_SEQUENCE_MAX_DIGITS)
-        
-        matches_file['File'] = matches_file['Spectrum Title'].str.split("_", expand = True).iloc[:, 2]
-
-        ordered = matches_file.sort_values(['File', 'File Sequence'])
-
-
-        #
-        # Select only unique "Sequence" + "First Scan" combination:
-        #
-        # - Same spectrum can contain different sequences
-        # - Different sequences can be read in different scans
-
-        duplicatesIndication = ordered.duplicated(['Spectrum Title', 'Sequence', 'First Scan'])
-
-        self.uniqueCombination = ordered[~duplicatesIndication]
-        print('Unique combinations found: {}'.format(self.uniqueCombination.shape))
-
-        # print('Unique combinations file {}: {}'.format('b01', 
-        #                                                self.uniqueCombination[self.uniqueCombination['File'] == 'b01'].shape))
-
-        if filteredFilesList:
-            self.uniqueCombination = self.uniqueCombination[self.uniqueCombination['File'].isin(filteredFilesList)]
-
-
-    def read_spectra(self, spectraParser):
-        currentFileName           = ''
-        currentScanFileNamePrefix = ''
-
-        currentFile  = None
-        lastScan     = None
-
-        startTime = time.time()
-
-        spectraFiles = PXD000561.MATCHES_TO_FILES_LIST[self.identificationsFilename]
-
-        for index, row in self.uniqueCombination.iterrows():
-            if (spectraFiles[row['File']] != currentFileName):
-                if (currentFile != None):
-
-                    #
-                    # Dumps the rest of current file as unrecognized spectra
-                    #
-
-                    spectraParser.read_spectrum(currentFile, currentFileNamePrefix + '_', 
-                                                PXD000561.SCAN_SEQUENCE_OVER_LIMIT, 
-                                                '', 
-                                                self.totalSpectra)
-
-                    print('File {}. Processing time of {} seconds'.format(currentFile.name, 
-                                                                          time.time() - startTime))
-
-                    currentFile.close()
-
-                    # break
-
-                currentFileNamePrefix = row['File']
-                currentFileName = spectraFiles[currentFileNamePrefix]
-
-                print('Will open file \"{}\"'.format(currentFileName))
-
-                currentFile = open(currentFileName, 'r')
-                lastScan    = None
-
-            _, lastScan = spectraParser.read_spectrum(currentFile, 
-                                                      currentFileNamePrefix + '_', 
-                                                      row['First Scan'], 
-                                                      row['Sequence'], 
-                                                      self.totalSpectra, 
-                                                      lastScan)
-
-
-        print('Total processing time {} seconds'.format(time.time() - startTime))
-        
-        self.totalSpectra.save_spectra(self.spectraFilename)
 
 
 class Scan:
@@ -492,16 +79,23 @@ class SpectraFound:
         
         
         
-    def add_scan(self, whichScan, whichSequence):
+    def add_scan(self, whichScan, whichSequence, sequenceDict = None):
                 
-        sequenceDict = whichScan.to_dict(self.saveFiles)
+        if not sequenceDict:
+            sequenceDict = whichScan.to_dict(self.saveFiles)
 
         print('- add_scan. sequence={}, scan={}, # non-zero peaks={}'.format(whichSequence, 
             whichScan.scan,
             len(sequenceDict['nzero_peaks'])))
         
         if whichSequence in self.spectra:
-            self.spectra[whichSequence].append(sequenceDict)
+
+            # Check if it is merging a list of spectra for a given peptides sequence
+
+            if type(sequenceDict) == list:
+                self.spectra[whichSequence] + sequenceDict
+            else:
+                self.spectra[whichSequence].append(sequenceDict)
         else:
             self.spectra[whichSequence] = [sequenceDict]
 
@@ -514,55 +108,6 @@ class SpectraFound:
             with open(os.path.join(sequenceFolder, sequenceDict['filename']), 'w') as outputFile:
                 json.dump(sequenceDict, outputFile)
                 
-    
-    def load_spectra(self, spectraName):
-    
-        self.multipleScansSequences = None
-        self.singleScanSequences = None
-        self.normalizationParameters = None
-
-        try:
-            with open(os.path.join(self.filesFolder, spectraName), 'rb') as inputFile:
-                entireData = pickle.load(inputFile)
-
-            # Check if the data is already saved in the complete format
-
-            if 'spectra' in entireData.keys():
-                self.spectra = entireData['spectra']
-                self.multipleScansSequences = entireData['multipleScansSequences']
-                self.singleScanSequences = entireData['singleScanSequences']
-                self.normalizationParameters = entireData['normalizationParameters']
-            else:
-                self.spectra = entireData
-
-
-
-        except Exception:
-            print('Could not open spectra file {}'.format(os.path.join(self.filesFolder, spectraName)))
-                    
-
-
-
-    def save_spectra(self, spectraName):
-        
-        entireData = {}
-        entireData['spectra'] = self.spectra
-        entireData['multipleScansSequences'] = self.multipleScansSequences
-        entireData['singleScanSequences'] = self.singleScanSequences
-        entireData['normalizationParameters'] = self.normalizationParameters
-
-        completeFilename = os.path.join(self.filesFolder, spectraName) 
-
-        if os.path.isdir(self.filesFolder) == False:
-            os.makedirs(self.filesFolder)
-        else:
-            if os.path.exists(completeFilename):
-                os.rename(completeFilename, completeFilename + ".bkp_" + str(datetime.datetime.now()))
-
-        with open(completeFilename, 'wb') as outputFile:
-            pickle.dump(entireData, outputFile, pickle.HIGHEST_PROTOCOL)
-
-
 
     def list_single_and_multiple_scans_sequences(self):
 
@@ -570,12 +115,12 @@ class SpectraFound:
         totalLen = 0
 
         sequenceMaxLen = ''
-        numSpectrum = 0
 
         maxScansInSequence = 0
         sequencesWithMultipleScans = 0
         sequencesWithSingleScan = 0
 
+        self.spectraCount = 0
         self.multipleScansSequences = []
         self.singleScanSequences = []
 
@@ -600,17 +145,59 @@ class SpectraFound:
                 spectrumLen = len(spectrum['nzero_peaks'])
                 
                 totalLen += spectrumLen
-                numSpectrum += 1
+                self.spectraCount += 1
                 
                 if spectrumLen > self.maxPeaksListLen:
                     self.maxPeaksListLen = spectrumLen
                     sequenceMaxLen = key
 
         Logger()('Maximum non-zero peaks list len = {}. key = {}'.format(self.maxPeaksListLen, sequenceMaxLen))
-        Logger()('Average peaks list len = {}'.format(totalLen / numSpectrum))
+        Logger()('Average peaks list len = {}'.format(totalLen / self.spectraCount))
         Logger()('Number of sequences with a single scan = {}'.format(sequencesWithSingleScan))
         Logger()('Number of sequences with more than 1 scan = {}'.format(sequencesWithMultipleScans))
         Logger()('Max number of scans in a single sequence = {}'.format(maxScansInSequence))
+        Logger()('Total number of spectra in this dataset = {}'.format(self.spectraCount))
+
+
+
+    def load_spectra(self, spectraName):
+    
+        self.multipleScansSequences = None
+        self.singleScanSequences = None
+        self.normalizationParameters = None
+        self.spectraCount = 0
+
+        try:
+            with open(os.path.join(self.filesFolder, spectraName), 'rb') as inputFile:
+                entireData = pickle.load(inputFile)
+
+            # Check if the data is already saved in the complete format
+
+            if 'spectra' in entireData.keys():
+                self.spectra = entireData['spectra']
+                self.multipleScansSequences = entireData['multipleScansSequences']
+                self.singleScanSequences = entireData['singleScanSequences']
+                self.normalizationParameters = entireData['normalizationParameters']
+                self.spectraCount = entireData['spectraCount']
+            else:
+                self.spectra = entireData
+
+
+
+        except Exception:
+            print('Could not open spectra file {}'.format(os.path.join(self.filesFolder, spectraName)))
+                    
+
+    def merge_spectra(self, destinationSpectra, spectraToMergeFolder, spectraToMergeFilename):
+
+        spectraToMerge = SpectraFound(False, spectraToMergeFolder)
+        spectraToMerge.load_spectra(spectraToMergeFilename)
+
+        for whichSequence in spectraToMerge.spectra.keys:
+            destinationSpectra.add_scan(None, whichSequence, spectraToMerge.spectra[whichSequence])
+
+        del spectraToMerge
+
 
 
 
@@ -688,6 +275,30 @@ class SpectraFound:
                 peaksList['nzero_peaks'][:, 1] = (peaksList['nzero_peaks'][:, 1] - self.normalizationParameters['intensity_mean']) / self.normalizationParameters['intensity_std']
 
 
+    def save_spectra(self, spectraName):
+        
+        entireData = {}
+        entireData['spectra'] = self.spectra
+        entireData['multipleScansSequences'] = self.multipleScansSequences
+        entireData['singleScanSequences'] = self.singleScanSequences
+        entireData['normalizationParameters'] = self.normalizationParameters
+        entireData['spectraCount'] = self.spectraCount
+
+        completeFilename = os.path.join(self.filesFolder, spectraName) 
+
+        if os.path.isdir(self.filesFolder) == False:
+            os.makedirs(self.filesFolder)
+        else:
+            if os.path.exists(completeFilename):
+                os.rename(completeFilename, completeFilename + ".bkp_" + str(datetime.datetime.now()))
+
+        with open(completeFilename, 'wb') as outputFile:
+            pickle.dump(entireData, outputFile, pickle.HIGHEST_PROTOCOL)
+
+
+
+
+
 
 class MGF:
     
@@ -712,7 +323,9 @@ class MGF:
     ]    
 
        
-    def read_spectrum(self, whichFile, scanFilenamePrefix, searchedScan, decodedSequence, spectraFound, currentScan = None):
+    def read_spectrum(self, whichFile, scanFilenamePrefix, searchedScan, decodedSequence, spectraFound, 
+                      currentScan = None,
+                      storeUnrecognized = True):
 
         print('read_spectrum: file={}, scan={}, sequence={}'.format(whichFile.name, searchedScan, decodedSequence))
 
@@ -775,7 +388,8 @@ class MGF:
                                     hasFoundScan = True
 
                                 elif newScan.scan < searchedScan:
-                                    spectraFound.add_scan(newScan, Scan.UNRECOGNIZED_SEQUENCE)
+                                    if storeUnrecognized:
+                                        spectraFound.add_scan(newScan, Scan.UNRECOGNIZED_SEQUENCE)
 
                                     newScan = None
 

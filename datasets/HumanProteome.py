@@ -1,4 +1,4 @@
-from .spectra import PXD000561
+from .PXD000561 import PXD000561
 from .spectra import MGF
 import os
 import torch
@@ -11,13 +11,14 @@ from bootstrap.lib.logger import Logger
 
 class HumanProteome(data.Dataset):
 
+    MATCHES_FILE = 'adult_adrenalgland_gel_elite.csv'
     TRAIN_DATASET = 'initialTest2.pkl'
-
     TEST_DATASET = 'initialTest2_b02.pkl'
 
 
     def __init__(self, dataDirectory = 'data/humanProteome', split = 'train', 
-                 batch_size = 100, nb_threads = 1, trainingDataset = None):
+                 batch_size = 100, nb_threads = 1, trainingDataset = None, 
+                 identificationsFilename = None, spectraFilename = None, normalizeData = True):
 
         self.split = split
         self.nb_threads = nb_threads
@@ -36,20 +37,29 @@ class HumanProteome(data.Dataset):
         except Exception:
             os.chdir(dataDirectory)
 
-        trainPeaksFile = None
+        matchesFile = identificationsFilename
+        peaksFile = spectraFilename
+        filteredFilesList = None
 
         if split == 'train':
+            if not matchesFile:
+                matchesFile = Options().get("dataset.train_matches_file", HumanProteome.MATCHES_FILE)
 
-            trainPeaksFile = Options().get("dataset.train_peaks_file", HumanProteome.TRAIN_DATASET)
+            if not peaksFile:
+                peaksFile = Options().get("dataset.train_peaks_file", HumanProteome.TRAIN_DATASET)
 
-            self.dataset = PXD000561(spectraFilename = trainPeaksFile)
-            self.dataset.load_identifications(filteredFilesList = Options()['dataset']['train_filtered_files_list'])
+            filteredFilesList = Options().get("dataset.train_filtered_files_list", None)
         else:
-            evalMatchesFile = Options().get("dataset.eval_matches_file", HumanProteome.TEST_DATASET)
-            evalPeaksFile = Options().get("dataset.eval_peaks_file", "Gel_Elite_49.csv")
+            if not matchesFile:
+                matchesFile = Options().get("dataset.eval_matches_file", HumanProteome.MATCHES_FILE)
 
-            self.dataset = PXD000561(identificationsFilename = evalMatchesFile, spectraFilename = evalPeaksFile)
-            self.dataset.load_identifications(filteredFilesList = Options()['dataset']['eval_filtered_files_list'])
+            if not peaksFile:
+                peaksFile = Options().get("dataset.eval_peaks_file", HumanProteome.TEST_DATASET)
+
+            filteredFilesList = Options().get("dataset.eval_filtered_files_list", None)
+
+        self.dataset = PXD000561(identificationsFilename = matchesFile, spectraFilename = peaksFile)
+        self.dataset.load_identifications(filteredFilesList = filteredFilesList)
 
 
         # Check if has processed the spectra yet
@@ -67,8 +77,9 @@ class HumanProteome(data.Dataset):
             # Now, analyze the sequences
             self.dataset.totalSpectra.list_single_and_multiple_scans_sequences()
 
-            # And finally normalize the data
-            self.dataset.totalSpectra.normalize_data(trainingDataset)
+            if normalizeData:
+                # And finally normalize the data
+                self.dataset.totalSpectra.normalize_data(trainingDataset)
 
             # Now, save the entire data
             self.dataset.totalSpectra.save_spectra(self.dataset.spectraFilename)
@@ -80,8 +91,9 @@ class HumanProteome(data.Dataset):
             # Now, analyze the sequences
             self.dataset.totalSpectra.list_single_and_multiple_scans_sequences()
 
-            # And finally normalize the data
-            self.dataset.totalSpectra.normalize_data(trainingDataset)
+            if normalizeData:
+                # And finally normalize the data
+                self.dataset.totalSpectra.normalize_data(trainingDataset)
 
             # Now, save the entire data
             self.dataset.totalSpectra.save_spectra(self.dataset.spectraFilename)
