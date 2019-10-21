@@ -18,7 +18,7 @@ class HumanProteome(data.Dataset):
 
     def __init__(self, dataDirectory = 'data/humanProteome', split = 'train', 
                  batch_size = 100, nb_threads = 1, trainingDataset = None, 
-                 identificationsFilename = None, spectraFilename = None, normalizeData = True):
+                 identificationsFilename = None, spectraFilename = None, normalizeData = True, storeUnrecognized = True):
 
         self.split = split
         self.nb_threads = nb_threads
@@ -70,7 +70,7 @@ class HumanProteome(data.Dataset):
 
             # Read the MGF files
 
-            self.dataset.read_spectra(MGF())
+            self.dataset.read_spectra(MGF(), storeUnrecognized = storeUnrecognized)
 
             # raise NotImplementedError('Missing implementation to generate the dataset spectra file.')
 

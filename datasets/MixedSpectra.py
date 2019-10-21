@@ -81,7 +81,8 @@ class MixedSpectra(data.Dataset):
                                                                                        split = split,
                                                                                        identificationsFilename = experiment, 
                                                                                        spectraFilename = spectraPeaksFilename,
-                                                                                       normalizeData = False)
+                                                                                       normalizeData = False,
+                                                                                       storeUnrecognized = False)
 
                     del newExperiment
 
