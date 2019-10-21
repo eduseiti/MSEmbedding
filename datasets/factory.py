@@ -1,5 +1,6 @@
 from bootstrap.lib.options import Options
 from .HumanProteome import HumanProteome
+from .MixedSpectra import MixedSpectra
 
 def factory(engine=None):
     dataset = {}
@@ -16,6 +17,10 @@ def factory(engine=None):
                                                         dataset['train'])
             else:
                 dataset['eval'] = factory_humanProteome(Options()['dataset']['eval_split'])
+    
+    elif Options()['dataset']['name'] == "mixedSpectra":
+        if Options()['dataset'].get('train_split', None):
+            dataset['train'] = factory_mixedSpectra(Options()['dataset']['train_split'])
     else:
         raise ValueError()
 
@@ -30,3 +35,13 @@ def factory_humanProteome(split, trainingDataset = None):
         nb_threads = Options()['dataset']['nb_threads'], 
         trainingDataset = trainingDataset)
     return dataset
+
+
+def factory_mixedSpectra(split, trainingDataset = None):
+    dataset = MixedSpectra(
+        Options()['dataset']['dir'],
+        split,
+        batch_size = Options()['dataset']['batch_size'],
+        nb_threads = Options()['dataset']['nb_threads'], 
+        trainingDataset = trainingDataset)
+    return dataset    

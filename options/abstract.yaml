@@ -6,8 +6,6 @@ dataset:
   name: humanProteome
   dir: data/humanProteome
   train_split: train
-  train_filtered_files_list: ['b01', 'b03']
-  train_peaks_file: initialTest3_b01_b03.pkl
   eval_split: eval
   nb_threads: 1
   batch_size: 300

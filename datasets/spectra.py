@@ -193,7 +193,7 @@ class SpectraFound:
         spectraToMerge = SpectraFound(False, spectraToMergeFolder)
         spectraToMerge.load_spectra(spectraToMergeFilename)
 
-        for whichSequence in spectraToMerge.spectra.keys:
+        for whichSequence in spectraToMerge.spectra.keys():
             destinationSpectra.add_scan(None, whichSequence, spectraToMerge.spectra[whichSequence])
 
         del spectraToMerge

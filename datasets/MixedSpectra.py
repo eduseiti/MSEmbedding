@@ -22,13 +22,13 @@ class MixedSpectra(data.Dataset):
 
     TRAIN_EXPERIMENTS_DATA = {
         "fetal_brain_gel_velos.csv" : ["fetal_brain_gel_velos.pkl", HumanProteome],
-        "fetal_ovary_brp_velos.csv" : ["fetal_ovary_brp_velos.pkl", HumanProteome],
-        "fetal_ovary_brp_elite.csv" : ["fetal_ovary_brp_elite.pkl", HumanProteome],
+        # "fetal_ovary_brp_velos.csv" : ["fetal_ovary_brp_velos.pkl", HumanProteome],
+        # "fetal_ovary_brp_elite.csv" : ["fetal_ovary_brp_elite.pkl", HumanProteome],
         "adult_adrenalgland_gel_elite.csv" : ["adult_adrenalgland_gel_elite.pkl", HumanProteome],
-        "adult_adrenalgland_gel_velos.csv" : ["adult_adrenalgland_gel_velos.pkl", HumanProteome],
-        "adult_adrenalgland_bRP_velos.csv" : ["adult_adrenalgland_bRP_velos.pkl", HumanProteome],
-        "adult_urinarybladder_gel_elite.csv" : ["adult_urinarybladder_gel_elite.pkl", HumanProteome],
-        "adult_platelets_gel_elite.csv" : ["adult_platelets_gel_elite.pkl", HumanProteome]
+        # "adult_adrenalgland_gel_velos.csv" : ["adult_adrenalgland_gel_velos.pkl", HumanProteome],
+        # "adult_adrenalgland_bRP_velos.csv" : ["adult_adrenalgland_bRP_velos.pkl", HumanProteome],
+        # "adult_urinarybladder_gel_elite.csv" : ["adult_urinarybladder_gel_elite.pkl", HumanProteome],
+        # "adult_platelets_gel_elite.csv" : ["adult_platelets_gel_elite.pkl", HumanProteome]
     }
 
 
@@ -55,11 +55,11 @@ class MixedSpectra(data.Dataset):
 
 
         if split == 'train':
-            trainPeaksFile = TRAIN_FILENAME.format(Options().get("dataset.train_set_version", MixedSpectra.CURRENT_TRAIN_VERSION))
+            trainPeaksFile = MixedSpectra.TRAIN_FILENAME.format(Options().get("dataset.train_set_version", MixedSpectra.CURRENT_TRAIN_VERSION))
         else:
-            evalPeaksFile = TEST_FILENAME.format(Options().get("dataset.eval_set_version", MixedSpectra.CURRENT_TEST_VERSION))
+            evalPeaksFile = MixedSpectra.TEST_FILENAME.format(Options().get("dataset.eval_set_version", MixedSpectra.CURRENT_TEST_VERSION))
 
-        self.totalSpectra = SpectraFound(False)
+        self.totalSpectra = SpectraFound(False, self.dataDirectory)
         self.totalSpectra.load_spectra(trainPeaksFile)
 
         if not self.totalSpectra.spectra:
@@ -71,7 +71,7 @@ class MixedSpectra(data.Dataset):
 
                 # Make sure each experiment peaks file exists
 
-                for experiment in datasets.keys:
+                for experiment in datasets.keys():
 
                     print("== Merging experiment {}...".format(experiment))
 
