@@ -78,24 +78,16 @@ class SpectraFound:
             self.filesFolder = os.getcwd()
         
         
-        
-    def add_scan(self, whichScan, whichSequence, sequenceDict = None):
+    def add_scan(self, whichScan, whichSequence):
                 
-        if not sequenceDict:
-            sequenceDict = whichScan.to_dict(self.saveFiles)
+        sequenceDict = whichScan.to_dict(self.saveFiles)
 
         print('- add_scan. sequence={}, scan={}, # non-zero peaks={}'.format(whichSequence, 
             whichScan.scan,
             len(sequenceDict['nzero_peaks'])))
         
         if whichSequence in self.spectra:
-
-            # Check if it is merging a list of spectra for a given peptides sequence
-
-            if type(sequenceDict) == list:
-                self.spectra[whichSequence] + sequenceDict
-            else:
-                self.spectra[whichSequence].append(sequenceDict)
+            self.spectra[whichSequence].append(sequenceDict)
         else:
             self.spectra[whichSequence] = [sequenceDict]
 
@@ -107,7 +99,8 @@ class SpectraFound:
                
             with open(os.path.join(sequenceFolder, sequenceDict['filename']), 'w') as outputFile:
                 json.dump(sequenceDict, outputFile)
-                
+
+
 
     def list_single_and_multiple_scans_sequences(self):
 
@@ -188,16 +181,35 @@ class SpectraFound:
             print('Could not open spectra file {}'.format(os.path.join(self.filesFolder, spectraName)))
                     
 
+
     def merge_spectra(self, destinationSpectra, spectraToMergeFolder, spectraToMergeFilename):
+
+        print("\nmerge_spectra. spectraToMergeFolder={}, spectraToMergeFilename={}".format(spectraToMergeFolder, spectraToMergeFilename))
 
         spectraToMerge = SpectraFound(False, spectraToMergeFolder)
         spectraToMerge.load_spectra(spectraToMergeFilename)
 
-        for whichSequence in spectraToMerge.spectra.keys():
-            destinationSpectra.add_scan(None, whichSequence, spectraToMerge.spectra[whichSequence])
+        numberOfExistingSequences = 0
+        numberOfSpectraFromExistingSequences = 0
+        totalNumberOfSpectraMerged = 0
+
+        for whichSequence in spectraToMerge.spectra.keys():      
+            if whichSequence in destinationSpectra.spectra:
+
+                self.spectra[whichSequence] + spectraToMerge.spectra[whichSequence]
+
+                numberOfExistingSequences += 1
+                numberOfSpectraFromExistingSequences += len(spectraToMerge.spectra[whichSequence])
+            else:
+                self.spectra[whichSequence] = spectraToMerge.spectra[whichSequence]
+
+            totalNumberOfSpectraMerged += len(spectraToMerge.spectra[whichSequence])
 
         del spectraToMerge
 
+        Logger()(">> Total # spectra merged: {}. # of existing sequences: {}. # of spectra from existing sequences: {}".format(totalNumberOfSpectraMerged,
+                                                                                                                               numberOfExistingSequences,
+                                                                                                                               numberOfSpectraFromExistingSequences))
 
 
 
@@ -273,6 +285,7 @@ class SpectraFound:
             for peaksList in self.spectra[key]:
                 peaksList['nzero_peaks'][:, 0] = (peaksList['nzero_peaks'][:, 0] - self.normalizationParameters['mz_mean']) / self.normalizationParameters['mz_std']
                 peaksList['nzero_peaks'][:, 1] = (peaksList['nzero_peaks'][:, 1] - self.normalizationParameters['intensity_mean']) / self.normalizationParameters['intensity_std']
+
 
 
     def save_spectra(self, spectraName):

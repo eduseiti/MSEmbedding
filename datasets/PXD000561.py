@@ -310,7 +310,7 @@ class PXD000561:
 
 
     MATCHES_TO_FILES_LIST = {
-        "Gel_Elite_49.csv" : ADULT_ADRENALGLAND_GEL_ELITE_FILES,
+        "adult_adrenalgland_gel_elite.csv" : ADULT_ADRENALGLAND_GEL_ELITE_FILES,
         "adult_adrenalgland_gel_velos.csv" : ADULT_ADRENALGLAND_GEL_VELOS_FILES,
         "adult_adrenalgland_bRP_velos.csv" : ADULT_ADRENALGLAND_BRP_VELOS_FILES,
         "adult_urinarybladder_gel_elite.csv" : ADULT_URINARYBLADDER_GEL_ELITE_FILES,

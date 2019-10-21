@@ -107,11 +107,12 @@ class HumanProteome(data.Dataset):
             Logger()('# of singleScanSequences: {}, # of multipleScansSequences: {}'.format(len(self.dataset.totalSpectra.singleScanSequences), 
                                                                                             len(self.dataset.totalSpectra.multipleScansSequences)))
 
-            Logger()('mz mean: {}, mz std: {}'.format(self.dataset.totalSpectra.normalizationParameters['mz_mean'], 
-                                                      self.dataset.totalSpectra.normalizationParameters['mz_std']))
+            if self.dataset.totalSpectra.normalizationParameters:
+                Logger()('mz mean: {}, mz std: {}'.format(self.dataset.totalSpectra.normalizationParameters['mz_mean'], 
+                                                        self.dataset.totalSpectra.normalizationParameters['mz_std']))
 
-            Logger()('intensity mean: {}, intensity std: {}'.format(self.dataset.totalSpectra.normalizationParameters['intensity_mean'], 
-                                                                    self.dataset.totalSpectra.normalizationParameters['intensity_std']))
+                Logger()('intensity mean: {}, intensity std: {}'.format(self.dataset.totalSpectra.normalizationParameters['intensity_mean'], 
+                                                                        self.dataset.totalSpectra.normalizationParameters['intensity_std']))
 
 
 

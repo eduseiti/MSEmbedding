@@ -48,10 +48,10 @@ class MixedSpectra(data.Dataset):
 
         print('Working directory: ' + os.getcwd())
 
-        try:
-            currentDirectory.index(dataDirectory)
-        except Exception:
-            os.chdir(dataDirectory)
+        # try:
+        #     currentDirectory.index(dataDirectory)
+        # except Exception:
+        #     os.chdir(dataDirectory)
 
 
         if split == 'train':
@@ -59,7 +59,9 @@ class MixedSpectra(data.Dataset):
         else:
             evalPeaksFile = MixedSpectra.TEST_FILENAME.format(Options().get("dataset.eval_set_version", MixedSpectra.CURRENT_TEST_VERSION))
 
-        self.totalSpectra = SpectraFound(False, self.dataDirectory)
+        peaksFilesFolder = os.path.join(self.dataDirectory, 'sequences')
+
+        self.totalSpectra = SpectraFound(False, peaksFilesFolder)
         self.totalSpectra.load_spectra(trainPeaksFile)
 
         if not self.totalSpectra.spectra:
@@ -73,7 +75,7 @@ class MixedSpectra(data.Dataset):
 
                 for experiment in datasets.keys():
 
-                    print("== Merging experiment {}...".format(experiment))
+                    print("== Loading experiment {}...".format(experiment))
 
                     spectraPeaksFilename = MixedSpectra.TRAIN_EXPERIMENTS_DATA[experiment][0]
 
@@ -86,7 +88,7 @@ class MixedSpectra(data.Dataset):
 
                     del newExperiment
 
-                    self.totalSpectra.merge_spectra(self.totalSpectra, dataDirectory, spectraPeaksFilename)
+                    self.totalSpectra.merge_spectra(self.totalSpectra, peaksFilesFolder, spectraPeaksFilename)
 
                     self.totalSpectra.save_spectra(trainPeaksFile)
 
@@ -98,7 +100,7 @@ class MixedSpectra(data.Dataset):
                 self.totalSpectra.normalize_data(trainingDataset)
 
                 # Save the entire data
-                self.totalSpectra.save_spectra(self.dataset.spectraFilename)
+                self.totalSpectra.save_spectra(trainPeaksFile)
 
 
         Logger()("Dataset statistics ({}):".format(split))
