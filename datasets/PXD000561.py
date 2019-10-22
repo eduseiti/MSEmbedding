@@ -392,44 +392,46 @@ class PXD000561:
         spectraFiles = PXD000561.MATCHES_TO_FILES_LIST[self.identificationsFilename]
 
         for index, row in self.uniqueCombination.iterrows():
-            if (spectraFiles[row['File']] != currentFileName):
-                if (currentFile != None):
+            try:
+                if (spectraFiles[row['File']] != currentFileName):
+                    if (currentFile != None):
 
-                    if storeUnrecognized:
-                        #
-                        # Dumps the rest of current file as unrecognized spectra
-                        #
+                        if storeUnrecognized:
+                            #
+                            # Dumps the rest of current file as unrecognized spectra
+                            #
 
-                        spectraParser.read_spectrum(currentFile, currentFileNamePrefix + '_', 
-                                                    PXD000561.SCAN_SEQUENCE_OVER_LIMIT, 
-                                                    '', 
-                                                    self.totalSpectra)
+                            spectraParser.read_spectrum(currentFile, currentFileNamePrefix + '_', 
+                                                        PXD000561.SCAN_SEQUENCE_OVER_LIMIT, 
+                                                        '', 
+                                                        self.totalSpectra)
 
-                        print('File {}. Processing time of {} seconds'.format(currentFile.name, 
-                                                                            time.time() - startTime))
+                            print('File {}. Processing time of {} seconds'.format(currentFile.name, 
+                                                                                time.time() - startTime))
 
-                    currentFile.close()
+                        currentFile.close()
 
-                    # break
+                        # break
 
-                currentFileNamePrefix = row['File']
-                currentFileName = spectraFiles[currentFileNamePrefix]
+                    currentFileNamePrefix = row['File']
+                    currentFileName = spectraFiles[currentFileNamePrefix]
 
-                print('Will open file \"{}\"'.format(currentFileName))
+                    print('Will open file \"{}\"'.format(currentFileName))
 
-                currentFile = open(currentFileName, 'r')
-                lastScan    = None
+                    currentFile = open(currentFileName, 'r')
+                    lastScan    = None
 
-            _, lastScan = spectraParser.read_spectrum(currentFile, 
-                                                      currentFileNamePrefix + '_', 
-                                                      row['First Scan'], 
-                                                      row['Sequence'], 
-                                                      self.totalSpectra, 
-                                                      currentScan = lastScan,
-                                                      storeUnrecognized = storeUnrecognized)
+                _, lastScan = spectraParser.read_spectrum(currentFile, 
+                                                        currentFileNamePrefix + '_', 
+                                                        row['First Scan'], 
+                                                        row['Sequence'], 
+                                                        self.totalSpectra, 
+                                                        currentScan = lastScan,
+                                                        storeUnrecognized = storeUnrecognized)
+            except KeyError:
+                Logger()("- Identification file key {} has not corresponding spectra file.")
 
-
-        print('Total processing time {} seconds'.format(time.time() - startTime))
+        Logger()('{} Total processing time {} seconds'.format(self.identificationsFilename, time.time() - startTime))
         
         self.totalSpectra.save_spectra(self.spectraFilename)
 

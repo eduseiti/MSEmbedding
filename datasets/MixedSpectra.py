@@ -22,13 +22,13 @@ class MixedSpectra(data.Dataset):
 
     TRAIN_EXPERIMENTS_DATA = {
         "fetal_brain_gel_velos.csv" : ["fetal_brain_gel_velos.pkl", HumanProteome],
-        # "fetal_ovary_brp_velos.csv" : ["fetal_ovary_brp_velos.pkl", HumanProteome],
-        # "fetal_ovary_brp_elite.csv" : ["fetal_ovary_brp_elite.pkl", HumanProteome],
+        "fetal_ovary_brp_velos.csv" : ["fetal_ovary_brp_velos.pkl", HumanProteome],
+        "fetal_ovary_brp_elite.csv" : ["fetal_ovary_brp_elite.pkl", HumanProteome],
         "adult_adrenalgland_gel_elite.csv" : ["adult_adrenalgland_gel_elite.pkl", HumanProteome],
-        # "adult_adrenalgland_gel_velos.csv" : ["adult_adrenalgland_gel_velos.pkl", HumanProteome],
-        # "adult_adrenalgland_bRP_velos.csv" : ["adult_adrenalgland_bRP_velos.pkl", HumanProteome],
-        # "adult_urinarybladder_gel_elite.csv" : ["adult_urinarybladder_gel_elite.pkl", HumanProteome],
-        # "adult_platelets_gel_elite.csv" : ["adult_platelets_gel_elite.pkl", HumanProteome]
+        "adult_adrenalgland_gel_velos.csv" : ["adult_adrenalgland_gel_velos.pkl", HumanProteome],
+        "adult_adrenalgland_bRP_velos.csv" : ["adult_adrenalgland_bRP_velos.pkl", HumanProteome],
+        "adult_urinarybladder_gel_elite.csv" : ["adult_urinarybladder_gel_elite.pkl", HumanProteome],
+        "adult_platelets_gel_elite.csv" : ["adult_platelets_gel_elite.pkl", HumanProteome]
     }
 
 
@@ -105,7 +105,7 @@ class MixedSpectra(data.Dataset):
 
         Logger()("Dataset statistics ({}):".format(split))
         Logger()('- # of singleScanSequences: {}, # of multipleScansSequences: {}'.format(len(self.totalSpectra.singleScanSequences), 
-                                                                                            len(self.totalSpectra.multipleScansSequences)))
+                                                                                          len(self.totalSpectra.multipleScansSequences)))
         Logger()('- Total number of spectra: {}'.format(self.totalSpectra.spectraCount))
 
         numberOfSequences = len(self.dataset.totalSpectra.multipleScansSequences)
