@@ -90,7 +90,7 @@ class MixedSpectra(data.Dataset):
 
                     self.totalSpectra.merge_spectra(self.totalSpectra, peaksFilesFolder, spectraPeaksFilename)
 
-                    self.totalSpectra.save_spectra(trainPeaksFile)
+                    self.totalSpectra.save_spectra(trainPeaksFile, True)
 
 
                 # Now, analyze the sequences
@@ -100,7 +100,7 @@ class MixedSpectra(data.Dataset):
                 self.totalSpectra.normalize_data(trainingDataset)
 
                 # Save the entire data
-                self.totalSpectra.save_spectra(trainPeaksFile)
+                self.totalSpectra.save_spectra(trainPeaksFile, True)
 
 
         Logger()("Dataset statistics ({}):".format(split))

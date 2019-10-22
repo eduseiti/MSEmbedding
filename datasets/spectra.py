@@ -288,7 +288,7 @@ class SpectraFound:
 
 
 
-    def save_spectra(self, spectraName):
+    def save_spectra(self, spectraName, overwrite = False):
         
         entireData = {}
         entireData['spectra'] = self.spectra
@@ -302,7 +302,7 @@ class SpectraFound:
         if os.path.isdir(self.filesFolder) == False:
             os.makedirs(self.filesFolder)
         else:
-            if os.path.exists(completeFilename):
+            if not overwrite and os.path.exists(completeFilename):
                 os.rename(completeFilename, completeFilename + ".bkp_" + str(datetime.datetime.now()))
 
         with open(completeFilename, 'wb') as outputFile:
