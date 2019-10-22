@@ -196,12 +196,12 @@ class SpectraFound:
         for whichSequence in spectraToMerge.spectra.keys():      
             if whichSequence in destinationSpectra.spectra:
 
-                self.spectra[whichSequence] + spectraToMerge.spectra[whichSequence]
+                destinationSpectra.spectra[whichSequence] + spectraToMerge.spectra[whichSequence]
 
                 numberOfExistingSequences += 1
                 numberOfSpectraFromExistingSequences += len(spectraToMerge.spectra[whichSequence])
             else:
-                self.spectra[whichSequence] = spectraToMerge.spectra[whichSequence]
+                destinationSpectra.spectra[whichSequence] = spectraToMerge.spectra[whichSequence]
 
             totalNumberOfSpectraMerged += len(spectraToMerge.spectra[whichSequence])
 

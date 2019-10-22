@@ -108,7 +108,7 @@ class MixedSpectra(data.Dataset):
                                                                                           len(self.totalSpectra.multipleScansSequences)))
         Logger()('- Total number of spectra: {}'.format(self.totalSpectra.spectraCount))
 
-        numberOfSequences = len(self.dataset.totalSpectra.multipleScansSequences)
+        numberOfSequences = len(self.totalSpectra.multipleScansSequences)
 
         self.numberOfBatches = (numberOfSequences * 3) // self.batch_size
 
