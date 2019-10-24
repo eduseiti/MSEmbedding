@@ -21,18 +21,18 @@ class MixedSpectra(data.Dataset):
     TEST_FILENAME = "test_mixedSpectra_{}.pkl"
 
     TRAIN_EXPERIMENTS_DATA = {
-        "fetal_brain_gel_velos.csv" : ["fetal_brain_gel_velos.pkl", HumanProteome],
-        "fetal_ovary_brp_velos.csv" : ["fetal_ovary_brp_velos.pkl", HumanProteome],
-        "fetal_ovary_brp_elite.csv" : ["fetal_ovary_brp_elite.pkl", HumanProteome],
-        "adult_adrenalgland_gel_elite.csv" : ["adult_adrenalgland_gel_elite.pkl", HumanProteome],
-        "adult_adrenalgland_gel_velos.csv" : ["adult_adrenalgland_gel_velos.pkl", HumanProteome],
-        "adult_adrenalgland_bRP_velos.csv" : ["adult_adrenalgland_bRP_velos.pkl", HumanProteome],
-        "adult_urinarybladder_gel_elite.csv" : ["adult_urinarybladder_gel_elite.pkl", HumanProteome],
-        "adult_platelets_gel_elite.csv" : ["adult_platelets_gel_elite.pkl", HumanProteome]
+        "fetal_brain_gel_velos.csv" : {"peaksFile" : "fetal_brain_gel_velos.pkl", "filesList": None, "constructor" : HumanProteome},
+        "fetal_ovary_brp_velos.csv" : {"peaksFile" : "fetal_ovary_brp_velos.pkl", "filesList": None, "constructor" : HumanProteome},
+        "fetal_ovary_brp_elite.csv" : {"peaksFile" : "fetal_ovary_brp_elite.pkl", "filesList": None, "constructor" : HumanProteome},
+        "adult_adrenalgland_gel_elite.csv" : {"peaksFile" : "adult_adrenalgland_gel_elite.pkl", "filesList": None, "constructor" : HumanProteome},
+        "adult_adrenalgland_gel_velos.csv" : {"peaksFile" : "adult_adrenalgland_gel_velos.pkl", "filesList": None, "constructor" : HumanProteome},
+        "adult_adrenalgland_bRP_velos.csv" : {"peaksFile" : "adult_adrenalgland_bRP_velos.pkl", "filesList": None, "constructor" : HumanProteome},
+        "adult_urinarybladder_gel_elite.csv" : {"peaksFile" : "adult_urinarybladder_gel_elite.pkl", "filesList": None, "constructor" : HumanProteome},
+        "adult_platelets_gel_elite.csv" : {"peaksFile" : "adult_platelets_gel_elite.pkl", "filesList": None, "constructor" : HumanProteome}
     }
 
     TEST_EXPERIMENTS_DATA = {
-        "adult_heart_brp_elite.csv" : ["adult_heart_brp_elite.pkl", HumanProteome]
+        "adult_heart_brp_elite.csv" : {"peaksFile" : "adult_heart_brp_elite.pkl", "filesList": ["f02", "f13", "f23"], "constructor" : HumanProteome}
     }
 
 
@@ -76,14 +76,15 @@ class MixedSpectra(data.Dataset):
 
                 print("== Loading experiment {}...".format(experiment))
 
-                spectraPeaksFilename = experimentsData[experiment][0]
+                spectraPeaksFilename = experimentsData[experiment]["peaksFile"]
 
-                newExperiment = experimentsData[experiment][1](dataDirectory = dataDirectory,
-                                                                               split = split,
-                                                                               identificationsFilename = experiment, 
-                                                                               spectraFilename = spectraPeaksFilename,
-                                                                               normalizeData = False,
-                                                                               storeUnrecognized = False)
+                newExperiment = experimentsData[experiment]["constructor"](dataDirectory = dataDirectory,
+                                                                                           split = split,
+                                                                                           identificationsFilename = experiment, 
+                                                                                           spectraFilename = spectraPeaksFilename,
+                                                                                           filesList = experimentsData[experiment]["filesList"]
+                                                                                           normalizeData = False,
+                                                                                           storeUnrecognized = False)
 
                 del newExperiment
 
