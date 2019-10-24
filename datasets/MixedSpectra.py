@@ -31,18 +31,18 @@ class MixedSpectra(data.Dataset):
         "adult_platelets_gel_elite.csv" : ["adult_platelets_gel_elite.pkl", HumanProteome]
     }
 
+    TEST_EXPERIMENTS_DATA = {
+        "adult_heart_brp_elite.csv" : ["adult_heart_brp_elite.pkl", HumanProteome]
+    }
 
 
     def __init__(self, dataDirectory = 'data/mixedSpectra', split = 'train', 
-                 batch_size = 100, nb_threads = 1, trainingDataset = None):
+                 batch_size = 100, nb_threads = 1):
 
         self.split = split
         self.nb_threads = nb_threads
         self.batch_size = batch_size
         self.dataDirectory = dataDirectory
-
-        if split != 'train':
-            self.trainingDataset = trainingDataset
 
         currentDirectory = os.getcwd()
 
@@ -55,52 +55,51 @@ class MixedSpectra(data.Dataset):
 
 
         if split == 'train':
-            trainPeaksFile = MixedSpectra.TRAIN_FILENAME.format(Options().get("dataset.train_set_version", MixedSpectra.CURRENT_TRAIN_VERSION))
+            peaksFile = MixedSpectra.TRAIN_FILENAME.format(Options().get("dataset.train_set_version", MixedSpectra.CURRENT_TRAIN_VERSION))
+            experimentsData = MixedSpectra.TRAIN_EXPERIMENTS_DATA
         else:
-            evalPeaksFile = MixedSpectra.TEST_FILENAME.format(Options().get("dataset.eval_set_version", MixedSpectra.CURRENT_TEST_VERSION))
+            peaksFile = MixedSpectra.TEST_FILENAME.format(Options().get("dataset.eval_set_version", MixedSpectra.CURRENT_TEST_VERSION))
+            experimentsData = MixedSpectra.TEST_EXPERIMENTS_DATA
 
         peaksFilesFolder = os.path.join(self.dataDirectory, 'sequences')
 
         self.totalSpectra = SpectraFound(False, peaksFilesFolder)
-        self.totalSpectra.load_spectra(trainPeaksFile)
+        self.totalSpectra.load_spectra(peaksFile)
 
         if not self.totalSpectra.spectra:
 
             print("** Need to create the train and test datasets")
 
-            if split == 'train':
-                datasets = MixedSpectra.TRAIN_EXPERIMENTS_DATA
+            # Make sure each experiment peaks file exists
 
-                # Make sure each experiment peaks file exists
+            for experiment in experimentsData.keys():
 
-                for experiment in datasets.keys():
+                print("== Loading experiment {}...".format(experiment))
 
-                    print("== Loading experiment {}...".format(experiment))
+                spectraPeaksFilename = experimentsData[experiment][0]
 
-                    spectraPeaksFilename = MixedSpectra.TRAIN_EXPERIMENTS_DATA[experiment][0]
+                newExperiment = experimentsData[experiment][1](dataDirectory = dataDirectory,
+                                                                               split = split,
+                                                                               identificationsFilename = experiment, 
+                                                                               spectraFilename = spectraPeaksFilename,
+                                                                               normalizeData = False,
+                                                                               storeUnrecognized = False)
 
-                    newExperiment = MixedSpectra.TRAIN_EXPERIMENTS_DATA[experiment][1](dataDirectory = dataDirectory,
-                                                                                       split = split,
-                                                                                       identificationsFilename = experiment, 
-                                                                                       spectraFilename = spectraPeaksFilename,
-                                                                                       normalizeData = False,
-                                                                                       storeUnrecognized = False)
+                del newExperiment
 
-                    del newExperiment
+                self.totalSpectra.merge_spectra(self.totalSpectra, peaksFilesFolder, spectraPeaksFilename)
 
-                    self.totalSpectra.merge_spectra(self.totalSpectra, peaksFilesFolder, spectraPeaksFilename)
-
-                    self.totalSpectra.save_spectra(trainPeaksFile, True)
+                self.totalSpectra.save_spectra(peaksFile, True)
 
 
-                # Now, analyze the sequences
-                self.totalSpectra.list_single_and_multiple_scans_sequences()
+            # Now, analyze the sequences
+            self.totalSpectra.list_single_and_multiple_scans_sequences()
 
-                # And finally normalize the data
-                self.totalSpectra.normalize_data(trainingDataset)
+            # And finally normalize the data
+            self.totalSpectra.normalize_data()
 
-                # Save the entire data
-                self.totalSpectra.save_spectra(trainPeaksFile, True)
+            # Save the entire data
+            self.totalSpectra.save_spectra(peaksFile, True)
 
 
         Logger()("Dataset statistics ({}):".format(split))

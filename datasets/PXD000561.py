@@ -122,6 +122,34 @@ class PXD000561:
     }
 
 
+    ADULT_HEART_BRP_ELITE_FILES = {
+        'f01' : 'Adult_Heart_bRP_Elite_81_f01.mgf',
+        'f02' : 'Adult_Heart_bRP_Elite_81_f02.mgf',
+        'f03' : 'Adult_Heart_bRP_Elite_81_f03.mgf',
+        'f04' : 'Adult_Heart_bRP_Elite_81_f04.mgf',
+        'f05' : 'Adult_Heart_bRP_Elite_81_f05.mgf',
+        'f06' : 'Adult_Heart_bRP_Elite_81_f06.mgf',
+        'f07' : 'Adult_Heart_bRP_Elite_81_f07.mgf',
+        'f08' : 'Adult_Heart_bRP_Elite_81_f08.mgf',
+        'f09' : 'Adult_Heart_bRP_Elite_81_f09.mgf',
+        'f10' : 'Adult_Heart_bRP_Elite_81_f10.mgf',
+        'f11' : 'Adult_Heart_bRP_Elite_81_f11.mgf',
+        'f12' : 'Adult_Heart_bRP_Elite_81_f12.mgf',
+        'f13' : 'Adult_Heart_bRP_Elite_81_f13.mgf',
+        'f14' : 'Adult_Heart_bRP_Elite_81_f14.mgf',
+        'f15' : 'Adult_Heart_bRP_Elite_81_f15.mgf',
+        'f16' : 'Adult_Heart_bRP_Elite_81_f16.mgf',
+        'f17' : 'Adult_Heart_bRP_Elite_81_f17.mgf',
+        'f18' : 'Adult_Heart_bRP_Elite_81_f18.mgf',
+        'f19' : 'Adult_Heart_bRP_Elite_81_f19.mgf',
+        'f20' : 'Adult_Heart_bRP_Elite_81_f20.mgf',
+        'f21' : 'Adult_Heart_bRP_Elite_81_f21.mgf',
+        'f22' : 'Adult_Heart_bRP_Elite_81_f22.mgf',
+        'f23' : 'Adult_Heart_bRP_Elite_81_f23.mgf',
+        'f24' : 'Adult_Heart_bRP_Elite_81_f24.mgf',
+    }
+
+
     ADULT_PLATELETS_GEL_ELITE_FILES = {
         'b01' : 'Adult_Platelets_Gel_Elite_48_f01.mgf',
         'b02' : 'Adult_Platelets_Gel_Elite_48_f02.mgf',
@@ -313,8 +341,9 @@ class PXD000561:
         "adult_adrenalgland_gel_elite.csv" : ADULT_ADRENALGLAND_GEL_ELITE_FILES,
         "adult_adrenalgland_gel_velos.csv" : ADULT_ADRENALGLAND_GEL_VELOS_FILES,
         "adult_adrenalgland_bRP_velos.csv" : ADULT_ADRENALGLAND_BRP_VELOS_FILES,
-        "adult_urinarybladder_gel_elite.csv" : ADULT_URINARYBLADDER_GEL_ELITE_FILES,
+        "adult_heart_brp_elite.csv" : ADULT_HEART_BRP_ELITE_FILES,
         "adult_platelets_gel_elite.csv" : ADULT_PLATELETS_GEL_ELITE_FILES,
+        "adult_urinarybladder_gel_elite.csv" : ADULT_URINARYBLADDER_GEL_ELITE_FILES,
         "fetal_brain_gel_velos.csv" : FETAL_BRAIN_GEL_VELOS_FILES,
         "fetal_ovary_brp_velos.csv" : FETAL_OVARY_BRP_VELOS_FILES,
         "fetal_ovary_brp_elite.csv" : FETAL_OVARY_BRP_ELITE_FILES
