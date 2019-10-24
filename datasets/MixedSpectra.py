@@ -82,7 +82,7 @@ class MixedSpectra(data.Dataset):
                                                                                            split = split,
                                                                                            identificationsFilename = experiment, 
                                                                                            spectraFilename = spectraPeaksFilename,
-                                                                                           filesList = experimentsData[experiment]["filesList"]
+                                                                                           filesList = experimentsData[experiment]["filesList"],
                                                                                            normalizeData = False,
                                                                                            storeUnrecognized = False)
 
