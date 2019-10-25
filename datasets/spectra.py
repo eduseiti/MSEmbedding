@@ -155,6 +155,8 @@ class SpectraFound:
 
     def load_spectra(self, spectraName):
     
+        print("Loading spectra file {}".format(spectraName))
+
         self.multipleScansSequences = None
         self.singleScanSequences = None
         self.normalizationParameters = None

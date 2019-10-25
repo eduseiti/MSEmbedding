@@ -79,7 +79,7 @@ class MixedSpectra(data.Dataset):
                 trainingPeaksFile = MixedSpectra.TRAIN_FILENAME.format(Options().get("dataset.train_set_version", MixedSpectra.CURRENT_TRAIN_VERSION))
 
                 trainingDataset = SpectraFound(False, peaksFilesFolder)
-                trainingDataset.load_spectra(peaksFile)
+                trainingDataset.load_spectra(trainingPeaksFile)
 
                 if not trainingDataset:
                     raise ValueError("Missing training dataset to get normalization parameters !!!")
@@ -112,7 +112,7 @@ class MixedSpectra(data.Dataset):
             self.totalSpectra.list_single_and_multiple_scans_sequences()
 
             # And finally normalize the data
-            self.totalSpectra.normalize_data(trainingDataset.totalSpectra.normalizationParameters)
+            self.totalSpectra.normalize_data(trainingDataset.normalizationParameters)
 
             # Save the entire data
             self.totalSpectra.save_spectra(peaksFile, True)
