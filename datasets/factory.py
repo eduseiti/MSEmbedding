@@ -22,7 +22,10 @@ def factory(engine=None):
             dataset['train'] = factory_mixedSpectra(Options()['dataset']['train_split'])
 
         if Options()['dataset'].get('eval_split', None):
-            dataset['eval'] = factory_mixedSpectra(Options()['dataset']['eval_split'])
+            if 'train' in dataset:
+                dataset['eval'] = factory_mixedSpectra(Options()['dataset']['eval_split'], dataset['train'])
+            else:
+                dataset['eval'] = factory_mixedSpectra(Options()['dataset']['eval_split'])
 
     else:
         raise ValueError()
@@ -45,5 +48,6 @@ def factory_mixedSpectra(split, trainingDataset = None):
         Options()['dataset']['dir'],
         split,
         batch_size = Options()['dataset']['batch_size'],
-        nb_threads = Options()['dataset']['nb_threads'])
+        nb_threads = Options()['dataset']['nb_threads'], 
+        trainingDataset = trainingDataset)
     return dataset    

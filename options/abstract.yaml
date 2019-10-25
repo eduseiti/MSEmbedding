@@ -5,7 +5,7 @@ dataset:
   import: MSEmbedding.datasets.factory
   name: humanProteome
   dir: data/humanProteome
-  train_split: train
+  train_split: 
   eval_split: eval
   nb_threads: 1
   batch_size: 300

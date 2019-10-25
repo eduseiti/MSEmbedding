@@ -37,12 +37,15 @@ class MixedSpectra(data.Dataset):
 
 
     def __init__(self, dataDirectory = 'data/mixedSpectra', split = 'train', 
-                 batch_size = 100, nb_threads = 1):
+                 batch_size = 100, nb_threads = 1, trainingDataset = None):
 
         self.split = split
         self.nb_threads = nb_threads
         self.batch_size = batch_size
         self.dataDirectory = dataDirectory
+
+        if split != 'train':
+            self.trainingDataset = trainingDataset
 
         currentDirectory = os.getcwd()
 
@@ -68,7 +71,19 @@ class MixedSpectra(data.Dataset):
 
         if not self.totalSpectra.spectra:
 
-            print("** Need to create the train and test datasets")
+            print("*** Need to create the {} dataset".format(split))
+
+            if not trainingDataset:
+                print("***** Need to load training dataset to get normalization parameters")
+
+                trainingPeaksFile = MixedSpectra.TRAIN_FILENAME.format(Options().get("dataset.train_set_version", MixedSpectra.CURRENT_TRAIN_VERSION))
+
+                trainingDataset = SpectraFound(False, peaksFilesFolder)
+                trainingDataset.load_spectra(peaksFile)
+
+                if not trainingDataset:
+                    raise ValueError("Missing training dataset to get normalization parameters !!!")
+
 
             # Make sure each experiment peaks file exists
 
@@ -97,7 +112,7 @@ class MixedSpectra(data.Dataset):
             self.totalSpectra.list_single_and_multiple_scans_sequences()
 
             # And finally normalize the data
-            self.totalSpectra.normalize_data()
+            self.totalSpectra.normalize_data(trainingDataset.totalSpectra.normalizationParameters)
 
             # Save the entire data
             self.totalSpectra.save_spectra(peaksFile, True)

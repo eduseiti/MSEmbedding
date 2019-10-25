@@ -213,9 +213,9 @@ class SpectraFound:
 
 
 
-    def normalize_data(self, trainingDataset = None):
+    def normalize_data(self, normalizationParameters = None):
 
-        if not trainingDataset:
+        if not normalizationParameters:
 
             #
             # Need to calculate the normalization parameters
@@ -268,7 +268,7 @@ class SpectraFound:
             Logger()('intensity mean: {}, intensity std: {}'.format(self.normalizationParameters['intensity_mean'], self.normalizationParameters['intensity_std']))
 
         else:
-            self.normalizationParameters = trainingDataset.dataset.totalSpectra.normalizationParameters
+            self.normalizationParameters = normalizationParameters
 
             Logger()("Will apply the following normalization parameters, from training dataset")
             Logger()('mz mean: {}, mz std: {}'.format(self.normalizationParameters['mz_mean'], self.normalizationParameters['mz_std']))
