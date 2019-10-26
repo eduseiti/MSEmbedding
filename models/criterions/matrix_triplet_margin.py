@@ -6,6 +6,12 @@ import pickle
 import os
 
 
+#
+# This criterion only works with batches containing only (anchor, positive example), 
+# not including negative examples.
+#
+#
+
 class MatrixTripletMargin(nn.Module):
 
     wrongCount = 0
@@ -31,24 +37,15 @@ class MatrixTripletMargin(nn.Module):
         embeddings = networkOutput[0]
         originalIndexes = originalIndexes.tolist()
 
-        anchors = embeddings[originalIndexes[::3]]
-        positive = embeddings[originalIndexes[1::3]]
-        negative = embeddings[originalIndexes[2::3]]
-
-        # embeddings = networkOutput
-
-        # anchors = embeddings[::3]
-        # positive = embeddings[1::3]
-        # negative = embeddings[2::3]
+        anchors = embeddings[originalIndexes[::2]]
+        positive = embeddings[originalIndexes[1::2]]
 
         anchors = anchors.reshape(anchors.shape[0], -1)
         positive = positive.reshape(positive.shape[0], -1)
-        negative = negative.reshape(negative.shape[0], -1)
 
         normalizedAnchors = nn.functional.normalize(anchors)
 
         allPositiveCosineDistances = 1 - torch.mm(normalizedAnchors, nn.functional.normalize(positive).t())
-        allNegativeCosineDistances = 1 - torch.mm(normalizedAnchors, nn.functional.normalize(negative).t())
 
         # ltZeroCount = (allCosineDistances < 0).sum()
         # gtOneCount = (allCosineDistances > 1).sum()
@@ -65,17 +62,14 @@ class MatrixTripletMargin(nn.Module):
         #         dataDump['allCosineDistances'] = allCosineDistances
         #         dataDump["anchors"] = anchors
         #         dataDump["positive"] = positive
-        #         dataDump["negative"] = negative
         #         pickle.dump(dataDump, outputFile)
 
         anchorPositiveDistances = allPositiveCosineDistances.diag().unsqueeze(1)
 
-        loss = torch.max(anchorPositiveDistances - torch.cat((allPositiveCosineDistances, allNegativeCosineDistances), dim = 1) + self.margin, 
+        loss = torch.max(anchorPositiveDistances - allPositiveCosineDistances + self.margin, 
                          anchorPositiveDistances.new_zeros(1))
 
         loss[range(loss.shape[0]), range(loss.shape[0])] = 0.0
-
-        print("-------------> aggregation={}".format(self.aggregation))
 
         if self.aggregation == "valid":
             non_zeroed_losses = (loss > self.epsilon).float().sum()

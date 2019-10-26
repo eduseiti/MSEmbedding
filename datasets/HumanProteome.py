@@ -121,9 +121,14 @@ class HumanProteome(data.Dataset):
 
         numberOfSequences = len(self.dataset.totalSpectra.multipleScansSequences)
 
-        self.numberOfBatches = (numberOfSequences * 3) // self.batch_size
+        examplesPerSequence = 2
 
-        if (numberOfSequences * 3) % self.batch_size != 0:
+        if Options().get("dataset.include_negative", False):
+            examplesPerSequence = 3
+
+        self.numberOfBatches = (numberOfSequences * examplesPerSequence) // self.batch_size
+
+        if (numberOfSequences * examplesPerSequence) % self.batch_size != 0:
             self.numberOfBatches += 1
 
         print('=============> Initial number of batches: {}'.format(self.numberOfBatches))

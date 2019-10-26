@@ -4,6 +4,8 @@ import torch
 import numpy as np
 
 from bootstrap.lib.logger import Logger
+from bootstrap.lib.options import Options
+
 
 import os
 import pickle
@@ -21,10 +23,11 @@ class BatchLoader(object):
 
         self.totalSpectra = originalData
         self.batchSize = batchSize
-
         self.dataDumpFolder = dataDumpFolder
+        self.includeNegative = Options().get("dataset.include_negative", False)
 
         self.createTripletBatch()
+
 
 
     def createTripletBatch(self):
@@ -33,9 +36,10 @@ class BatchLoader(object):
 
         random.shuffle(self.totalSpectra.singleScanSequences)
 
-        singleScanSequencesCount = len(self.totalSpectra.singleScanSequences)
+        if self.includeNegative:
+            singleScanSequencesCount = len(self.totalSpectra.singleScanSequences)
 
-        print("++++++++ singleScanSequencesCount={}".format(singleScanSequencesCount))
+            print("++++++++ singleScanSequencesCount={}".format(singleScanSequencesCount))
 
         Logger()('>>> New epoch initial sequences: {}'.format(self.totalSpectra.multipleScansSequences[0:10]))
 
@@ -45,7 +49,9 @@ class BatchLoader(object):
 
 
         #
-        # Every 3 peaks corresponds to the following sequence: anchor, positive and negative examples.
+        # If "includeNegative" enabled, Every 3 peaks corresponds to the following sequence: anchor, positive and negative examples.
+        #
+        # Otherwise, every 2 peaks corresponds to: anchr, positive example.
         #
 
         for i, sequence in enumerate(self.totalSpectra.multipleScansSequences):
@@ -53,18 +59,20 @@ class BatchLoader(object):
             positiveExamplesIndexes = random.sample(range(len(self.totalSpectra.spectra[sequence])), k = 2)
 
             anchor = self.totalSpectra.spectra[sequence][positiveExamplesIndexes[0]]['nzero_peaks']
-            positive = self.totalSpectra.spectra[sequence][positiveExamplesIndexes[1]]['nzero_peaks']
-
-            negative = self.totalSpectra.spectra[self.totalSpectra.singleScanSequences[i % singleScanSequencesCount]][0]['nzero_peaks']
-
             peaksList.append(anchor)
             self.peaksLen.append(len(anchor))
 
+            positive = self.totalSpectra.spectra[sequence][positiveExamplesIndexes[1]]['nzero_peaks']
             peaksList.append(positive)
             self.peaksLen.append(len(positive))
 
-            peaksList.append(negative)
-            self.peaksLen.append(len(negative))
+            if self.includeNegative:
+                negative = self.totalSpectra.spectra[self.totalSpectra.singleScanSequences[i % singleScanSequencesCount]][0]['nzero_peaks']
+                peaksList.append(negative)
+                self.peaksLen.append(len(negative))
+
+
+
 
 
         #

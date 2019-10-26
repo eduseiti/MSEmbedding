@@ -20,6 +20,11 @@ class EmbeddingsDistance(torch.nn.Module):
         self.mode = mode
         self.allEmbeddings = []
 
+        if Options().get("dataset.include_negative", False):
+            self.examplesPerSequence = 3
+        else:
+            self.examplesPerSequence = 2
+
         if engine and mode == 'eval':
             self.split = engine.dataset[mode].split
             engine.register_hook('eval_on_end_epoch', self.calculate_MedR)
@@ -77,11 +82,11 @@ class EmbeddingsDistance(torch.nn.Module):
         recall_at_5 = 0
         recall_at_10 = 0
 
-        for i in range(len(epochEmbeddings) // 3):
+        for i in range(len(epochEmbeddings) // self.examplesPerSequence):
 
-            allCosineDistances[i * 3, i * 3] = -1 # Make sure the same embedding distance is always the first after sorting
+            allCosineDistances[i * self.examplesPerSequence, i * self.examplesPerSequence] = -1 # Make sure the same embedding distance is always the first after sorting
 
-            orderedDistancesFast = torch.argsort(allCosineDistances[i * 3])
+            orderedDistancesFast = torch.argsort(allCosineDistances[i * self.examplesPerSequence])
             orderedListFast = orderedDistancesFast.tolist()
 
             #
@@ -91,17 +96,16 @@ class EmbeddingsDistance(torch.nn.Module):
             #
 
 
-            sameRankFast = orderedListFast.index(i * 3)
-            positiveExampleRankFast = orderedListFast.index(i * 3 + 1) - 1
-            negativeExampleRankFast = orderedListFast.index(i * 3 + 2) - 1
+            sameRankFast = orderedListFast.index(i * self.examplesPerSequence)
+            positiveExampleRankFast = orderedListFast.index(i * self.examplesPerSequence + 1) - 1
 
             # if (sameRankFast > 0 or allCosineDistances[orderedListFast[sameRankFast], orderedListFast[sameRankFast]] < 0):
 
-            #     print('{} - Same rank Fast={}, Same distance Fast={}, Positive rank Fast={}, Negative rank Fast={}'.format(i, 
+            #     print('{} - Same rank Fast={}, Same distance Fast={}, Positive rank Fast={}'.format(i, 
             #         sameRankFast, allCosineDistances[orderedListFast[sameRankFast], orderedListFast[sameRankFast]], 
-            #         positiveExampleRankFast, negativeExampleRankFast))
+            #         positiveExampleRankFast))
 
-            #     print("allCosineDistances={}".format(allCosineDistances[i * 3]))
+            #     print("allCosineDistances={}".format(allCosineDistances[i * self.examplesPerSequence]))
 
             #     print("cwd={}".format(os.getcwd()))
 
@@ -122,9 +126,9 @@ class EmbeddingsDistance(torch.nn.Module):
             if positiveExampleRankFast <= 9:
                 recall_at_10 += 1
 
-            Logger()('{} - Same rank Fast={}, Same distance Fast={}, Positive rank Fast={}, Negative rank Fast={}'.format(i, 
+            Logger()('{} - Same rank Fast={}, Same distance Fast={}, Positive rank Fast={}'.format(i, 
                 sameRankFast, allCosineDistances[orderedListFast[sameRankFast], orderedListFast[sameRankFast]], 
-                positiveExampleRankFast, negativeExampleRankFast))
+                positiveExampleRankFast))
 
 
         out = {}
