@@ -35,6 +35,11 @@ class MixedSpectra(data.Dataset):
         "adult_heart_brp_elite.csv" : {"peaksFile" : "adult_heart_brp_elite.pkl", "filesList": ["f02", "f13", "f23"], "constructor" : HumanProteome}
     }
 
+    TEST_EXPERIMENTS_DATA_SMALL = {
+        "adult_heart_brp_elite.csv" : {"peaksFile" : "adult_heart_brp_elite.pkl", "filesList": ["f13", "f23"], "constructor" : HumanProteome}
+    }
+
+
 
     def __init__(self, dataDirectory = 'data/mixedSpectra', split = 'train', 
                  batch_size = 100, nb_threads = 1, trainingDataset = None):
@@ -61,8 +66,14 @@ class MixedSpectra(data.Dataset):
             peaksFile = MixedSpectra.TRAIN_FILENAME.format(Options().get("dataset.train_set_version", MixedSpectra.CURRENT_TRAIN_VERSION))
             experimentsData = MixedSpectra.TRAIN_EXPERIMENTS_DATA
         else:
-            peaksFile = MixedSpectra.TEST_FILENAME.format(Options().get("dataset.eval_set_version", MixedSpectra.CURRENT_TEST_VERSION))
-            experimentsData = MixedSpectra.TEST_EXPERIMENTS_DATA
+            testVersion = Options().get("dataset.eval_set_version", MixedSpectra.CURRENT_TEST_VERSION)
+
+            if testVersion == MixedSpectra.CURRENT_TEST_VERSION:
+                experimentsData = MixedSpectra.TEST_EXPERIMENTS_DATA
+            else:
+                experimentsData = MixedSpectra.TEST_EXPERIMENTS_DATA_SMALL
+
+            peaksFile = MixedSpectra.TEST_FILENAME.format(testVersion)
 
         peaksFilesFolder = os.path.join(self.dataDirectory, 'sequences')
 

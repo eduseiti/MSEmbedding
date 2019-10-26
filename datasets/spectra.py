@@ -234,7 +234,7 @@ class SpectraFound:
             intensitySum = 0.0
             totalNonZeroPeaks = 0
 
-            print("Start to calculate the mzMean and intensityMean...")
+            print("\nStart to calculate the mzMean and intensityMean...")
 
             for key in self.multipleScansSequences + self.singleScanSequences:
                 for peaksList in self.spectra[key]:
@@ -272,7 +272,7 @@ class SpectraFound:
         else:
             self.normalizationParameters = normalizationParameters
 
-            Logger()("Will apply the following normalization parameters, from training dataset")
+            Logger()("\nWill apply the following normalization parameters, from training dataset")
             Logger()('mz mean: {}, mz std: {}'.format(self.normalizationParameters['mz_mean'], self.normalizationParameters['mz_std']))
             Logger()('intensity mean: {}, intensity std: {}'.format(self.normalizationParameters['intensity_mean'], self.normalizationParameters['intensity_std']))
             
