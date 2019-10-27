@@ -63,8 +63,8 @@ class MixedSpectra(data.Dataset):
 
 
         if split == 'train':
-            # peaksFile = MixedSpectra.TRAIN_FILENAME.format(Options().get("dataset.train_set_version", MixedSpectra.CURRENT_TRAIN_VERSION))
-            peaksFile = MixedSpectra.TEST_FILENAME.format(Options().get("dataset.eval_set_version", MixedSpectra.CURRENT_TRAIN_VERSION))
+            peaksFile = MixedSpectra.TRAIN_FILENAME.format(Options().get("dataset.train_set_version", MixedSpectra.CURRENT_TRAIN_VERSION))
+            #peaksFile = MixedSpectra.TEST_FILENAME.format(Options().get("dataset.eval_set_version", MixedSpectra.CURRENT_TRAIN_VERSION))
             experimentsData = MixedSpectra.TRAIN_EXPERIMENTS_DATA
         else:
             testVersion = Options().get("dataset.eval_set_version", MixedSpectra.CURRENT_TEST_VERSION)
