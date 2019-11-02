@@ -1,0 +1,36 @@
+__include__: abstract.yaml
+exp:
+  dir: logs/MSEmbedding/mixedSpectra_radam_lstm_50_LR1e-3_margin0.3_700_epochs_wd1e-5_adaptive_epsilon_1e-6_bi-lstm
+dataset:
+  name: mixedSpectra
+  dir: data/mixedSpectra
+  train_set_version: v0.1
+  eval_set_version: v0.1_small
+  batch_size: 300
+engine:
+  nb_epochs: 700
+model:
+  network:
+    lstm_out_dim: 50
+    bidirecional_lstm: True
+  criterion:
+    name: MatrixTripletMargin
+    aggregation: valid
+    epsilon: 0.000001
+optimizer:
+  import: MSEmbedding.models.optimizers.factory
+  name: radam
+  lr: 0.001 
+  weight_decay: 0.00001
+misc:
+  cuda: True
+views:
+  items:  
+    - logs:train_batch.loss
+    - logs:train_epoch.loss
+    - logs:eval_batch.loss
+    - logs:eval_epoch.loss
+    - logs:eval_epoch.metric.MedR
+    - logs:eval_epoch.metric.recall_at_1
+    - logs:eval_epoch.metric.recall_at_5
+    - logs:eval_epoch.metric.recall_at_10
