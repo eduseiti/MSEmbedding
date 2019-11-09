@@ -81,7 +81,7 @@ class HumanProteome(data.Dataset):
 
             if normalizeData:
                 # And finally normalize the data
-                self.dataset.totalSpectra.normalize_data(trainingDataset.dataset.totalSpectra.normalizationParameters)
+                self.dataset.totalSpectra.normalize_data(trainingDataset.dataset.totalSpectra.normalizationParameters if trainingDataset else None)
 
             # Now, save the entire data
             self.dataset.totalSpectra.save_spectra(self.dataset.spectraFilename)
@@ -95,7 +95,7 @@ class HumanProteome(data.Dataset):
 
             if normalizeData:
                 # And finally normalize the data
-                self.dataset.totalSpectra.normalize_data(trainingDataset.dataset.totalSpectra.normalizationParameters)
+                self.dataset.totalSpectra.normalize_data(trainingDataset.dataset.totalSpectra.normalizationParameters if trainingDataset else None)
 
             # Now, save the entire data
             self.dataset.totalSpectra.save_spectra(self.dataset.spectraFilename)
