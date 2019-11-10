@@ -21,9 +21,6 @@ from .spectra import MGF
 
 class PXD000561:
 
-    SCAN_SEQUENCE_MAX_DIGITS = 8
-    SCAN_SEQUENCE_OVER_LIMIT = 999999999
-
     ADULT_ADRENALGLAND_GEL_ELITE_FILES = {
         'b01' : 'Adult_Adrenalgland_Gel_Elite_49_f01.mgf',
         'b02' : 'Adult_Adrenalgland_Gel_Elite_49_f02.mgf',
@@ -384,7 +381,7 @@ class PXD000561:
         #
 
         matches_file['File Sequence'] = \
-            matches_file['Spectrum Title'].str.split("_", expand = True).iloc[:, 3].str.zfill(PXD000561.SCAN_SEQUENCE_MAX_DIGITS)
+            matches_file['Spectrum Title'].str.split("_", expand = True).iloc[:, 3].str.zfill(MGF.SCAN_SEQUENCE_MAX_DIGITS)
         
         matches_file['File'] = matches_file['Spectrum Title'].str.split("_", expand = True).iloc[:, 2]
 
@@ -431,7 +428,7 @@ class PXD000561:
                             #
 
                             spectraParser.read_spectrum(currentFile, currentFileNamePrefix + '_', 
-                                                        PXD000561.SCAN_SEQUENCE_OVER_LIMIT, 
+                                                        MGF.SCAN_SEQUENCE_OVER_LIMIT, 
                                                         '', 
                                                         self.totalSpectra)
 
@@ -450,13 +447,13 @@ class PXD000561:
                     currentFile = open(currentFileName, 'r')
                     lastScan    = None
 
-                _, lastScan = spectraParser.read_spectrum(currentFile, 
-                                                        currentFileNamePrefix + '_', 
-                                                        row['First Scan'], 
-                                                        row['Sequence'], 
-                                                        self.totalSpectra, 
-                                                        currentScan = lastScan,
-                                                        storeUnrecognized = storeUnrecognized)
+                _, lastScan, _ = spectraParser.read_spectrum(currentFile, 
+                                                             currentFileNamePrefix + '_', 
+                                                             row['First Scan'], 
+                                                             row['Sequence'], 
+                                                             self.totalSpectra, 
+                                                             currentScan = lastScan,
+                                                             storeUnrecognized = storeUnrecognized)
             except KeyError:
                 Logger()("- Identification file key {} has not corresponding spectra file.")
 
