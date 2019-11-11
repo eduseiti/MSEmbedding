@@ -84,9 +84,9 @@ class SpectraFound:
                 
         sequenceDict = whichScan.to_dict(self.saveFiles)
 
-        print('- add_scan. sequence={}, scan={}, # non-zero peaks={}'.format(whichSequence, 
-            whichScan.scan,
-            len(sequenceDict['nzero_peaks'])))
+        # print('- add_scan. sequence={}, scan={}, # non-zero peaks={}'.format(whichSequence, 
+        #     whichScan.scan,
+        #     len(sequenceDict['nzero_peaks'])))
         
         if whichSequence in self.spectra:
             self.spectra[whichSequence].append(sequenceDict)
