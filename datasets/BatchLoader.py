@@ -102,9 +102,12 @@ class BatchLoader(object):
         #
 
         howManyCompleteBatches = len(self.epoch) // self.batchSize
+        additionalBatch = False
 
         if len(self.epoch) % self.batchSize != 0:
             self.numberOfBatches = howManyCompleteBatches + 1
+
+            additionalBatch = True
         else:
             self.numberOfBatches = howManyCompleteBatches
 
@@ -120,21 +123,23 @@ class BatchLoader(object):
 
             yield batchExamples
 
-            print('\nWill get next batch')
-      
-        print('Last batch {}: from {} to {}; size {}'.format(batch + 1, 
-                                                    howManyCompleteBatches * self.batchSize, 
-                                                    howManyCompleteBatches * self.batchSize + len(self.epoch) % self.batchSize - 1,
-                                                    len(self.epoch) % self.batchSize))
 
-        # print('Batch Indexes: {}'.format(list(range(howManyCompleteBatches * self.batchSize, howManyCompleteBatches * self.batchSize + len(self.epoch) % self.batchSize - 1))))
+        # Check if there is a last batch
+
+        if additionalBatch:
+            print('Last batch {}: from {} to {}; size {}'.format(batch + 1, 
+                                                        howManyCompleteBatches * self.batchSize, 
+                                                        howManyCompleteBatches * self.batchSize + len(self.epoch) % self.batchSize - 1,
+                                                        len(self.epoch) % self.batchSize))
+
+            # print('Batch Indexes: {}'.format(list(range(howManyCompleteBatches * self.batchSize, howManyCompleteBatches * self.batchSize + len(self.epoch) % self.batchSize - 1))))
 
 
-        batchExamples = list(range(howManyCompleteBatches * self.batchSize, howManyCompleteBatches * self.batchSize + len(self.epoch) % self.batchSize))
+            batchExamples = list(range(howManyCompleteBatches * self.batchSize, howManyCompleteBatches * self.batchSize + len(self.epoch) % self.batchSize))
 
-        # batch = {'peaks' : batchExamples, "peaksLen" : self.peaksLen[batchExamples[0]:len(batchExamples)]}
+            # batch = {'peaks' : batchExamples, "peaksLen" : self.peaksLen[batchExamples[0]:len(batchExamples)]}
 
-        yield batchExamples
+            yield batchExamples
 
         
     def __len__(self):
