@@ -98,10 +98,14 @@ class Linfeng(data.Dataset):
             spectraFound.multipleScansSequences = None
             spectraFound.singleScanSequences = None
             spectraFound.normalizationParameters = normalizationParameters
+            spectraFound.spectraCount = 0
 
             files = os.listdir(os.path.join(mgfFolder, folder))
 
             for fileName in files:
+
+                spectraCountInFile = 0
+
                 if fileName.lower().endswith(".mgf"):
                     print("- Processing file {}".format(fileName))
 
@@ -109,10 +113,12 @@ class Linfeng(data.Dataset):
 
                     currentFile = open(os.path.join(mgfFolder, folder, fileName), 'r')
 
-                    _, _, spectraFound.spectraCount = spectraParser.read_spectrum(currentFile, 
-                                                                fileNameParts[2] + '_' + fileNameParts[3].split('.')[0], 
-                                                                None, None, spectraFound)
+                    _, _, spectraCountInFile = spectraParser.read_spectrum(currentFile, 
+                                                                           fileNameParts[2] + '_' + fileNameParts[3].split('.')[0], 
+                                                                           None, None, spectraFound)
   
+                spectraFound.spectraCount += spectraCountInFile
+
             Logger()("Folder {} files had {} spectra.".format(folder, spectraFound.spectraCount))
 
             totalSpectraCount += spectraFound.spectraCount
