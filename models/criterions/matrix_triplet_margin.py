@@ -85,15 +85,13 @@ class MatrixTripletMargin(nn.Module):
 
                 Logger()("zeroedLosses={}, countOfNonZeroedLosses={}".format(zeroedLosses.float().sum(), countOfNonZeroedLosses))
 
-                computedLoss = 0.0
+                aggregatedLoss = torch.sum(loss) / countOfNonZeroedLosses
+                aggregatedLoss2 = 0.0
 
                 if countOfNonZeroedLosses > 0:
 
-                    aggregatedLoss = 0.0
-                    aggregatedLoss2 = 0.0
-
                     loss2 = torch.max(anchorDistances + self.margin + self.variableMarginStep, comparissonBase)
-                    loss2[range(loss.shape[0]), range(loss.shape[0])] = 0.0
+                    loss2[range(loss2.shape[0]), range(loss2.shape[0])] = 0.0
 
                     countOfNonZeroedLosses_2 = (loss2[zeroedLosses] > self.epsilon).float().sum()
 
@@ -102,13 +100,9 @@ class MatrixTripletMargin(nn.Module):
                     if countOfNonZeroedLosses_2 > 0:
                         aggregatedLoss2 = torch.sum(loss2[zeroedLosses]) / countOfNonZeroedLosses_2
 
-                    aggregatedLoss = torch.sum(loss) / countOfNonZeroedLosses
-
-                    computedLoss = aggregatedLoss + aggregatedLoss2
-
                     Logger()("Loss={}, Loss2={}".format(aggregatedLoss, aggregatedLoss2))
 
-                out['loss'] = computedLoss
+                out['loss'] = aggregatedLoss + aggregatedLoss2
             else:
                 countOfNonZeroedLosses = (loss > self.epsilon).float().sum()
 
