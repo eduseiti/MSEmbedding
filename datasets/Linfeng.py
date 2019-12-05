@@ -1,5 +1,3 @@
-from .HumanProteome import HumanProteome
-from .PXD000561 import PXD000561
 from .spectra import SpectraFound
 from .spectra import MGF
 from .spectra import Scan
@@ -12,7 +10,7 @@ import pickle
 
 import gc
 
-from .BatchLoader import BatchLoader
+from .batch_loader_encoder import BatchLoaderEncoder
 
 from bootstrap.lib.options import Options
 from bootstrap.lib.logger import Logger
@@ -20,7 +18,7 @@ from bootstrap.lib.logger import Logger
 
 class Linfeng(data.Dataset):
 
-    SPECTRA_LIST_FILE = "linfeng_spectra.pkl"
+    SPECTRA_LIST_FILE = "linfeng_spectra_info.pkl"
     SPECTRA_FOLDER = "sequence"
     SPECTRA_FILES_EXTENSION = ".pkl"
 
@@ -114,7 +112,7 @@ class Linfeng(data.Dataset):
                     currentFile = open(os.path.join(mgfFolder, folder, fileName), 'r')
 
                     _, _, spectraCountInFile = spectraParser.read_spectrum(currentFile, 
-                                                                           fileNameParts[2] + '_' + fileNameParts[3].split('.')[0], 
+                                                                           fileName + '_', 
                                                                            None, None, spectraFound)
   
                 spectraFound.spectraCount += spectraCountInFile
@@ -126,9 +124,23 @@ class Linfeng(data.Dataset):
             # Normalize the spectra with the training set normalization parameters
             # Also, populate the list of all spectra
 
+
+            currentFile = ""
+            spectrumIndexInFile = 0
+
             for peaksList in spectraFound.spectra[Scan.UNRECOGNIZED_SEQUENCE]:
 
-                spectraList.append(peaksList['filename'])
+                if currentFile != peaksList['filename'].split('_')[0]:
+                    spectrumIndexInFile = 0
+                    currentFile = peaksList['filename'].split('_')[0]
+                else:
+                    spectrumIndexInFile += 1
+
+                spectraList.append({'filename' : currentFile, 
+                                    'index' : spectrumIndexInFile,
+                                    'pepmass' : peaksList['pepmass'],
+                                    'charge' : peaksList['charge']})
+
 
                 peaksList['nzero_peaks'][:, 0] = (peaksList['nzero_peaks'][:, 0] - normalizationParameters['mz_mean']) / normalizationParameters['mz_std']
                 peaksList['nzero_peaks'][:, 1] = (peaksList['nzero_peaks'][:, 1] - normalizationParameters['intensity_mean']) / normalizationParameters['intensity_std']
@@ -223,11 +235,7 @@ class Linfeng(data.Dataset):
 
     def make_batch_loader(self):
 
-        if self.split != 'train':
-            self.batchSampler = BatchLoader(self.totalSpectra, self.batch_size, dataDumpFolder = self.dataDirectory)
-        else:
-            self.batchSampler = BatchLoader(self.totalSpectra, self.batch_size, dataDumpFolder = self.dataDirectory)
-
+        self.batchSampler = BatchLoaderEncoder(self.spectraList, self.batch_size)
 
         self.numberOfBatches = len(self.batchSampler.epoch) // self.batch_size
 
@@ -235,7 +243,6 @@ class Linfeng(data.Dataset):
             self.numberOfBatches += 1
 
         print('=============> Updated number of batches: {}'.format(self.numberOfBatches))
-
 
         print('********************* make_batch_loader: {}'.format(self.batchSampler))
 
