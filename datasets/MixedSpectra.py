@@ -179,11 +179,7 @@ class MixedSpectra(data.Dataset):
 
     def make_batch_loader(self):
 
-        if self.split != 'train':
-            self.batchSampler = BatchLoader(self.totalSpectra, self.batch_size, dataDumpFolder = self.dataDirectory)
-        else:
-            self.batchSampler = BatchLoader(self.totalSpectra, self.batch_size, dataDumpFolder = self.dataDirectory)
-
+        self.batchSampler = BatchLoader(self.totalSpectra, self.batch_size, dataDumpFolder = self.dataDirectory)
 
         self.numberOfBatches = len(self.batchSampler.epoch) // self.batch_size
 
