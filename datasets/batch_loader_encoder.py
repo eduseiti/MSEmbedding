@@ -22,13 +22,28 @@ class BatchLoaderEncoder(object):
 
         self.createTripletBatch()
 
-        
+        self.currentFilename = ""
+        self.currentExperiment = None
+        self.currentIndexInFile = 0
+        self.currentBatchStartingIndex = 0
 
 
     def load_batch(self, firstIndex, lastIndex):
 
         peaksList = []
         self.peaksLen = []
+
+        self.currentBatchStartingIndex = firstIndex
+
+        if self.currentFilename != self.spectraList[self.currentBatchStartingIndex]['filename']:
+
+            self.currentFilename = self.spectraList[self.currentBatchStartingIndex]['filename']
+
+            with open(self.currentFilename, 'rb') as inputFile:
+                self.currentExperiment = pickle.load(inputFile)
+
+
+        
 
 
         #
