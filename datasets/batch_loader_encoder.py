@@ -61,6 +61,18 @@ class BatchLoaderEncoder(object):
 
 
 
+    #
+    # index: item index considering the entire epoch, i.e., all spectra in spectraList.
+    # 
+    # return spectrum, spectrum len
+    #
+
+    def getItem(self, index):
+
+        return self.currentBatch[index - self.currentBatchStartingIndex], self.peaksLen[index - self.currentBatchStartingIndex]
+
+
+
     def __iter__(self):
 
         print('********************* BatchLoader.__iter__. self: {}'.format(self))
@@ -69,18 +81,21 @@ class BatchLoaderEncoder(object):
         # Generate a single list of peaks
         #
 
-        howManyCompleteBatches = len(self.spectraList) // self.batchSize
+        howManyCompleteBatches = len(self.epoch) // self.batchSize
+        additionalBatch = False
 
-        if len(self.spectraList) % self.batchSize != 0:
+        if len(self.epoch) % self.batchSize != 0:
             self.numberOfBatches = howManyCompleteBatches + 1
+
+            additionalBatch = True
         else:
             self.numberOfBatches = howManyCompleteBatches
 
         for batch in range(howManyCompleteBatches):
 
-            load_batch(batch * self.batchSize, batch * self.batchSize + self.batchSize - 1)
-
             print('Batch {}: from {} to {}'.format(batch, batch * self.batchSize, batch * self.batchSize + self.batchSize - 1))
+
+            self.load_batch(batch * self.batchSize, batch * self.batchSize + self.batchSize - 1)
 
             # print('Batch Indexes: {}'.format(list(range(batch * self.batchSize, batch * self.batchSize + self.batchSize))))
 
@@ -90,23 +105,28 @@ class BatchLoaderEncoder(object):
 
             yield batchExamples
 
-            print('\nWill get next batch')
-      
-        print('Last batch {}: from {} to {}; size {}'.format(batch + 1, 
-                                                    howManyCompleteBatches * self.batchSize, 
-                                                    howManyCompleteBatches * self.batchSize + len(self.epoch) % self.batchSize - 1,
-                                                    len(self.epoch) % self.batchSize))
 
-        # print('Batch Indexes: {}'.format(list(range(howManyCompleteBatches * self.batchSize, howManyCompleteBatches * self.batchSize + len(self.epoch) % self.batchSize - 1))))
+        # Check if there is a last batch
+
+        if additionalBatch:
+            print('Last batch {}: from {} to {}; size {}'.format(batch + 1, 
+                                                        howManyCompleteBatches * self.batchSize, 
+                                                        howManyCompleteBatches * self.batchSize + len(self.epoch) % self.batchSize - 1,
+                                                        len(self.epoch) % self.batchSize))
+
+            # print('Batch Indexes: {}'.format(list(range(howManyCompleteBatches * self.batchSize, howManyCompleteBatches * self.batchSize + len(self.epoch) % self.batchSize - 1))))
 
 
-        batchExamples = list(range(howManyCompleteBatches * self.batchSize, howManyCompleteBatches * self.batchSize + len(self.epoch) % self.batchSize))
+            self.load_batch(howManyCompleteBatches * self.batchSize, howManyCompleteBatches * self.batchSize + len(self.epoch) % self.batchSize - 1)
 
-        # batch = {'peaks' : batchExamples, "peaksLen" : self.peaksLen[batchExamples[0]:len(batchExamples)]}
+            batchExamples = list(range(howManyCompleteBatches * self.batchSize, howManyCompleteBatches * self.batchSize + len(self.epoch) % self.batchSize))
 
-        yield batchExamples
+            # batch = {'peaks' : batchExamples, "peaksLen" : self.peaksLen[batchExamples[0]:len(batchExamples)]}
+
+            yield batchExamples
 
         
+
     def __len__(self):
 
         # The total length will be the number of sequences * 3 = anchor, positive and negative examples.
@@ -114,16 +134,4 @@ class BatchLoaderEncoder(object):
         return self.numberOfBatches
 
 
-    def dumpData(self, epochNumber, multipleScansSequences, singleScanSequences, epoch):
-        
-        if os.path.isdir(self.dataDumpFolder) == False:
-            os.makedirs(self.dataDumpFolder)
 
-        with open(os.path.join(self.dataDumpFolder, DATA_DUMP_FILENAME.format(epochNumber)), 'wb') as outputFile:
-
-            dumpedData = {}
-            dumpedData['multipleScansSequences'] = multipleScansSequences
-            dumpedData['singleScanSequences'] = singleScanSequences
-            dumpedData['epoch'] = epoch
-
-            pickle.dump(dumpedData, outputFile, pickle.HIGHEST_PROTOCOL)

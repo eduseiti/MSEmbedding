@@ -216,14 +216,11 @@ class Linfeng(data.Dataset):
 
     def __getitem__(self, index):
 
-        # print('********************* __getitem__: {}, index: {}'.format(self.batchSampler, index))
-        # print('********************* __getitem__: epoch: {}'.format(id(self.batchSampler.epoch)))
-
         item = {}
-        item['peaks'] = self.batchSampler.epoch[index]
-        item['peaksLen'] = self.batchSampler.peaksLen[index]
+        item['peaks'], item['peaksLen'] = self.batchSampler.getItem(index)
 
         return item
+
 
 
     def __len__(self):
@@ -233,13 +230,14 @@ class Linfeng(data.Dataset):
         return self.numberOfBatches
 
 
+
     def make_batch_loader(self):
 
         self.batchSampler = BatchLoaderEncoder(self.spectraList, self.batch_size)
 
-        self.numberOfBatches = len(self.batchSampler.epoch) // self.batch_size
+        self.numberOfBatches = len(self.batchSampler.spectraList) // self.batch_size
 
-        if len(self.batchSampler.epoch) % self.batch_size != 0:
+        if len(self.batchSampler.spectraList) % self.batch_size != 0:
             self.numberOfBatches += 1
 
         print('=============> Updated number of batches: {}'.format(self.numberOfBatches))
