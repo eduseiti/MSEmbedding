@@ -20,75 +20,45 @@ class BatchLoaderEncoder(object):
         self.spectraList = spectraList
         self.batchSize = batchSize
 
-        self.createTripletBatch()
-
         self.currentFilename = ""
         self.currentExperiment = None
-        self.currentIndexInFile = 0
+        self.currentIndexInExperiment = 0
         self.currentBatchStartingIndex = 0
+
 
 
     def load_batch(self, firstIndex, lastIndex):
 
+        print('load_batch: from {} to {}'.format(firstIndex, lastIndex)
+        print("Current experiment file: {}, current index in experiment: {}".format(self.currentFilename, self.currentIndexInExperiment))
+
         peaksList = []
         self.peaksLen = []
-
+        currentIndexInBatch = 0
         self.currentBatchStartingIndex = firstIndex
 
-        if self.currentFilename != self.spectraList[self.currentBatchStartingIndex]['filename']:
+        while self.currentIndexInExperiment <= lastIndex:
+            if self.currentFilename != self.spectraList[self.currentIndexInExperiment]['filename']:
 
-            self.currentFilename = self.spectraList[self.currentBatchStartingIndex]['filename']
+                self.currentFilename = self.spectraList[self.currentIndexInExperiment]['filename']
+                print("Opening new experiment file: {}".format(self.currentFilename))
 
-            with open(self.currentFilename, 'rb') as inputFile:
-                self.currentExperiment = pickle.load(inputFile)
+                with open(self.currentFilename, 'rb') as inputFile:
+                    self.currentExperiment = pickle.load(inputFile)
 
+                self.currentIndexInExperiment = 0
 
+            peaksList.append(self.currentExperiment['spectra']['unrecognized'][self.currentIndexInExperiment])
+            self.peaksLen.append(len(self.currentExperiment['spectra']['unrecognized'][self.currentIndexInExperiment]))
+
+            currentIndexInBatch += 1
+            self.currentIndexInExperiment += 1
         
+        self.currentBatch = torch.nn.utils.rnn.pad_sequence(peaksList, batch_first = True, padding_value = 0.0)
+        self.currentBatchSize = currentIndexInBatch
 
+        print('********************* BatchLoaderEncoder.load_batch. self.currentBatch len: {}, shape: {}'.format(self.currentBatchSize, self.currentBatch.shape))
 
-        #
-        # If "includeNegative" enabled, Every 3 peaks corresponds to the following sequence: anchor, positive and negative examples.
-        #
-        # Otherwise, every 2 peaks corresponds to: anchr, positive example.
-        #
-
-        for i, sequence in enumerate(self.totalSpectra.multipleScansSequences):
-
-            positiveExamplesIndexes = random.sample(range(len(self.totalSpectra.spectra[sequence])), k = 2)
-
-            anchor = self.totalSpectra.spectra[sequence][positiveExamplesIndexes[0]]['nzero_peaks']
-            peaksList.append(anchor)
-            self.peaksLen.append(len(anchor))
-
-            positive = self.totalSpectra.spectra[sequence][positiveExamplesIndexes[1]]['nzero_peaks']
-            peaksList.append(positive)
-            self.peaksLen.append(len(positive))
-
-            if self.includeNegative:
-                negative = self.totalSpectra.spectra[self.totalSpectra.singleScanSequences[i % singleScanSequencesCount]][0]['nzero_peaks']
-                peaksList.append(negative)
-                self.peaksLen.append(len(negative))
-
-
-
-
-
-        #
-        # Now, pad the sequence still on the original order: the batches will be sorted before going through the LSTM...
-        #
-
-        self.epoch = torch.nn.utils.rnn.pad_sequence(peaksList, batch_first = True, padding_value = 0.0)
-
-        print('********************* BatchLoader.createTripletBatch. self.epoch len: {}, shape: {}'.format(len(self.epoch), self.epoch.shape))
-
-
-        BatchLoaderEncoder.numberOfEpochs += 1
-
-        # if not self.normalizationParameters:
-        #     if (BatchLoader.numberOfEpochs >= BatchLoader.SAVE_EPOCH_DATA_FIRST and BatchLoader.numberOfEpochs <= BatchLoader.SAVE_EPOCH_DATA_LAST):
-        #         self.dumpData(BatchLoader.numberOfEpochs, self.totalSpectra.multipleScansSequences, self.totalSpectra.singleScanSequences, self.epoch)
-
-        return (self.epoch, self.peaksLen)
 
 
     def __iter__(self):
@@ -107,6 +77,8 @@ class BatchLoaderEncoder(object):
             self.numberOfBatches = howManyCompleteBatches
 
         for batch in range(howManyCompleteBatches):
+
+            load_batch(batch * self.batchSize, batch * self.batchSize + self.batchSize - 1)
 
             print('Batch {}: from {} to {}'.format(batch, batch * self.batchSize, batch * self.batchSize + self.batchSize - 1))
 
