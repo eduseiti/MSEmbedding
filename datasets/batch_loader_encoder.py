@@ -113,7 +113,7 @@ class BatchLoaderEncoder(object):
                 self.currentBatchStartingIndex = firstIndex
 
             while self.currentSpectrumIndex <= lastIndex:
-                splittedFilename = self.spectraList[self.currentIndexInExperiment]['filename'].split('_')
+                splittedFilename = self.spectraList[self.currentSpectrumIndex]['filename'].split('_')
                 pklFilename = splittedFilename[2] + "_" + splittedFilename[1] + ".pkl"
 
                 if self.currentFilename != pklFilename:
