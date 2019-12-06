@@ -15,7 +15,7 @@ import time
 
 class BatchLoaderEncoder(object):
 
-    MAX_LOADED_BATCHES = 12
+    MAX_LOADED_BATCHES = 10
 
 
     def __init__(self, spectraList, batchSize, dataFolder):
@@ -152,8 +152,8 @@ class BatchLoaderEncoder(object):
 
                 del self.currentBatches[currentLoadedBatchesStartingIndex[0]]
 
-        else:
-            print("********************* Batch already loaded")
+        # else:
+        #     print("********************* Batch already loaded")
 
 
     #

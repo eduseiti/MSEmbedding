@@ -245,8 +245,7 @@ class Linfeng(data.Dataset):
         print('********************* make_batch_loader: {}'.format(self.batchSampler))
 
         data_loader = data.DataLoader(self,
-            num_workers = 0,
-            # num_workers = self.nb_threads,
+            num_workers = self.nb_threads,
             batch_sampler = self.batchSampler,
             drop_last = False)
         return data_loader

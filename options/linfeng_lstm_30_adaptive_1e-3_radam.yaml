@@ -8,7 +8,8 @@ dataset:
   train_split: 
   eval_split: test
   train_normalization_file: data/mixedSpectra/sequences/train_mixedSpectra_v0.1.pkl
-  batch_size: 1000
+  batch_size: 500
+  nb_threads: 0  
 engine:
   nb_epochs: 1
 model:
