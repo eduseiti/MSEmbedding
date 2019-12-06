@@ -19,6 +19,8 @@ class MSEmbedding(Model):
 
         super(MSEmbedding, self).__init__(engine, cuda_tf=cuda_tf)
 
+        print("MSEmbedding modes={}".format(modes))
+
         self.network = networks.factory(engine = engine)
 
         self.criterions = {}
@@ -30,3 +32,7 @@ class MSEmbedding(Model):
         if 'eval' in modes:
             self.criterions['eval'] = criterions.factory(engine = engine, mode = 'train')
             self.metrics['eval'] = metrics.factory(engine = engine, mode = 'eval')
+
+        if 'test' in modes:
+            self.metrics['test'] = metrics.factory(engine = engine, mode = 'test')
+

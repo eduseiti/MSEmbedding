@@ -15,7 +15,9 @@ model:
   network:
     lstm_out_dim: 30
     bidirecional_lstm: True
-  criterion:
+  metric:
+    name: saveEmbeddings
+    import: MSEmbedding.models.metrics.factory    
 optimizer:
   import: MSEmbedding.models.optimizers.factory
   name: radam

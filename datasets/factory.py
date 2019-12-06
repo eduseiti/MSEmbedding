@@ -30,7 +30,7 @@ def factory(engine=None):
 
     elif Options()['dataset']['name'] == "linfeng":
         if Options()['dataset'].get('eval_split', None):
-            dataset['test'] = factory_linfeng(Options()['dataset']['eval_split'])
+            dataset['eval'] = factory_linfeng(Options()['dataset']['eval_split'])
     else:
         raise ValueError()
 

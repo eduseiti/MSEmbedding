@@ -15,10 +15,15 @@ class BatchLoaderEncoder(object):
     numberOfEpochs = 0
 
 
-    def __init__(self, spectraList, batchSize):
+    def __init__(self, spectraList, batchSize, dataFolder):
 
         self.spectraList = spectraList
         self.batchSize = batchSize
+
+        self.dataFolder = dataFolder
+
+        self.currentBatch = None
+        self.currentBatchSize = None
 
         self.currentFilename = ""
         self.currentExperiment = None
@@ -29,7 +34,7 @@ class BatchLoaderEncoder(object):
 
     def load_batch(self, firstIndex, lastIndex):
 
-        print('load_batch: from {} to {}'.format(firstIndex, lastIndex)
+        print('load_batch: from {} to {}'.format(firstIndex, lastIndex))
         print("Current experiment file: {}, current index in experiment: {}".format(self.currentFilename, self.currentIndexInExperiment))
 
         peaksList = []
@@ -38,18 +43,20 @@ class BatchLoaderEncoder(object):
         self.currentBatchStartingIndex = firstIndex
 
         while self.currentIndexInExperiment <= lastIndex:
-            if self.currentFilename != self.spectraList[self.currentIndexInExperiment]['filename']:
+            splittedFilename = self.spectraList[self.currentIndexInExperiment]['filename'].split('_')
+            pklFilename = splittedFilename[2] + "_" + splittedFilename[1] + ".pkl"
 
-                self.currentFilename = self.spectraList[self.currentIndexInExperiment]['filename']
+            if self.currentFilename != pklFilename:
+                self.currentFilename = pklFilename
                 print("Opening new experiment file: {}".format(self.currentFilename))
 
-                with open(self.currentFilename, 'rb') as inputFile:
+                with open(os.path.join(self.dataFolder, self.currentFilename), 'rb') as inputFile:
                     self.currentExperiment = pickle.load(inputFile)
 
                 self.currentIndexInExperiment = 0
 
-            peaksList.append(self.currentExperiment['spectra']['unrecognized'][self.currentIndexInExperiment])
-            self.peaksLen.append(len(self.currentExperiment['spectra']['unrecognized'][self.currentIndexInExperiment]))
+            peaksList.append(self.currentExperiment['spectra']['unrecognized'][self.currentIndexInExperiment]['nzero_peaks'])
+            self.peaksLen.append(len(self.currentExperiment['spectra']['unrecognized'][self.currentIndexInExperiment]['nzero_peaks']))
 
             currentIndexInBatch += 1
             self.currentIndexInExperiment += 1
@@ -81,10 +88,10 @@ class BatchLoaderEncoder(object):
         # Generate a single list of peaks
         #
 
-        howManyCompleteBatches = len(self.epoch) // self.batchSize
+        howManyCompleteBatches = len(self.spectraList) // self.batchSize
         additionalBatch = False
 
-        if len(self.epoch) % self.batchSize != 0:
+        if len(self.spectraList) % self.batchSize != 0:
             self.numberOfBatches = howManyCompleteBatches + 1
 
             additionalBatch = True
@@ -101,8 +108,6 @@ class BatchLoaderEncoder(object):
 
             batchExamples = list(range(batch * self.batchSize, batch * self.batchSize + self.batchSize))
 
-            # batch = {'peaks' : batchExamples, "peaksLen" : self.peaksLen[batchExamples[0]:len(batchExamples)]}
-
             yield batchExamples
 
 
@@ -111,17 +116,15 @@ class BatchLoaderEncoder(object):
         if additionalBatch:
             print('Last batch {}: from {} to {}; size {}'.format(batch + 1, 
                                                         howManyCompleteBatches * self.batchSize, 
-                                                        howManyCompleteBatches * self.batchSize + len(self.epoch) % self.batchSize - 1,
-                                                        len(self.epoch) % self.batchSize))
+                                                        howManyCompleteBatches * self.batchSize + len(self.spectraList) % self.batchSize - 1,
+                                                        len(self.spectraList) % self.batchSize))
 
             # print('Batch Indexes: {}'.format(list(range(howManyCompleteBatches * self.batchSize, howManyCompleteBatches * self.batchSize + len(self.epoch) % self.batchSize - 1))))
 
 
-            self.load_batch(howManyCompleteBatches * self.batchSize, howManyCompleteBatches * self.batchSize + len(self.epoch) % self.batchSize - 1)
+            self.load_batch(howManyCompleteBatches * self.batchSize, howManyCompleteBatches * self.batchSize + len(self.spectraList) % self.batchSize - 1)
 
-            batchExamples = list(range(howManyCompleteBatches * self.batchSize, howManyCompleteBatches * self.batchSize + len(self.epoch) % self.batchSize))
-
-            # batch = {'peaks' : batchExamples, "peaksLen" : self.peaksLen[batchExamples[0]:len(batchExamples)]}
+            batchExamples = list(range(howManyCompleteBatches * self.batchSize, howManyCompleteBatches * self.batchSize + len(self.spectraList) % self.batchSize))
 
             yield batchExamples
 

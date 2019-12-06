@@ -18,7 +18,7 @@ from bootstrap.lib.logger import Logger
 
 class Linfeng(data.Dataset):
 
-    SPECTRA_LIST_FILE = "linfeng_spectra_info.pkl"
+    SPECTRA_LIST_FILE = "linfeng_spectra_index.pkl"
     SPECTRA_FOLDER = "sequence"
     SPECTRA_FILES_EXTENSION = ".pkl"
 
@@ -165,7 +165,7 @@ class Linfeng(data.Dataset):
 
         print('Working directory: ' + os.getcwd())
 
-        if not os.path.exists(os.path.join(dataDirectory, Linfeng.SPECTRA_LIST_FILE)):
+        if not os.path.exists(os.path.join(dataDirectory, Linfeng.SPECTRA_FOLDER, Linfeng.SPECTRA_LIST_FILE)):
 
             print("*** Need to create the spectra list !!!")
 
@@ -196,7 +196,7 @@ class Linfeng(data.Dataset):
             with open(os.path.join(Linfeng.SPECTRA_FOLDER, Linfeng.SPECTRA_LIST_FILE), 'wb') as outputFile:
                 pickle.dump(self.spectraList, outputFile, pickle.HIGHEST_PROTOCOL)            
         else:
-            with open(os.path.join(Linfeng.SPECTRA_FOLDER, Linfeng.SPECTRA_LIST_FILE), 'rb') as inputFile:
+            with open(os.path.join(dataDirectory, Linfeng.SPECTRA_FOLDER, Linfeng.SPECTRA_LIST_FILE), 'rb') as inputFile:
                 self.spectraList = pickle.load(inputFile)
 
             self.totalSpectraCount = len(self.spectraList)            
@@ -233,7 +233,7 @@ class Linfeng(data.Dataset):
 
     def make_batch_loader(self):
 
-        self.batchSampler = BatchLoaderEncoder(self.spectraList, self.batch_size)
+        self.batchSampler = BatchLoaderEncoder(self.spectraList, self.batch_size, os.path.join(self.dataDirectory, Linfeng.SPECTRA_FOLDER))
 
         self.numberOfBatches = len(self.batchSampler.spectraList) // self.batch_size
 
