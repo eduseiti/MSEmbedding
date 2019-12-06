@@ -12,6 +12,10 @@ def factory(engine=None):
         model = MSEmbedding(Options()['model'],
                             engine.dataset.keys(),
                             engine)
+    if Options()['model']['name'] == 'MSEmbedding_encoding':
+        model = MSEmbedding(Options()['model'],
+                            'test',
+                            engine)
     else:
         raise ValueError()
 

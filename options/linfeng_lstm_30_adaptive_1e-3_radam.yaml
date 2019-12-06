@@ -8,10 +8,11 @@ dataset:
   train_split: 
   eval_split: test
   train_normalization_file: data/mixedSpectra/sequences/train_mixedSpectra_v0.1.pkl
-  batch_size: 402
+  batch_size: 1000
 engine:
   nb_epochs: 1
 model:
+  name: MSEmbedding_encoding
   network:
     lstm_out_dim: 30
     bidirecional_lstm: True

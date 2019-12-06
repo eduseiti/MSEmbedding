@@ -22,13 +22,7 @@ class SaveEmbeddings(torch.nn.Module):
         self.mode = mode
         self.allEmbeddings = []
 
-        if Options().get("dataset.include_negative", False):
-            self.examplesPerSequence = 3
-        else:
-            self.examplesPerSequence = 2
-
         if engine and mode == 'test':
-            self.split = engine.dataset[mode].split
             engine.register_hook('eval_on_end_epoch', self.save_all_embeddings)
 
 
