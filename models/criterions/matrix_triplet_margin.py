@@ -37,11 +37,22 @@ class MatrixTripletMargin(nn.Module):
         embeddings = networkOutput[0]
         originalIndexes = originalIndexes.tolist()
 
+        # print("criterion: embeddings.shape={}".format(embeddings.shape))
+
         anchors = embeddings[originalIndexes[::2]]
         positive = embeddings[originalIndexes[1::2]]
 
-        anchors = anchors.reshape(anchors.shape[0], -1)
-        positive = positive.reshape(positive.shape[0], -1)
+        # print("criterion: anchors.shape={}, positive.shape={}".format(anchors.shape, positive.shape))
+        # print("anchors[0]={}".format(anchors[0]))
+        # print("positive[0]={}".format(positive[0]))
+
+
+        # anchors = anchors.reshape(anchors.shape[0], -1)
+        # positive = positive.reshape(positive.shape[0], -1)
+
+        # print("criterion 2: anchors.shape={}, positive.shape={}".format(anchors.shape, positive.shape))
+        # print("anchors[0]={}".format(anchors[0]))
+        # print("positive[0]={}".format(positive[0]))
 
         normalizedAnchors = nn.functional.normalize(anchors)
 
