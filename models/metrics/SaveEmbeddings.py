@@ -9,38 +9,54 @@ from scipy.spatial.distance import cdist
 
 import os
 import pickle
+import sys
 
 class SaveEmbeddings(torch.nn.Module):
 
-    EMBEDDINGS_FILENAME = "spectra_embeddings.pkl"
+    EMBEDDINGS_FOLDER = "data/linfeng"
+    EMBEDDINGS_FILENAME = "spectra_embeddings_{}.pkl"
 
-    wrongCount = 0
+    SAVE_COUNT = 20
 
     def __init__(self, engine = None, mode = 'test'):
         super(SaveEmbeddings, self).__init__()
+
+        self.currentBatch = 0
 
         self.mode = mode
         self.allEmbeddings = []
 
         if engine and mode == 'test':
-            engine.register_hook('eval_on_end_epoch', self.save_all_embeddings)
+            engine.register_hook('eval_on_end_epoch', self.save_embeddings)
 
 
     def forward(self, criterionOutput, networkOutput, batch):
 
+        originalIndexes = torch.zeros(len(networkOutput[1]), dtype = torch.int32)
+
+        for i in range(len(networkOutput[1])):
+            originalIndexes[networkOutput[1][i]] = i
+
         embeddings = networkOutput[0]
-        originalIndexes = criterionOutput['originalIndexes']
+        originalIndexes = originalIndexes.tolist()
 
-        self.allEmbeddings.append(embeddings[originalIndexes])
+        print("**** size={}".format(embeddings.element_size() * embeddings.nelement()))
+        print("**** element_size={}, nelement={}".format(embeddings.element_size(), embeddings.nelement()))
+        print("**** shape={}".format(embeddings.shape))
+        
+        self.allEmbeddings.append(embeddings[originalIndexes].cpu())
+
+        self.currentBatch += 1
+
+        if self.currentBatch % SaveEmbeddings.SAVE_COUNT == 0:
+            self.save_embeddings()
 
 
+    def save_embeddings(self):
 
-    def save_all_embeddings(self):
+        print("-- save_embeddings. currentBatch={}".format(self.currentBatch))
 
-        print("save_all_embeddings. Current directory: {}".format(os.getcwd()))
-
-        with open(EMBEDDINGS_FILENAME, "wb") as outputFile:
+        with open(os.path.join(SaveEmbeddings.EMBEDDINGS_FOLDER, SaveEmbeddings.EMBEDDINGS_FILENAME.format(str(self.currentBatch).zfill(6))), "wb") as outputFile:
             pickle.dump(self.allEmbeddings, outputFile, pickle.HIGHEST_PROTOCOL)
-
 
         self.allEmbeddings = []

@@ -34,5 +34,5 @@ class MSEmbedding(Model):
             self.metrics['eval'] = metrics.factory(engine = engine, mode = 'eval')
 
         if 'test' in modes:
-            self.metrics['test'] = metrics.factory(engine = engine, mode = 'test')
+            self.metrics['eval'] = metrics.factory(engine = engine, mode = 'test')
 
