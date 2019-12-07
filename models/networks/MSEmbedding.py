@@ -97,7 +97,10 @@ class MSEmbeddingNet(nn.Module):
         #
 
         if self.bidirecionalLstm:
-            x = F.relu(self.fusion(x))
+
+            # selects the last internal state of each direction
+
+            x = F.relu(self.fusion(torch.cat(x[:, self.lstmOutDim - 1, :], x[:, -1, :])))
 
         return (x, indexesSortedPeaks)    
 
