@@ -16,7 +16,7 @@ class SaveEmbeddings(torch.nn.Module):
     EMBEDDINGS_FOLDER = "data/linfeng"
     EMBEDDINGS_FILENAME = "spectra_embeddings_{}.pkl"
 
-    SAVE_COUNT = 20
+    SAVE_COUNT = 20000
 
     def __init__(self, engine = None, mode = 'test'):
         super(SaveEmbeddings, self).__init__()
@@ -44,7 +44,11 @@ class SaveEmbeddings(torch.nn.Module):
         print("**** element_size={}, nelement={}".format(embeddings.element_size(), embeddings.nelement()))
         print("**** shape={}".format(embeddings.shape))
         
-        self.allEmbeddings.append(embeddings[originalIndexes].cpu())
+        lastHiddenState = embeddings[originalIndexes].cpu()[range(embeddings.shape[0]), batch['peaksLen'] - 1, :]
+
+        print("**** shape lastHiddenState={}".format(lastHiddenState.shape))
+
+        self.allEmbeddings.append(lastHiddenState)
 
         self.currentBatch += 1
 
