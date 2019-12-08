@@ -41,6 +41,7 @@ class BatchLoaderEncoder(object):
         self.load_batch(0, self.batchSize - 1)
 
 
+
     def define_batches(self):
 
         batchLimits = []
