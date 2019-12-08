@@ -25,7 +25,7 @@ dataset:
   eval_filtered_files_list: ['b1', 'b18', 'b24']
   eval_peaks_file: eval_adult_platelets_gel_elite_b1_b18_b24.pkl
 
-  batch_size: 300
+  batch_size: 200
 engine:
   nb_epochs: 700
 model:

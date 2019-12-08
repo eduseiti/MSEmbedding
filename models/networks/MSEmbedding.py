@@ -101,13 +101,13 @@ class MSEmbeddingNet(nn.Module):
 
         if self.bidirecionalLstm:
 
-            print("-- shape originalPeaksLen={}".format((originalPeaksLen - 1).shape))
+            print("-- shape originalPeaksLen={}".format((originalPeaksLen[indexesSortedPeaks] - 1).shape))
 
-            print("-- shape last={}".format(x[range(x.shape[0]), originalPeaksLen - 1, :].shape))
+            print("-- shape last={}".format(x[range(x.shape[0]), originalPeaksLen[indexesSortedPeaks] - 1, :].shape))
 
             # selects the last internal state of each direction
 
-            x = F.relu(self.fusion(x[range(x.shape[0]), originalPeaksLen - 1, :]))
+            x = F.relu(self.fusion(x[range(x.shape[0]), originalPeaksLen[indexesSortedPeaks] - 1, :]))
 
         return (x, indexesSortedPeaks)
 
