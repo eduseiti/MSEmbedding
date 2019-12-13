@@ -5,6 +5,9 @@ import torch.optim as optim
 from torch.autograd import Variable
 from bootstrap.lib.options import Options
 
+import numpy as np
+
+
 
 class MSEmbeddingNet(nn.Module):
     
@@ -97,9 +100,16 @@ class MSEmbeddingNet(nn.Module):
         #
 
         if self.bidirecionalLstm:
-            x = F.relu(self.fusion(x))
 
-        return (x, indexesSortedPeaks)    
+            print("-- shape originalPeaksLen={}".format((originalPeaksLen[indexesSortedPeaks] - 1).shape))
+
+            print("-- shape last={}".format(x[range(x.shape[0]), originalPeaksLen[indexesSortedPeaks] - 1, :].shape))
+
+            # selects the last internal state of each direction
+
+            x = F.relu(self.fusion(x[range(x.shape[0]), originalPeaksLen[indexesSortedPeaks] - 1, :]))
+
+        return (x, indexesSortedPeaks)
 
 
 

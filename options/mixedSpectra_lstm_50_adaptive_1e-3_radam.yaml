@@ -6,7 +6,7 @@ dataset:
   dir: data/mixedSpectra
   train_set_version: v0.1
   eval_set_version: v0.1_small
-  batch_size: 230
+  batch_size: 350
 engine:
   nb_epochs: 700
 model:
