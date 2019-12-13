@@ -91,12 +91,13 @@ class MatrixTripletMargin(nn.Module):
 
         if self.aggregation == "valid":
             if self.variableMargin:
+                nonZeroedLosses = loss > self.epsilon
                 zeroedLosses = loss <= self.epsilon
                 countOfNonZeroedLosses = loss.numel() - zeroedLosses.float().sum()
 
                 Logger()("zeroedLosses={}, countOfNonZeroedLosses={}".format(zeroedLosses.float().sum(), countOfNonZeroedLosses))
 
-                aggregatedLoss = torch.sum(loss) / countOfNonZeroedLosses
+                aggregatedLoss = torch.sum(loss[nonZeroedLosses]) / countOfNonZeroedLosses
                 aggregatedLoss2 = 0.0
 
                 if countOfNonZeroedLosses > 0:
