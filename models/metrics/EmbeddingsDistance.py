@@ -50,11 +50,7 @@ class EmbeddingsDistance(torch.nn.Module):
 
         print("epochEmbeddings.shape={}".format(epochEmbeddings.shape))
 
-        epochEmbeddingsNorm = epochEmbeddings.reshape(epochEmbeddings.shape[0], -1)
-
-        print("epochEmbeddingsNorm.shape={}".format(epochEmbeddingsNorm.shape))
-
-        epochEmbeddingsNorm = nn.functional.normalize(epochEmbeddingsNorm)
+        epochEmbeddingsNorm = nn.functional.normalize(epochEmbeddings)
         allCosineDistances = 1 - torch.mm(epochEmbeddingsNorm, epochEmbeddingsNorm.t())
 
         # ltZeroCount = (allCosineDistances < 0).sum()
