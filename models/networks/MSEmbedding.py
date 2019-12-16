@@ -27,7 +27,8 @@ class MSEmbeddingNet(nn.Module):
 
         self.lstm = nn.LSTM(self.fcOutDim * 2, self.lstmOutDim, 
                             batch_first = True, 
-                            bidirectional = self.bidirecionalLstm)
+                            bidirectional = self.bidirecionalLstm,
+                            num_layers=2)
 
         if self.bidirecionalLstm:
             self.fusion = nn.Linear(self.lstmOutDim * 2, self.lstmOutDim)
