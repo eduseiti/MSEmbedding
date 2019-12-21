@@ -16,14 +16,13 @@ class MSEmbeddingNet(nn.Module):
         self.fcOutDim = Options()['model']['network']['fc_out_dim']
         self.lstmOutDim = Options()['model']['network']['lstm_out_dim']
         self.bidirecionalLstm = Options()['model']['network']['bidirecional_lstm']
+        self.window = Options()['model']['network']['window']
 
         super(MSEmbeddingNet, self).__init__()
 
-        self.fcMZ1 = nn.Linear(1, 32)
-        self.fcMZ2 = nn.Linear(32, self.fcOutDim)
-
-        self.fcIntensity1 = nn.Linear(1, 32)
-        self.fcIntensity2 = nn.Linear(32, self.fcOutDim)
+        self.fcMZ1 = nn.Linear(self.window, 32)
+        self.fcIntensity1 = nn.Linear(self.window, 32)
+        self.fcCombined = nn.Linear(32 * 2, self.fcOutDim * 2)
 
         self.lstm = nn.LSTM(self.fcOutDim * 2, self.lstmOutDim, 
                             batch_first = True, 
@@ -46,6 +45,7 @@ class MSEmbeddingNet(nn.Module):
         # print (">>> peaksLen.shape={}".format(batch['peaksLen'].shape)) 
 
         originalPeaksLen = batch['peaksLen']
+
         indexesSortedPeaks = torch.argsort(originalPeaksLen, descending = True)
 
         sortedPeaks = batch['peaks'][indexesSortedPeaks]
@@ -56,30 +56,34 @@ class MSEmbeddingNet(nn.Module):
 
         originalPeaksMaxLen = x.shape[1]
 
-        transform = torch.empty(x.shape[0], x.shape[1], self.fcOutDim * 2)
+        xMZ = F.relu(self.fcMZ1(x[:, :, 0].unfold(1, self.window, self.window)))
+        xIntensity = F.relu(self.fcIntensity1(x[:, :, 1].unfold(1, self.window, self.window)))
 
-        if torch.cuda.is_available():
-            transform = transform.cuda()           
-        
-        xMZ = F.relu(self.fcMZ1(x[:, :, 0].view(x.shape[0], -1, 1)))
-        xMZ = F.relu(self.fcMZ2(xMZ))
+        print("xMZ.shape={}, xIntensity.shape={}".format(xMZ.shape, xIntensity.shape))
 
-        xIntensity = F.relu(self.fcIntensity1(x[:, :, 1].view(x.shape[0], -1, 1)))
-        xIntensity = F.relu(self.fcIntensity2(xIntensity))
+        # xMZ_xIntesity_combined = torch.empty(xMZ.shape[0], xMZ.shape[1], self.fcOutDim * 2)
 
-        transform = torch.stack((xMZ, xIntensity), 2).view(x.shape[0], x.shape[1], -1)
+        # if torch.cuda.is_available():
+        #     xMZ_xIntesity_combined = xMZ_xIntesity_combined.cuda()                  
+
+        xMZ_xIntesity_combined = torch.stack((xMZ, xIntensity), 2).view(xMZ.shape[0], xMZ.shape[1], -1)
+
+        print("xMZ_xIntesity_combined.shape={}".format(xMZ_xIntesity_combined.shape))
             
+        transform = F.relu(self.fcCombined(xMZ_xIntesity_combined))
+
         print('-- Before pack: Len = {}, shape = {}'.format(len(transform), transform.shape))
 
-        transform = torch.nn.utils.rnn.pack_padded_sequence(transform, originalPeaksLen[indexesSortedPeaks], batch_first = True)
+        transform = torch.nn.utils.rnn.pack_padded_sequence(transform, originalPeaksLen[indexesSortedPeaks] // self.window - 1, batch_first = True)
 
         x, _ = self.lstm(transform)
 
         # print('Output={}, hidden={}'.format(x.shape, hidden))
 
-        x, _ = torch.nn.utils.rnn.pad_packed_sequence(x, batch_first = True, total_length = originalPeaksMaxLen)
+        x, _ = torch.nn.utils.rnn.pad_packed_sequence(x, batch_first = True, total_length = originalPeaksMaxLen // self.window)
 
         print('-- After pack: Len = {}, shape = {}'.format(len(x), x.shape))
+
 
         # for i in range(x.shape[1]):
         #     print("x[0,{}]={}; x[1,{}]={}; x[2,{}]={}".format(i, x[0, i], i, x[1, i], i, x[2, i]))
@@ -100,14 +104,13 @@ class MSEmbeddingNet(nn.Module):
         #
 
         if self.bidirecionalLstm:
-
-            print("-- shape originalPeaksLen={}".format((originalPeaksLen[indexesSortedPeaks] - 1).shape))
-
-            print("-- shape last={}".format(x[range(x.shape[0]), originalPeaksLen[indexesSortedPeaks] - 1, :].shape))
+            print("-- shape last={}".format(x[range(x.shape[0]), originalPeaksLen[indexesSortedPeaks] // self.window - 1, :].shape))
 
             # selects the last internal state of each direction
 
-            x = F.relu(self.fusion(x[range(x.shape[0]), originalPeaksLen[indexesSortedPeaks] - 1, :]))
+            x = F.relu(self.fusion(x[range(x.shape[0]), originalPeaksLen[indexesSortedPeaks] // self.window - 1, :]))
+
+        print("x={}".format(x))
 
         return (x, indexesSortedPeaks)
 
