@@ -15,6 +15,7 @@ class SaveEmbeddings(torch.nn.Module):
 
     EMBEDDINGS_FOLDER = "data/linfeng"
     EMBEDDINGS_FILENAME = "spectra_embeddings_fixed_{}.pkl"
+    EMBEDDINGS_BIN_FILENAME = "spectra_embeddings_fixed_{}.bin"
 
     SAVE_COUNT = 20000
 
@@ -25,6 +26,7 @@ class SaveEmbeddings(torch.nn.Module):
 
         self.mode = mode
         self.allEmbeddings = []
+        self.allEmbeddingsBin = []
 
         if engine and mode == 'test':
             engine.register_hook('eval_on_end_epoch', self.save_embeddings)
@@ -48,7 +50,12 @@ class SaveEmbeddings(torch.nn.Module):
 
         print("**** shape lastHiddenState={}".format(lastHiddenState.shape))
 
-        self.allEmbeddings + lastHiddenState.unbind()
+        # self.allEmbeddings += list(lastHiddenState.unbind())
+        self.allEmbeddingsBin += [whichEmbedding.numpy().tobytes() for whichEmbedding in lastHiddenState.unbind()]
+
+        # print("Len allEmbeddings={}".format(len(self.allEmbeddings)))
+        print("Len allEmbeddingsBin={}".format(len(self.allEmbeddingsBin)))
+
 
         self.currentBatch += 1
 
@@ -60,7 +67,12 @@ class SaveEmbeddings(torch.nn.Module):
 
         print("-- save_embeddings. currentBatch={}".format(self.currentBatch))
 
-        with open(os.path.join(SaveEmbeddings.EMBEDDINGS_FOLDER, SaveEmbeddings.EMBEDDINGS_FILENAME.format(str(self.currentBatch).zfill(6))), "wb") as outputFile:
-            pickle.dump(self.allEmbeddings, outputFile, pickle.HIGHEST_PROTOCOL)
+        # with open(os.path.join(SaveEmbeddings.EMBEDDINGS_FOLDER, SaveEmbeddings.EMBEDDINGS_FILENAME.format(str(self.currentBatch).zfill(6))), "wb") as outputFile:
+        #     pickle.dump(self.allEmbeddings, outputFile, pickle.HIGHEST_PROTOCOL)
+
+        with open(os.path.join(SaveEmbeddings.EMBEDDINGS_FOLDER, SaveEmbeddings.EMBEDDINGS_BIN_FILENAME.format(str(self.currentBatch).zfill(6))), "wb") as outputFile:
+            for whichEmbedding in self.allEmbeddingsBin:
+                outputFile.write(whichEmbedding)
 
         self.allEmbeddings = []
+        self.allEmbeddingsBin = []
