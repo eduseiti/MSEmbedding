@@ -1,6 +1,6 @@
 __include__: abstract.yaml
 exp:
-  dir: logs/MSEmbedding/mixedSpectra_radam_lstm_30_LR1e-3_margin0.3_700_epochs_wd1e-5_adaptive_epsilon_1e-6_bi-lstm
+  dir: logs/MSEmbedding/mixedSpectra_radam_lstm_30_LR1e-3_margin0.3_700_epochs_wd1e-5_adaptive_epsilon_1e-6_bi-lstm_3_layers
 dataset:
   name: mixedSpectra
   dir: data/mixedSpectra
