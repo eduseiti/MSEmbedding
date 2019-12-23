@@ -16,7 +16,8 @@ class MSEmbeddingNet(nn.Module):
         self.fcOutDim = Options()['model']['network']['fc_out_dim']
         self.lstmOutDim = Options()['model']['network']['lstm_out_dim']
         self.bidirecionalLstm = Options()['model']['network']['bidirecional_lstm']
-
+        self.numOfLayers = Options()['model']['network'].get('num_of_layers', 1)
+        
         super(MSEmbeddingNet, self).__init__()
 
         self.fcMZ1 = nn.Linear(1, 32)
@@ -28,7 +29,7 @@ class MSEmbeddingNet(nn.Module):
         self.lstm = nn.LSTM(self.fcOutDim * 2, self.lstmOutDim, 
                             batch_first = True, 
                             bidirectional = self.bidirecionalLstm,
-                            num_layers=2)
+                            num_layers = self.numOfLayers)
 
         if self.bidirecionalLstm:
             self.fusion = nn.Linear(self.lstmOutDim * 2, self.lstmOutDim)
