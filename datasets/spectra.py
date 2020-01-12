@@ -19,9 +19,9 @@ from bootstrap.lib.logger import Logger
 
 class Scan:
     
-    UNRECOGNIZED_SEQUENCE = "unrecognized"    
+    UNRECOGNIZED_SEQUENCE = "unrecognized"
     
-    def __init__(self, filenamePrefix):
+    def __init__(self, filenamePrefix, maxDigitsSequence):
         
         self.scan          = 0
         self.retentionTime = 0
@@ -30,13 +30,15 @@ class Scan:
         
         self.peaks = []
         
+        self.maxDigitsSequence = maxDigitsSequence
+
         self.filenamePrefix = filenamePrefix
         
         
     def to_dict(self, saveFilename):
         
         if saveFilename:
-            result = {'filename' : self.filenamePrefix + str(self.scan).zfill(PXD000561.SCAN_SEQUENCE_MAX_DIGITS) + '.json'}
+            result = {'filename' : self.filenamePrefix + str(self.scan).zfill(self.maxDigitsSequence) + '.pkl'}
         else:
             result = {}
         
@@ -82,23 +84,26 @@ class SpectraFound:
                 
         sequenceDict = whichScan.to_dict(self.saveFiles)
 
-        print('- add_scan. sequence={}, scan={}, # non-zero peaks={}'.format(whichSequence, 
-            whichScan.scan,
-            len(sequenceDict['nzero_peaks'])))
+        # print('- add_scan. sequence={}, scan={}, # non-zero peaks={}'.format(whichSequence, 
+        #     whichScan.scan,
+        #     len(sequenceDict['nzero_peaks'])))
         
         if whichSequence in self.spectra:
             self.spectra[whichSequence].append(sequenceDict)
         else:
             self.spectra[whichSequence] = [sequenceDict]
 
-        if self.saveFiles:
-            sequenceFolder = os.path.join(self.filesFolder, whichSequence)
+        #
+        # Does not save each individual file, even if saveFiles == True;
+        #
+        # if self.saveFiles:
+        #     sequenceFolder = os.path.join(self.filesFolder, whichSequence)
             
-            if os.path.isdir(sequenceFolder) == False:
-                os.makedirs(sequenceFolder)
+        #     if os.path.isdir(sequenceFolder) == False:
+        #         os.makedirs(sequenceFolder)
                
-            with open(os.path.join(sequenceFolder, sequenceDict['filename']), 'w') as outputFile:
-                json.dump(sequenceDict, outputFile)
+        #     with open(os.path.join(sequenceFolder, sequenceDict['filename']), 'w') as outputFile:
+        #         pickle.dump(sequenceDict, outputFile, pickle.HIGHEST_PROTOCOL)
 
 
 
@@ -223,11 +228,6 @@ class SpectraFound:
             # Need to calculate the normalization parameters
             #
 
-            # First, create a list with all non-zero peaks lists
-
-            allPeaksLists = []
-            allPeaksListsLen = []
-
             # Sum everything to calculate the mean
 
             mzSum = 0.0
@@ -316,7 +316,10 @@ class SpectraFound:
 
 
 class MGF:
-    
+
+    SCAN_SEQUENCE_MAX_DIGITS = 8
+    SCAN_SEQUENCE_OVER_LIMIT = 999999999
+
     BEGIN_IONS_FIELD  = 0
     TITLE_FIELD       = 1
     RTINSECONDS_FIELD = 2
@@ -337,10 +340,29 @@ class MGF:
         '^END IONS'
     ]    
 
+
+#
+# Reads the scans inside a MGF file and stores in a spectra dictionary. Assumes the scans are in ascending order
+# inside the MGF file.
+#
+# whichFile: MGF file being analyzed.
+# scanFilenamePrefix: scan filename prefix, to be optionally added in each scan dictionary.
+# searchedScan: scan number being searched inside the file. If "None", all scans found in the file will be stored.
+#               If the "searchedScan" is found, it is added into the "speactraFound" dictionary and the function
+#               returns.
+#
+# decodedSequence: sequence corresponding to the scan number being searched. Ignored if "searchedScan" == "None".
+# spectraFound: spectra dictionary holding the scans found.
+# currentScan: last scan read from the previous file. Is matched against the "searchedScan"
+# storeUnrecognized: if True, while searching for a non-null "searchedScan" value, stores in the "spectraFound"
+#                    dictionary all the scans smaller than "searchedScan". Must be "True" if "searchedScan" == "None".
+#
        
     def read_spectrum(self, whichFile, scanFilenamePrefix, searchedScan, decodedSequence, spectraFound, 
                       currentScan = None,
                       storeUnrecognized = True):
+
+        totalScansAdded = 0
 
         print('read_spectrum: file={}, scan={}, sequence={}'.format(whichFile.name, searchedScan, decodedSequence))
 
@@ -381,7 +403,7 @@ class MGF:
                                 raise ValueError('\"END IONS\" statement missing. File={}. Scan={}'.format(whichFile.name,
                                                                                                            json.dump(newScan.to_dict)))
 
-                            newScan = Scan(scanFilenamePrefix)
+                            newScan = Scan(scanFilenamePrefix, MGF.SCAN_SEQUENCE_MAX_DIGITS)
 
                         elif (i == MGF.TITLE_FIELD):
                             newScan.scan = int(parsing.group(1))
@@ -402,15 +424,17 @@ class MGF:
 
                                     hasFoundScan = True
 
-                                elif newScan.scan < searchedScan:
+                                    totalScansAdded += 1 
+
+                                elif not searchedScan or newScan.scan < searchedScan:
                                     if storeUnrecognized:
                                         spectraFound.add_scan(newScan, Scan.UNRECOGNIZED_SEQUENCE)
 
-                                    newScan = None
+                                        totalScansAdded += 1 
 
+                                    newScan = None
                                 else:    
                                     raise ValueError('Scan {} not found. File={}'.format(searchedScan, whichFile.name))
-
                             else:
                                 raise ValueError('\"BEGIN IONS\" statement missing. File={}. Scan={}'.format(whichFile.name,
                                                                                                              searchedScan))
@@ -429,4 +453,4 @@ class MGF:
                 break
 
 
-        return hasFoundScan, newScan
+        return hasFoundScan, newScan, totalScansAdded

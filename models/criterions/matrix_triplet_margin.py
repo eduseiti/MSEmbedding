@@ -25,6 +25,7 @@ class MatrixTripletMargin(nn.Module):
         self.epsilon = Options()['model']['criterion'].get('epsilon', 0.00000001)
 
 
+
     def forward(self, networkOutput, batch):
 
         out = {}
