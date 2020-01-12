@@ -17,6 +17,7 @@ model:
   network:
     lstm_out_dim: 30
     bidirecional_lstm: True
+    num_of_layers: 2
   metric:
     name: saveEmbeddings
     import: MSEmbedding.models.metrics.factory    

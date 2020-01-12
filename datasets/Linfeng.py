@@ -99,13 +99,14 @@ class Linfeng(data.Dataset):
             spectraFound.spectraCount = 0
 
             files = os.listdir(os.path.join(mgfFolder, folder))
+            files.sort()
 
             for fileName in files:
 
                 spectraCountInFile = 0
 
                 if fileName.lower().endswith(".mgf"):
-                    print("- Processing file {}".format(fileName))
+                    Logger()("- Processing file {}".format(fileName))
 
                     fileNameParts = fileName.split('_')
 
@@ -129,9 +130,9 @@ class Linfeng(data.Dataset):
 
             for peaksList in spectraFound.spectra[Scan.UNRECOGNIZED_SEQUENCE]:
 
-                if currentFile != peaksList['filename'].split('_')[0]:
+                if currentFile != '_'.join(peaksList['filename'].split('_')[:-1]):
                     spectrumIndexInFile = 0
-                    currentFile = peaksList['filename'].split('_')[0]
+                    currentFile = '_'.join(peaksList['filename'].split('_')[:-1])
                 else:
                     spectrumIndexInFile += 1
 

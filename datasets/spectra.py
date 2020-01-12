@@ -365,7 +365,7 @@ class MGF:
 
         totalScansAdded = 0
 
-        print('read_spectrum: file={}, scan={}, sequence={}'.format(whichFile.name, searchedScan, decodedSequence))
+        Logger()('read_spectrum: file={}, scan={}, sequence={}'.format(whichFile.name, searchedScan, decodedSequence))
 
         hasFoundScan = False
 
