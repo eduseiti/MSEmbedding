@@ -124,7 +124,6 @@ class Linfeng(data.Dataset):
             # Normalize the spectra with the training set normalization parameters
             # Also, populate the list of all spectra
 
-
             currentFile = ""
             spectrumIndexInFile = 0
 
@@ -139,7 +138,8 @@ class Linfeng(data.Dataset):
                 spectraList.append({'filename' : currentFile, 
                                     'index' : spectrumIndexInFile,
                                     'pepmass' : peaksList['pepmass'],
-                                    'charge' : peaksList['charge']})
+                                    'charge' : peaksList['charge'],
+                                    'scan' : peaksList['scan']})
 
 
                 peaksList['nzero_peaks'][:, 0] = (peaksList['nzero_peaks'][:, 0] - normalizationParameters['mz_mean']) / normalizationParameters['mz_std']

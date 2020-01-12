@@ -4,7 +4,7 @@ exp:
 dataset:
   name: linfeng
   dir: data/linfeng
-  mgf_dir: /media/eduseiti/Seagate Expansion Drive1/unicamp/Linfeng
+  mgf_dir: /media/eduseiti/bigdata01/unicamp/doutorado/linfeng
   train_split: 
   eval_split: test
   train_normalization_file: data/mixedSpectra/sequences/train_mixedSpectra_v0.1.pkl

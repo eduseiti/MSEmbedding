@@ -49,6 +49,7 @@ class Scan:
         
         result['pepmass'] = self.pepmass
         result['charge']  = self.charge
+        result['scan'] = self.scan
         
         return result
         
