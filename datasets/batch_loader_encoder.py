@@ -115,8 +115,6 @@ class BatchLoaderEncoder(object):
 
             while self.currentSpectrumIndex <= lastIndex:
 
-                print("***** splittedFilename={}".format(self.spectraList[self.currentSpectrumIndex]['filename']))
-
                 splittedFilename = self.spectraList[self.currentSpectrumIndex]['filename'].split('_')
                 pklFilename = splittedFilename[2] + "_" + splittedFilename[1] + ".pkl"
 
