@@ -333,7 +333,7 @@ class MGF:
 
     MGF_PARSE = [
         '^BEGIN IONS',
-        '^TITLE=.+\".+scan=(\d+)\"',
+        '^TITLE=.+\.(\d+)\..+',
         '^RTINSECONDS=(\d+\.*\d*)',
         '^PEPMASS=(\d+\.*\d*)',
         '^CHARGE=(\d+\+*)',

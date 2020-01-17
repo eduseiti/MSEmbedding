@@ -14,8 +14,8 @@ from bootstrap.lib.logger import Logger
 
 class MixedSpectra(data.Dataset):
 
-    CURRENT_TRAIN_VERSION = "v0.1"
-    CURRENT_TEST_VERSION = "v0.1"
+    CURRENT_TRAIN_VERSION = "v0.2"
+    CURRENT_TEST_VERSION = "v0.2"
 
     TRAIN_FILENAME = "train_mixedSpectra_{}.pkl"
     TEST_FILENAME = "test_mixedSpectra_{}.pkl"
@@ -32,11 +32,11 @@ class MixedSpectra(data.Dataset):
     }
 
     TEST_EXPERIMENTS_DATA = {
-        "adult_heart_brp_elite.csv" : {"peaksFile" : "adult_heart_brp_elite.pkl", "filesList": ["f02", "f13", "f23"], "constructor" : HumanProteome}
+        "adult_heart_brp_velos.csv" : {"peaksFile" : "adult_heart_brp_velos.pkl", "filesList": ["f02", "f13", "f23"], "constructor" : HumanProteome}
     }
 
     TEST_EXPERIMENTS_DATA_SMALL = {
-        "adult_heart_brp_elite.csv" : {"peaksFile" : "adult_heart_brp_elite.pkl", "filesList": ["f13", "f23"], "constructor" : HumanProteome}
+        "adult_heart_brp_velos.csv" : {"peaksFile" : "adult_heart_brp_velos.pkl", "filesList": ["f13", "f23"], "constructor" : HumanProteome}
     }
 
 

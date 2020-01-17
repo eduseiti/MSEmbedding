@@ -143,7 +143,37 @@ class PXD000561:
         'f21' : 'Adult_Heart_bRP_Elite_81_f21.mgf',
         'f22' : 'Adult_Heart_bRP_Elite_81_f22.mgf',
         'f23' : 'Adult_Heart_bRP_Elite_81_f23.mgf',
-        'f24' : 'Adult_Heart_bRP_Elite_81_f24.mgf',
+        'f24' : 'Adult_Heart_bRP_Elite_81_f24.mgf'
+    }
+
+
+    ADULT_HEART_BRP_VELOS_FILES = {
+        'A1' : 'Adult_Heart_bRP_Velos_6_f01.mgf',
+        'A2' : 'Adult_Heart_bRP_Velos_6_f02.mgf',
+        'A3' : 'Adult_Heart_bRP_Velos_6_f03.mgf',
+        'A4' : 'Adult_Heart_bRP_Velos_6_f04.mgf',
+        'A5' : 'Adult_Heart_bRP_Velos_6_f05.mgf',
+        'A6' : 'Adult_Heart_bRP_Velos_6_f06.mgf',
+        'A7' : 'Adult_Heart_bRP_Velos_6_f07.mgf',
+        'A8' : 'Adult_Heart_bRP_Velos_6_f08.mgf',
+        'A9' : 'Adult_Heart_bRP_Velos_6_f09.mgf',
+        'A10' : 'Adult_Heart_bRP_Velos_6_f10.mgf',
+        'A11' : 'Adult_Heart_bRP_Velos_6_f11.mgf',
+        'A11-110318011425' : 'Adult_Heart_bRP_Velos_6_f12.mgf',
+        'A12' : 'Adult_Heart_bRP_Velos_6_f13.mgf',
+        'B1' : 'Adult_Heart_bRP_Velos_6_f14.mgf',
+        'B2' : 'Adult_Heart_bRP_Velos_6_f15.mgf',
+        'B3' : 'Adult_Heart_bRP_Velos_6_f16.mgf',
+        'B1-B3-pooled' : 'Adult_Heart_bRP_Velos_6_f17.mgf',
+        'B4' : 'Adult_Heart_bRP_Velos_6_f18.mgf',
+        'B5' : 'Adult_Heart_bRP_Velos_6_f19.mgf',
+        'B6' : 'Adult_Heart_bRP_Velos_6_f20.mgf',
+        'B7' : 'Adult_Heart_bRP_Velos_6_f21.mgf',
+        'B8' : 'Adult_Heart_bRP_Velos_6_f22.mgf',
+        'B9' : 'Adult_Heart_bRP_Velos_6_f23.mgf',
+        'B10' : 'Adult_Heart_bRP_Velos_6_f24.mgf',
+        'B10' : 'Adult_Heart_bRP_Velos_6_f25.mgf',
+        'B10' : 'Adult_Heart_bRP_Velos_6_f26.mgf'
     }
 
 
