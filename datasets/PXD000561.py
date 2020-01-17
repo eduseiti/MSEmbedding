@@ -369,6 +369,7 @@ class PXD000561:
         "adult_adrenalgland_gel_velos.csv" : ADULT_ADRENALGLAND_GEL_VELOS_FILES,
         "adult_adrenalgland_bRP_velos.csv" : ADULT_ADRENALGLAND_BRP_VELOS_FILES,
         "adult_heart_brp_elite.csv" : ADULT_HEART_BRP_ELITE_FILES,
+        "adult_heart_brp_velos.csv" : ADULT_HEART_BRP_VELOS_FILES,
         "adult_platelets_gel_elite.csv" : ADULT_PLATELETS_GEL_ELITE_FILES,
         "adult_urinarybladder_gel_elite.csv" : ADULT_URINARYBLADDER_GEL_ELITE_FILES,
         "fetal_brain_gel_velos.csv" : FETAL_BRAIN_GEL_VELOS_FILES,
@@ -448,6 +449,10 @@ class PXD000561:
         spectraFiles = PXD000561.MATCHES_TO_FILES_LIST[self.identificationsFilename]
 
         for index, row in self.uniqueCombination.iterrows():
+
+
+            print("+++++ file={}".format(row['File']))
+
             try:
                 if (spectraFiles[row['File']] != currentFileName):
                     if (currentFile != None):
