@@ -32,11 +32,11 @@ class MixedSpectra(data.Dataset):
     }
 
     TEST_EXPERIMENTS_DATA = {
-        "adult_heart_brp_velos.csv" : {"peaksFile" : "adult_heart_brp_velos.pkl", "filesList": ["f02", "f13", "f23"], "constructor" : HumanProteome}
+        "adult_heart_brp_velos.csv" : {"peaksFile" : "adult_heart_brp_velos.pkl", "filesList": ["A2", "A12", "B9"], "constructor" : HumanProteome}
     }
 
     TEST_EXPERIMENTS_DATA_SMALL = {
-        "adult_heart_brp_velos.csv" : {"peaksFile" : "adult_heart_brp_velos.pkl", "filesList": ["f13", "f23"], "constructor" : HumanProteome}
+        "adult_heart_brp_velos.csv" : {"peaksFile" : "adult_heart_brp_velos.pkl", "filesList": ["A12", "B9"], "constructor" : HumanProteome}
     }
 
 
@@ -49,8 +49,10 @@ class MixedSpectra(data.Dataset):
         self.batch_size = batch_size
         self.dataDirectory = dataDirectory
 
-        if split != 'train':
-            self.trainingDataset = trainingDataset
+        if trainingDataset:
+            self.trainingDataset = trainingDataset.totalSpectra
+        else:
+            self.trainingDataset = None
 
         currentDirectory = os.getcwd()
 
@@ -85,15 +87,15 @@ class MixedSpectra(data.Dataset):
 
             print("*** Need to create the {} dataset".format(split))
 
-            if not trainingDataset:
+            if not self.trainingDataset:
                 print("***** Need to load training dataset to get normalization parameters")
 
                 trainingPeaksFile = MixedSpectra.TRAIN_FILENAME.format(Options().get("dataset.train_set_version", MixedSpectra.CURRENT_TRAIN_VERSION))
 
-                trainingDataset = SpectraFound(False, peaksFilesFolder)
-                trainingDataset.load_spectra(trainingPeaksFile)
+                self.trainingDataset = SpectraFound(False, peaksFilesFolder)
+                self.trainingDataset.load_spectra(trainingPeaksFile)
 
-                if not trainingDataset:
+                if not self.trainingDataset.spectra:
                     raise ValueError("Missing training dataset to get normalization parameters !!!")
 
 
@@ -124,7 +126,7 @@ class MixedSpectra(data.Dataset):
             self.totalSpectra.list_single_and_multiple_scans_sequences()
 
             # And finally normalize the data
-            self.totalSpectra.normalize_data(trainingDataset.normalizationParameters)
+            self.totalSpectra.normalize_data(self.trainingDataset.normalizationParameters)
 
             # Save the entire data
             self.totalSpectra.save_spectra(peaksFile, True)

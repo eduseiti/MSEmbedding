@@ -74,8 +74,6 @@ class HumanProteome(data.Dataset):
 
             self.dataset.read_spectra(MGF(), storeUnrecognized = storeUnrecognized)
 
-            # raise NotImplementedError('Missing implementation to generate the dataset spectra file.')
-
             # Now, analyze the sequences
             self.dataset.totalSpectra.list_single_and_multiple_scans_sequences()
 

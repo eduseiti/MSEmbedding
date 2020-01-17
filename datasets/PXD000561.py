@@ -449,10 +449,6 @@ class PXD000561:
         spectraFiles = PXD000561.MATCHES_TO_FILES_LIST[self.identificationsFilename]
 
         for index, row in self.uniqueCombination.iterrows():
-
-
-            print("+++++ file={}".format(row['File']))
-
             try:
                 if (spectraFiles[row['File']] != currentFileName):
                     if (currentFile != None):
