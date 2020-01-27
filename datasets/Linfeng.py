@@ -10,7 +10,10 @@ import pickle
 
 import gc
 
+import math
+
 from .batch_loader_encoder import BatchLoaderEncoder
+from MSEmbedding.models.metrics.SaveEmbeddings import SaveEmbeddings
 
 from bootstrap.lib.options import Options
 from bootstrap.lib.logger import Logger
@@ -18,12 +21,14 @@ from bootstrap.lib.logger import Logger
 
 class Linfeng(data.Dataset):
 
-    SPECTRA_LIST_FILE = "linfeng_spectra_index.pkl"
+    SPECTRA_LIST_FILE_DEFAULT = "linfeng_spectra_index"
     SPECTRA_FOLDER = "sequence"
     SPECTRA_FILES_EXTENSION = ".pkl"
 
+    TMP_EMBEDDINGS_FILENAME = "tmp_files_list.txt"
 
-    EXPERIMENTS_FOLDERS = [
+
+    EXPERIMENTS_FOLDERS_ALL = [
         "HapMap9_080510",
         "HapMap10_080810",
         "HapMap11_080910",
@@ -78,6 +83,11 @@ class Linfeng(data.Dataset):
     ]
 
 
+    SAMPLE_EXPERIMENTS_FOLDERS = [
+        "sample_experiment"
+    ]
+
+
 
     def read_spectra(self, folders, mgfFolder, outputFolder, normalizationParameters):
 
@@ -87,68 +97,78 @@ class Linfeng(data.Dataset):
 
         spectraList = []
 
-        for folder in folders:
+        print("HERE: {}".format(os.getcwd()))
 
-            print("Processing folder {}".format(folder))
+        with open(os.path.join(self.currentDirectory, self.embeddingsFolder, Linfeng.TMP_EMBEDDINGS_FILENAME), "w") as outputFile:
+            for folder in folders:
 
-            spectraFound = SpectraFound(True, outputFolder)
+                print("Processing folder {}".format(folder))
 
-            spectraFound.multipleScansSequences = None
-            spectraFound.singleScanSequences = None
-            spectraFound.normalizationParameters = normalizationParameters
-            spectraFound.spectraCount = 0
+                spectraFound = SpectraFound(True, outputFolder)
 
-            files = os.listdir(os.path.join(mgfFolder, folder))
-            files.sort()
+                spectraFound.multipleScansSequences = None
+                spectraFound.singleScanSequences = None
+                spectraFound.normalizationParameters = normalizationParameters
+                spectraFound.spectraCount = 0
 
-            for fileName in files:
+                files = os.listdir(os.path.join(mgfFolder, folder))
+                files.sort()
 
-                spectraCountInFile = 0
+                for fileName in files:
 
-                if fileName.lower().endswith(".mgf"):
-                    Logger()("- Processing file {}".format(fileName))
+                    spectraCountInFile = 0
 
-                    fileNameParts = fileName.split('_')
+                    if fileName.lower().endswith(".mgf"):
+                        Logger()("- Processing file {}".format(fileName))
 
-                    currentFile = open(os.path.join(mgfFolder, folder, fileName), 'r')
+                        currentFile = open(os.path.join(mgfFolder, folder, fileName), 'r')
 
-                    _, _, spectraCountInFile = spectraParser.read_spectrum(currentFile, 
-                                                                           fileName + '_', 
-                                                                           None, None, spectraFound)
-  
-                spectraFound.spectraCount += spectraCountInFile
+                        _, _, spectraCountInFile = spectraParser.read_spectrum(currentFile, 
+                                                                            fileName + '_', 
+                                                                            None, None, spectraFound)
+    
+                    spectraFound.spectraCount += spectraCountInFile
 
-            Logger()("Folder {} files had {} spectra.".format(folder, spectraFound.spectraCount))
+                Logger()("Folder {} files had {} spectra.".format(folder, spectraFound.spectraCount))
 
-            totalSpectraCount += spectraFound.spectraCount
+                totalSpectraCount += spectraFound.spectraCount
 
-            # Normalize the spectra with the training set normalization parameters
-            # Also, populate the list of all spectra
+                # Normalize the spectra with the training set normalization parameters
+                # Also, populate the list of all spectra
 
-            currentFile = ""
-            spectrumIndexInFile = 0
+                currentFile = ""
+                spectrumIndexInFile = 0
 
-            for peaksList in spectraFound.spectra[Scan.UNRECOGNIZED_SEQUENCE]:
+                for peaksList in spectraFound.spectra[Scan.UNRECOGNIZED_SEQUENCE]:
 
-                if currentFile != '_'.join(peaksList['filename'].split('_')[:-1]):
-                    spectrumIndexInFile = 0
-                    currentFile = '_'.join(peaksList['filename'].split('_')[:-1])
-                else:
-                    spectrumIndexInFile += 1
+                    if currentFile != '_'.join(peaksList['filename'].split('_')[:-1]):
+                        spectrumIndexInFile = 0
+                        currentFile = '_'.join(peaksList['filename'].split('_')[:-1])
+                    else:
+                        spectrumIndexInFile += 1
 
-                spectraList.append({'filename' : currentFile, 
-                                    'index' : spectrumIndexInFile,
-                                    'pepmass' : peaksList['pepmass'],
-                                    'charge' : peaksList['charge'],
-                                    'scan' : peaksList['scan']})
+                    spectraList.append({'filename' : currentFile, 
+                                        'index' : spectrumIndexInFile,
+                                        'pepmass' : peaksList['pepmass'],
+                                        'charge' : peaksList['charge'],
+                                        'scan' : peaksList['scan']})
 
 
-                peaksList['nzero_peaks'][:, 0] = (peaksList['nzero_peaks'][:, 0] - normalizationParameters['mz_mean']) / normalizationParameters['mz_std']
-                peaksList['nzero_peaks'][:, 1] = (peaksList['nzero_peaks'][:, 1] - normalizationParameters['intensity_mean']) / normalizationParameters['intensity_std']
+                    peaksList['nzero_peaks'][:, 0] = (peaksList['nzero_peaks'][:, 0] - normalizationParameters['mz_mean']) / normalizationParameters['mz_std']
+                    peaksList['nzero_peaks'][:, 1] = (peaksList['nzero_peaks'][:, 1] - normalizationParameters['intensity_mean']) / normalizationParameters['intensity_std']
 
-            # Save spectra for this folder in a separated file to be processed by the batch loader
+                    # Save the original filename in the spectra filelist file
 
-            spectraFound.save_spectra(folder + Linfeng.SPECTRA_FILES_EXTENSION)
+                    outputFile.write(currentFile + "\n")
+
+
+                # Save spectra for this folder in a separated file to be processed by the batch loader
+
+                spectraFound.save_spectra(folder + Linfeng.SPECTRA_FILES_EXTENSION)
+
+        os.rename(os.path.join(self.currentDirectory, self.embeddingsFolder, Linfeng.TMP_EMBEDDINGS_FILENAME), 
+                  os.path.join(self.currentDirectory, self.embeddingsFolder, 
+                               self.fileListFilename.format(str(math.ceil(totalSpectraCount / self.batch_size)).zfill(6)) + SaveEmbeddings.EMBEDDINGS_FILES_LIST_FILE_EXTENSION))
 
         return totalSpectraCount, spectraList
 
@@ -162,11 +182,16 @@ class Linfeng(data.Dataset):
         self.batch_size = batch_size
         self.dataDirectory = dataDirectory
 
-        currentDirectory = os.getcwd()
+        self.spectraListFilename = Options().get("dataset.spectra_list_file", Linfeng.SPECTRA_LIST_FILE_DEFAULT) + Linfeng.SPECTRA_FILES_EXTENSION
+        self.spectraExperimentsFolder = getattr(Linfeng, Options().get("dataset.mgf_experiments", "EXPERIMENTS_FOLDERS_ALL"))
+        self.fileListFilename = SaveEmbeddings.build_embeddings_filename()
+        self.embeddingsFolder = Options().get("dataset.embeddings_dir", SaveEmbeddings.EMBEDDINGS_FOLDER)
+
+        self.currentDirectory = os.getcwd()
 
         print('Working directory: ' + os.getcwd())
 
-        if not os.path.exists(os.path.join(dataDirectory, Linfeng.SPECTRA_FOLDER, Linfeng.SPECTRA_LIST_FILE)):
+        if not os.path.exists(os.path.join(dataDirectory, Linfeng.SPECTRA_FOLDER, self.spectraListFilename)):
 
             print("*** Need to create the spectra list !!!")
 
@@ -189,15 +214,15 @@ class Linfeng(data.Dataset):
 
             os.chdir(dataDirectory)
 
-            self.totalSpectraCount, self.spectraList = self.read_spectra(Linfeng.EXPERIMENTS_FOLDERS,
+            self.totalSpectraCount, self.spectraList = self.read_spectra(self.spectraExperimentsFolder,
                                                                          mgfFilesFolder, 
                                                                          Linfeng.SPECTRA_FOLDER, 
                                                                          normalizationParameters)
 
-            with open(os.path.join(Linfeng.SPECTRA_FOLDER, Linfeng.SPECTRA_LIST_FILE), 'wb') as outputFile:
+            with open(os.path.join(Linfeng.SPECTRA_FOLDER, self.spectraListFilename), 'wb') as outputFile:
                 pickle.dump(self.spectraList, outputFile, pickle.HIGHEST_PROTOCOL)            
         else:
-            with open(os.path.join(dataDirectory, Linfeng.SPECTRA_FOLDER, Linfeng.SPECTRA_LIST_FILE), 'rb') as inputFile:
+            with open(os.path.join(dataDirectory, Linfeng.SPECTRA_FOLDER, self.spectraListFilename), 'rb') as inputFile:
                 self.spectraList = pickle.load(inputFile)
 
             self.totalSpectraCount = len(self.spectraList)            
@@ -211,7 +236,7 @@ class Linfeng(data.Dataset):
         # framework.
         #
 
-        os.chdir(currentDirectory)
+        os.chdir(self.currentDirectory)
 
 
 

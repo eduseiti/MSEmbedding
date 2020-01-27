@@ -14,8 +14,16 @@ import sys
 class SaveEmbeddings(torch.nn.Module):
 
     EMBEDDINGS_FOLDER = "data/linfeng"
-    EMBEDDINGS_FILENAME = "spectra_embeddings_fixed_{}.pkl"
-    EMBEDDINGS_BIN_FILENAME = "spectra_embeddings_fixed_{}.bin"
+
+    EMBEDDINGS_FILE_EXTENSION = ".pkl"
+    EMBEDDINGS_BIN_FILE_EXTENSION = ".bin"
+    EMBEDDINGS_FILES_LIST_FILE_EXTENSION = ".txt"
+
+    EMBEDDINGS_FILENAME_DEFAULT = "spectra_embeddings"
+
+    def build_embeddings_filename():
+        return Options().get("dataset.embeddings_file", SaveEmbeddings.EMBEDDINGS_FILENAME_DEFAULT) + "_{}"
+
 
     SAVE_COUNT = 20000
 
@@ -27,6 +35,9 @@ class SaveEmbeddings(torch.nn.Module):
         self.mode = mode
         self.allEmbeddings = []
         self.allEmbeddingsBin = []
+
+        self.embeddingsFolder = Options().get("dataset.embeddings_dir", SaveEmbeddings.EMBEDDINGS_FOLDER)
+        self.embeddingsFilename = SaveEmbeddings.build_embeddings_filename()
 
         if engine and mode == 'test':
             engine.register_hook('eval_on_end_epoch', self.save_embeddings)
@@ -67,10 +78,10 @@ class SaveEmbeddings(torch.nn.Module):
 
         print("-- save_embeddings. currentBatch={}".format(self.currentBatch))
 
-        # with open(os.path.join(SaveEmbeddings.EMBEDDINGS_FOLDER, SaveEmbeddings.EMBEDDINGS_FILENAME.format(str(self.currentBatch).zfill(6))), "wb") as outputFile:
+        # with open(os.path.join(self.embeddingsFolder, (self.embeddingsFilename + SaveEmbeddings.EMBEDDINGS_FILE_EXTENSION).format(str(self.currentBatch).zfill(6))), "wb") as outputFile:
         #     pickle.dump(self.allEmbeddings, outputFile, pickle.HIGHEST_PROTOCOL)
 
-        with open(os.path.join(SaveEmbeddings.EMBEDDINGS_FOLDER, SaveEmbeddings.EMBEDDINGS_BIN_FILENAME.format(str(self.currentBatch).zfill(6))), "wb") as outputFile:
+        with open(os.path.join(self.embeddingsFolder, (self.embeddingsFilename + SaveEmbeddings.EMBEDDINGS_BIN_FILE_EXTENSION).format(str(self.currentBatch).zfill(6))), "wb") as outputFile:
             for whichEmbedding in self.allEmbeddingsBin:
                 outputFile.write(whichEmbedding)
 

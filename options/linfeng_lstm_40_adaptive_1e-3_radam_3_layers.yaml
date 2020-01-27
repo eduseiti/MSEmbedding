@@ -1,0 +1,40 @@
+__include__: abstract.yaml
+exp:
+  dir: logs/MSEmbedding/linfeng_radam_lstm_40_LR1e-3_margin0.3_700_epochs_wd1e-5_adaptive_epsilon_1e-6_bi-lstm_3_layers
+dataset:
+  name: linfeng
+  dir: data/linfeng
+  mgf_dir: /media/eduseiti/bigdata01/unicamp/doutorado/linfeng
+  mgf_experiments: SAMPLE_EXPERIMENTS_FOLDERS
+  spectra_list_file: sample_linfeng
+  embeddings_file: sample_embeddings
+  embeddings_dir: data/linfeng
+  train_split: 
+  eval_split: test
+  train_normalization_file: data/mixedSpectra/sequences/train_mixedSpectra_v0.2.pkl
+  batch_size: 500
+  nb_threads: 0  
+engine:
+  nb_epochs: 1
+model:
+  name: MSEmbedding_encoding
+  network:
+    lstm_out_dim: 40
+    bidirecional_lstm: True
+    num_of_layers: 2
+  metric:
+    name: saveEmbeddings
+    import: MSEmbedding.models.metrics.factory    
+optimizer:
+  import: MSEmbedding.models.optimizers.factory
+  name: radam
+  lr: 0.001 
+  weight_decay: 0.00001
+misc:
+  cuda: True
+views:
+  items:  
+    - logs:eval_epoch.metric.MedR
+    - logs:eval_epoch.metric.recall_at_1
+    - logs:eval_epoch.metric.recall_at_5
+    - logs:eval_epoch.metric.recall_at_10
