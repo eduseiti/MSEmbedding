@@ -378,10 +378,367 @@ class PXD000561:
     }
 
 
-    def __init__(self, identificationsFilename = None, spectraFilename = None):
+    ADULT_ADRENALGLAND_GEL_ELITE_CRUX_FILES = [
+        'Adult_Adrenalgland_Gel_Elite_49_f01.mgf',
+        'Adult_Adrenalgland_Gel_Elite_49_f02.mgf',
+        'Adult_Adrenalgland_Gel_Elite_49_f03.mgf',
+        'Adult_Adrenalgland_Gel_Elite_49_f04.mgf',
+        'Adult_Adrenalgland_Gel_Elite_49_f05.mgf',
+        'Adult_Adrenalgland_Gel_Elite_49_f06.mgf',
+        'Adult_Adrenalgland_Gel_Elite_49_f07.mgf',
+        'Adult_Adrenalgland_Gel_Elite_49_f08.mgf',
+        'Adult_Adrenalgland_Gel_Elite_49_f09.mgf',
+        'Adult_Adrenalgland_Gel_Elite_49_f10.mgf',
+        'Adult_Adrenalgland_Gel_Elite_49_f11.mgf',
+        'Adult_Adrenalgland_Gel_Elite_49_f12.mgf',
+        'Adult_Adrenalgland_Gel_Elite_49_f13.mgf',
+        'Adult_Adrenalgland_Gel_Elite_49_f14.mgf',
+        'Adult_Adrenalgland_Gel_Elite_49_f15.mgf',
+        'Adult_Adrenalgland_Gel_Elite_49_f16.mgf',
+        'Adult_Adrenalgland_Gel_Elite_49_f17.mgf',
+        'Adult_Adrenalgland_Gel_Elite_49_f18.mgf',
+        'Adult_Adrenalgland_Gel_Elite_49_f19.mgf',
+        'Adult_Adrenalgland_Gel_Elite_49_f20.mgf',
+        'Adult_Adrenalgland_Gel_Elite_49_f21.mgf',
+        'Adult_Adrenalgland_Gel_Elite_49_f22.mgf',
+        'Adult_Adrenalgland_Gel_Elite_49_f23.mgf',
+        'Adult_Adrenalgland_Gel_Elite_49_f24.mgf'
+    ]
+
+
+    ADULT_ADRENALGLAND_GEL_VELOS_CRUX_FILES = [
+        'Adult_Adrenalgland_Gel_Velos_2_f01.mgf',
+        'Adult_Adrenalgland_Gel_Velos_2_f02.mgf',
+        'Adult_Adrenalgland_Gel_Velos_2_f03.mgf',
+        'Adult_Adrenalgland_Gel_Velos_2_f04.mgf',
+        'Adult_Adrenalgland_Gel_Velos_2_f05.mgf',
+        'Adult_Adrenalgland_Gel_Velos_2_f06.mgf',
+        'Adult_Adrenalgland_Gel_Velos_2_f07.mgf',
+        'Adult_Adrenalgland_Gel_Velos_2_f08.mgf',
+        'Adult_Adrenalgland_Gel_Velos_2_f09.mgf',
+        'Adult_Adrenalgland_Gel_Velos_2_f10.mgf',
+        'Adult_Adrenalgland_Gel_Velos_2_f11.mgf',
+        'Adult_Adrenalgland_Gel_Velos_2_f12.mgf',
+        'Adult_Adrenalgland_Gel_Velos_2_f13.mgf',
+        'Adult_Adrenalgland_Gel_Velos_2_f14.mgf',
+        'Adult_Adrenalgland_Gel_Velos_2_f15.mgf',
+        'Adult_Adrenalgland_Gel_Velos_2_f16.mgf',
+        'Adult_Adrenalgland_Gel_Velos_2_f17.mgf',
+        'Adult_Adrenalgland_Gel_Velos_2_f18.mgf',
+        'Adult_Adrenalgland_Gel_Velos_2_f19.mgf',
+        'Adult_Adrenalgland_Gel_Velos_2_f20.mgf',
+        'Adult_Adrenalgland_Gel_Velos_2_f21.mgf',
+        'Adult_Adrenalgland_Gel_Velos_2_f22.mgf',
+        'Adult_Adrenalgland_Gel_Velos_2_f23.mgf',
+        'Adult_Adrenalgland_Gel_Velos_2_f24.mgf',
+        'Adult_Adrenalgland_Gel_Velos_2_f25.mgf',
+        'Adult_Adrenalgland_Gel_Velos_2_f26.mgf'
+    ]
+
+
+    ADULT_ADRENALGLAND_BRP_VELOS_CRUX_FILES = [
+        'Adult_Adrenalgland_bRP_Velos_1_f01.mgf',
+        'Adult_Adrenalgland_bRP_Velos_1_f02.mgf',
+        'Adult_Adrenalgland_bRP_Velos_1_f03.mgf',
+        'Adult_Adrenalgland_bRP_Velos_1_f04.mgf',
+        'Adult_Adrenalgland_bRP_Velos_1_f05.mgf',
+        'Adult_Adrenalgland_bRP_Velos_1_f06.mgf',
+        'Adult_Adrenalgland_bRP_Velos_1_f07.mgf',
+        'Adult_Adrenalgland_bRP_Velos_1_f08.mgf',
+        'Adult_Adrenalgland_bRP_Velos_1_f09.mgf',
+        'Adult_Adrenalgland_bRP_Velos_1_f10.mgf',
+        'Adult_Adrenalgland_bRP_Velos_1_f11.mgf',
+        'Adult_Adrenalgland_bRP_Velos_1_f12.mgf',
+        'Adult_Adrenalgland_bRP_Velos_1_f13.mgf',
+        'Adult_Adrenalgland_bRP_Velos_1_f14.mgf',
+        'Adult_Adrenalgland_bRP_Velos_1_f15.mgf',
+        'Adult_Adrenalgland_bRP_Velos_1_f16.mgf',
+        'Adult_Adrenalgland_bRP_Velos_1_f17.mgf',
+        'Adult_Adrenalgland_bRP_Velos_1_f18.mgf',
+        'Adult_Adrenalgland_bRP_Velos_1_f19.mgf',
+        'Adult_Adrenalgland_bRP_Velos_1_f20.mgf',
+        'Adult_Adrenalgland_bRP_Velos_1_f21.mgf',
+        'Adult_Adrenalgland_bRP_Velos_1_f22.mgf',
+        'Adult_Adrenalgland_bRP_Velos_1_f23.mgf',
+        'Adult_Adrenalgland_bRP_Velos_1_f24.mgf',
+        'Adult_Adrenalgland_bRP_Velos_1_f25.mgf',
+        'Adult_Adrenalgland_bRP_Velos_1_f26.mgf',
+        'Adult_Adrenalgland_bRP_Velos_1_f27.mgf',
+        'Adult_Adrenalgland_bRP_Velos_1_f28.mgf',
+        'Adult_Adrenalgland_bRP_Velos_1_f29.mgf',
+        'Adult_Adrenalgland_bRP_Velos_1_f30.mgf',
+        'Adult_Adrenalgland_bRP_Velos_1_f31.mgf',
+        'Adult_Adrenalgland_bRP_Velos_1_f32.mgf',
+        'Adult_Adrenalgland_bRP_Velos_1_f33.mgf',
+        'Adult_Adrenalgland_bRP_Velos_1_f34.mgf',
+        'Adult_Adrenalgland_bRP_Velos_1_f35.mgf',
+        'Adult_Adrenalgland_bRP_Velos_1_f36.mgf'
+    ]
+
+
+    ADULT_HEART_BRP_ELITE_CRUX_FILES = [
+        'Adult_Heart_bRP_Elite_81_f01.mgf',
+        'Adult_Heart_bRP_Elite_81_f02.mgf',
+        'Adult_Heart_bRP_Elite_81_f03.mgf',
+        'Adult_Heart_bRP_Elite_81_f04.mgf',
+        'Adult_Heart_bRP_Elite_81_f05.mgf',
+        'Adult_Heart_bRP_Elite_81_f06.mgf',
+        'Adult_Heart_bRP_Elite_81_f07.mgf',
+        'Adult_Heart_bRP_Elite_81_f08.mgf',
+        'Adult_Heart_bRP_Elite_81_f09.mgf',
+        'Adult_Heart_bRP_Elite_81_f10.mgf',
+        'Adult_Heart_bRP_Elite_81_f11.mgf',
+        'Adult_Heart_bRP_Elite_81_f12.mgf',
+        'Adult_Heart_bRP_Elite_81_f13.mgf',
+        'Adult_Heart_bRP_Elite_81_f14.mgf',
+        'Adult_Heart_bRP_Elite_81_f15.mgf',
+        'Adult_Heart_bRP_Elite_81_f16.mgf',
+        'Adult_Heart_bRP_Elite_81_f17.mgf',
+        'Adult_Heart_bRP_Elite_81_f18.mgf',
+        'Adult_Heart_bRP_Elite_81_f19.mgf',
+        'Adult_Heart_bRP_Elite_81_f20.mgf',
+        'Adult_Heart_bRP_Elite_81_f21.mgf',
+        'Adult_Heart_bRP_Elite_81_f22.mgf',
+        'Adult_Heart_bRP_Elite_81_f23.mgf',
+        'Adult_Heart_bRP_Elite_81_f24.mgf'
+    ]
+
+
+    ADULT_HEART_BRP_VELOS_CRUX_FILES = [
+        'Adult_Heart_bRP_Velos_6_f01.mgf',
+        'Adult_Heart_bRP_Velos_6_f02.mgf',
+        'Adult_Heart_bRP_Velos_6_f03.mgf',
+        'Adult_Heart_bRP_Velos_6_f04.mgf',
+        'Adult_Heart_bRP_Velos_6_f05.mgf',
+        'Adult_Heart_bRP_Velos_6_f06.mgf',
+        'Adult_Heart_bRP_Velos_6_f07.mgf',
+        'Adult_Heart_bRP_Velos_6_f08.mgf',
+        'Adult_Heart_bRP_Velos_6_f09.mgf',
+        'Adult_Heart_bRP_Velos_6_f10.mgf',
+        'Adult_Heart_bRP_Velos_6_f11.mgf',
+        'Adult_Heart_bRP_Velos_6_f12.mgf',
+        'Adult_Heart_bRP_Velos_6_f13.mgf',
+        'Adult_Heart_bRP_Velos_6_f14.mgf',
+        'Adult_Heart_bRP_Velos_6_f15.mgf',
+        'Adult_Heart_bRP_Velos_6_f16.mgf',
+        'Adult_Heart_bRP_Velos_6_f17.mgf',
+        'Adult_Heart_bRP_Velos_6_f18.mgf',
+        'Adult_Heart_bRP_Velos_6_f19.mgf',
+        'Adult_Heart_bRP_Velos_6_f20.mgf',
+        'Adult_Heart_bRP_Velos_6_f21.mgf',
+        'Adult_Heart_bRP_Velos_6_f22.mgf',
+        'Adult_Heart_bRP_Velos_6_f23.mgf',
+        'Adult_Heart_bRP_Velos_6_f24.mgf',
+        'Adult_Heart_bRP_Velos_6_f25.mgf',
+        'Adult_Heart_bRP_Velos_6_f26.mgf'
+    ]
+
+
+    ADULT_PLATELETS_GEL_ELITE_CRUX_FILES = [
+        'Adult_Platelets_Gel_Elite_48_f01.mgf',
+        'Adult_Platelets_Gel_Elite_48_f02.mgf',
+        'Adult_Platelets_Gel_Elite_48_f03.mgf',
+        'Adult_Platelets_Gel_Elite_48_f04.mgf',
+        'Adult_Platelets_Gel_Elite_48_f05.mgf',
+        'Adult_Platelets_Gel_Elite_48_f06.mgf',
+        'Adult_Platelets_Gel_Elite_48_f07.mgf',
+        'Adult_Platelets_Gel_Elite_48_f08.mgf',
+        'Adult_Platelets_Gel_Elite_48_f09.mgf',
+        'Adult_Platelets_Gel_Elite_48_f10.mgf',
+        'Adult_Platelets_Gel_Elite_48_f11.mgf',
+        'Adult_Platelets_Gel_Elite_48_f12.mgf',
+        'Adult_Platelets_Gel_Elite_48_f13.mgf',
+        'Adult_Platelets_Gel_Elite_48_f14.mgf',
+        'Adult_Platelets_Gel_Elite_48_f15.mgf',
+        'Adult_Platelets_Gel_Elite_48_f16.mgf',
+        'Adult_Platelets_Gel_Elite_48_f17.mgf',
+        'Adult_Platelets_Gel_Elite_48_f18.mgf',
+        'Adult_Platelets_Gel_Elite_48_f19.mgf',
+        'Adult_Platelets_Gel_Elite_48_f20.mgf',
+        'Adult_Platelets_Gel_Elite_48_f21.mgf',
+        'Adult_Platelets_Gel_Elite_48_f22.mgf',
+        'Adult_Platelets_Gel_Elite_48_f23.mgf',
+        'Adult_Platelets_Gel_Elite_48_f24.mgf'
+    ]
+
+
+    ADULT_URINARYBLADDER_GEL_ELITE_CRUX_FILES = [
+        'Adult_Urinarybladder_Gel_Elite_70_f01.mgf',
+        'Adult_Urinarybladder_Gel_Elite_70_f02.mgf',
+        'Adult_Urinarybladder_Gel_Elite_70_f03.mgf',
+        'Adult_Urinarybladder_Gel_Elite_70_f04.mgf',
+        'Adult_Urinarybladder_Gel_Elite_70_f05.mgf',
+        'Adult_Urinarybladder_Gel_Elite_70_f06.mgf',
+        'Adult_Urinarybladder_Gel_Elite_70_f07.mgf',
+        'Adult_Urinarybladder_Gel_Elite_70_f08.mgf',
+        'Adult_Urinarybladder_Gel_Elite_70_f09.mgf',
+        'Adult_Urinarybladder_Gel_Elite_70_f10.mgf',
+        'Adult_Urinarybladder_Gel_Elite_70_f11.mgf',
+        'Adult_Urinarybladder_Gel_Elite_70_f12.mgf',
+        'Adult_Urinarybladder_Gel_Elite_70_f13.mgf',
+        'Adult_Urinarybladder_Gel_Elite_70_f14.mgf',
+        'Adult_Urinarybladder_Gel_Elite_70_f15.mgf',
+        'Adult_Urinarybladder_Gel_Elite_70_f16.mgf',
+        'Adult_Urinarybladder_Gel_Elite_70_f17.mgf',
+        'Adult_Urinarybladder_Gel_Elite_70_f18.mgf',
+        'Adult_Urinarybladder_Gel_Elite_70_f19.mgf',
+        'Adult_Urinarybladder_Gel_Elite_70_f20.mgf',
+        'Adult_Urinarybladder_Gel_Elite_70_f21.mgf',
+        'Adult_Urinarybladder_Gel_Elite_70_f22.mgf',
+        'Adult_Urinarybladder_Gel_Elite_70_f23.mgf',
+        'Adult_Urinarybladder_Gel_Elite_70_f24.mgf',
+        'Adult_Urinarybladder_Gel_Elite_70_f25.mgf'
+    ]
+
+
+    FETAL_BRAIN_GEL_VELOS_CRUX_FILES = [
+		"Fetal_Brain_Gel_Velos_16_f01.mgf",
+		"Fetal_Brain_Gel_Velos_16_f02.mgf",
+		"Fetal_Brain_Gel_Velos_16_f03.mgf",
+		"Fetal_Brain_Gel_Velos_16_f04.mgf",
+		"Fetal_Brain_Gel_Velos_16_f05.mgf",
+		"Fetal_Brain_Gel_Velos_16_f06.mgf",
+		"Fetal_Brain_Gel_Velos_16_f07.mgf",
+		"Fetal_Brain_Gel_Velos_16_f08.mgf",
+		"Fetal_Brain_Gel_Velos_16_f09.mgf",
+		"Fetal_Brain_Gel_Velos_16_f10.mgf",
+		"Fetal_Brain_Gel_Velos_16_f11.mgf",
+		"Fetal_Brain_Gel_Velos_16_f12.mgf",
+		"Fetal_Brain_Gel_Velos_16_f13.mgf",
+		"Fetal_Brain_Gel_Velos_16_f14.mgf",
+		"Fetal_Brain_Gel_Velos_16_f15.mgf",
+		"Fetal_Brain_Gel_Velos_16_f16.mgf",
+		"Fetal_Brain_Gel_Velos_16_f17.mgf",
+		"Fetal_Brain_Gel_Velos_16_f18.mgf",
+		"Fetal_Brain_Gel_Velos_16_f19.mgf",
+		"Fetal_Brain_Gel_Velos_16_f20.mgf",
+		"Fetal_Brain_Gel_Velos_16_f21.mgf",
+		"Fetal_Brain_Gel_Velos_16_f22.mgf",
+		"Fetal_Brain_Gel_Velos_16_f23.mgf",
+		"Fetal_Brain_Gel_Velos_16_f24.mgf",
+		"Fetal_Brain_Gel_Velos_16_f25.mgf",
+		"Fetal_Brain_Gel_Velos_16_f26.mgf",
+		"Fetal_Brain_Gel_Velos_16_f27.mgf",
+		"Fetal_Brain_Gel_Velos_16_f28.mgf",
+		"Fetal_Brain_Gel_Velos_16_f29.mgf"
+    ]
+
+
+    FETAL_LIVER_BRP_ELITE_CRUX_FILES = [
+        'Fetal_Liver_bRP_Elite_22_f01.mgf',
+        'Fetal_Liver_bRP_Elite_22_f02.mgf',
+        'Fetal_Liver_bRP_Elite_22_f03.mgf',
+        'Fetal_Liver_bRP_Elite_22_f04.mgf',
+        'Fetal_Liver_bRP_Elite_22_f05.mgf',
+        'Fetal_Liver_bRP_Elite_22_f06.mgf',
+        'Fetal_Liver_bRP_Elite_22_f07.mgf',
+        'Fetal_Liver_bRP_Elite_22_f08.mgf',
+        'Fetal_Liver_bRP_Elite_22_f09.mgf',
+        'Fetal_Liver_bRP_Elite_22_f10.mgf',
+        'Fetal_Liver_bRP_Elite_22_f11.mgf',
+        'Fetal_Liver_bRP_Elite_22_f12.mgf',
+        'Fetal_Liver_bRP_Elite_22_f13.mgf',
+        'Fetal_Liver_bRP_Elite_22_f14.mgf',
+        'Fetal_Liver_bRP_Elite_22_f15.mgf',
+        'Fetal_Liver_bRP_Elite_22_f16.mgf',
+        'Fetal_Liver_bRP_Elite_22_f17.mgf',
+        'Fetal_Liver_bRP_Elite_22_f18.mgf',
+        'Fetal_Liver_bRP_Elite_22_f19.mgf',
+        'Fetal_Liver_bRP_Elite_22_f20.mgf',
+        'Fetal_Liver_bRP_Elite_22_f21.mgf',
+        'Fetal_Liver_bRP_Elite_22_f22.mgf',
+        'Fetal_Liver_bRP_Elite_22_f23.mgf',
+        'Fetal_Liver_bRP_Elite_22_f24.mgf',
+        'Fetal_Liver_bRP_Elite_22_f25.mgf',
+        'Fetal_Liver_bRP_Elite_22_f26.mgf',
+        'Fetal_Liver_bRP_Elite_22_f27.mgf',
+        'Fetal_Liver_bRP_Elite_22_f28.mgf',
+        'Fetal_Liver_bRP_Elite_22_f29.mgf',
+        'Fetal_Liver_bRP_Elite_22_f30.mgf',
+        'Fetal_Liver_bRP_Elite_22_f31.mgf',
+        'Fetal_Liver_bRP_Elite_22_f32.mgf',
+        'Fetal_Liver_bRP_Elite_22_f33.mgf',
+        'Fetal_Liver_bRP_Elite_22_f34.mgf',
+        'Fetal_Liver_bRP_Elite_22_f35.mgf'
+    ]
+
+
+    FETAL_OVARY_BRP_VELOS_CRUX_FILES = [
+        'Fetal_Ovary_bRP_Velos_41_f01.mgf',
+        'Fetal_Ovary_bRP_Velos_41_f02.mgf',
+        'Fetal_Ovary_bRP_Velos_41_f03.mgf',
+        'Fetal_Ovary_bRP_Velos_41_f04.mgf',
+        'Fetal_Ovary_bRP_Velos_41_f05.mgf',
+        'Fetal_Ovary_bRP_Velos_41_f06.mgf',
+        'Fetal_Ovary_bRP_Velos_41_f07.mgf',
+        'Fetal_Ovary_bRP_Velos_41_f08.mgf',
+        'Fetal_Ovary_bRP_Velos_41_f09.mgf',
+        'Fetal_Ovary_bRP_Velos_41_f10.mgf',
+        'Fetal_Ovary_bRP_Velos_41_f11.mgf',
+        'Fetal_Ovary_bRP_Velos_41_f12.mgf',
+        'Fetal_Ovary_bRP_Velos_41_f13.mgf',
+        'Fetal_Ovary_bRP_Velos_41_f14.mgf',
+        'Fetal_Ovary_bRP_Velos_41_f15.mgf',
+        'Fetal_Ovary_bRP_Velos_41_f16.mgf',
+        'Fetal_Ovary_bRP_Velos_41_f17.mgf',
+        'Fetal_Ovary_bRP_Velos_41_f18.mgf',
+        'Fetal_Ovary_bRP_Velos_41_f19.mgf',
+        'Fetal_Ovary_bRP_Velos_41_f20.mgf',
+        'Fetal_Ovary_bRP_Velos_41_f21.mgf',
+        'Fetal_Ovary_bRP_Velos_41_f22.mgf',
+        'Fetal_Ovary_bRP_Velos_41_f23.mgf',
+        'Fetal_Ovary_bRP_Velos_41_f24.mgf',
+        'Fetal_Ovary_bRP_Velos_41_f25.mgf',
+        'Fetal_Ovary_bRP_Velos_41_f26.mgf'
+    ]
+
+
+    FETAL_OVARY_BRP_ELITE_CRUX_FILES = [
+        'Fetal_Ovary_bRP_Elite_25_f01.mgf',
+        'Fetal_Ovary_bRP_Elite_25_f02.mgf',
+        'Fetal_Ovary_bRP_Elite_25_f03.mgf',
+        'Fetal_Ovary_bRP_Elite_25_f04.mgf',
+        'Fetal_Ovary_bRP_Elite_25_f05.mgf',
+        'Fetal_Ovary_bRP_Elite_25_f06.mgf',
+        'Fetal_Ovary_bRP_Elite_25_f07.mgf',
+        'Fetal_Ovary_bRP_Elite_25_f08.mgf',
+        'Fetal_Ovary_bRP_Elite_25_f09.mgf',
+        'Fetal_Ovary_bRP_Elite_25_f10.mgf',
+        'Fetal_Ovary_bRP_Elite_25_f11.mgf',
+        'Fetal_Ovary_bRP_Elite_25_f12.mgf',
+        'Fetal_Ovary_bRP_Elite_25_f13.mgf',
+        'Fetal_Ovary_bRP_Elite_25_f14.mgf',
+        'Fetal_Ovary_bRP_Elite_25_f15.mgf',
+        'Fetal_Ovary_bRP_Elite_25_f16.mgf',
+        'Fetal_Ovary_bRP_Elite_25_f17.mgf',
+        'Fetal_Ovary_bRP_Elite_25_f18.mgf',
+        'Fetal_Ovary_bRP_Elite_25_f19.mgf',
+        'Fetal_Ovary_bRP_Elite_25_f20.mgf',
+        'Fetal_Ovary_bRP_Elite_25_f21.mgf',
+        'Fetal_Ovary_bRP_Elite_25_f22.mgf',
+        'Fetal_Ovary_bRP_Elite_25_f23.mgf',
+        'Fetal_Ovary_bRP_Elite_25_f24.mgf'
+    ]
+
+
+    MATCHES_TO_CRUX_FILES_LIST = {
+        "Adult_Adrenalgland_Gel_Elite_q_lt_0.01_identifications.tsv" : ADULT_ADRENALGLAND_GEL_ELITE_CRUX_FILES,
+        "Adult_Adrenalgland_Gel_Velos_q_lt_0.01_identifications.tsv" : ADULT_ADRENALGLAND_GEL_VELOS_CRUX_FILES,
+        "Adult_Adrenalgland_bRP_Velos_q_lt_0.01_identifications.tsv" : ADULT_ADRENALGLAND_BRP_VELOS_CRUX_FILES,
+        "Adult_Heart_bRP_Velos_q_lt_0.01_identifications.tsv" : ADULT_HEART_BRP_VELOS_CRUX_FILES,
+        "Adult_Platelets_Gel_Elite_q_lt_0.01_identifications.tsv" : ADULT_PLATELETS_GEL_ELITE_CRUX_FILES,
+        "Adult_Urinarybladder_Gel_Elite_q_lt_0.01_identifications.tsv" : ADULT_URINARYBLADDER_GEL_ELITE_CRUX_FILES,
+        "Fetal_Brain_Gel_Velos_q_lt_0.01_identifications.tsv" : FETAL_BRAIN_GEL_VELOS_CRUX_FILES,
+        "Fetal_Ovary_bRP_Velos_q_lt_0.01_identifications.tsv" : FETAL_OVARY_BRP_VELOS_CRUX_FILES,
+        "Fetal_Ovary_bRP_Elite_q_lt_0.01_identifications.tsv" : FETAL_OVARY_BRP_ELITE_CRUX_FILES
+    }
+
+
+    def __init__(self, identificationsFilename = None, spectraFilename = None, cruxIdentifications = False):
     
         self.identificationsFilename = identificationsFilename
         self.spectraFilename = spectraFilename
+        self.cruxIdentifications = cruxIdentifications
     
         self.totalSpectra = SpectraFound(False, 'sequences')
     
@@ -399,45 +756,105 @@ class PXD000561:
         
         print('Loading file: {}. dir:{}'.format(self.identificationsFilename, os.getcwd()))
 
-        matches_file = pd.read_csv(self.identificationsFilename)
+        if self.cruxIdentifications:
+            self.uniqueCombination = pd.read_csv(self.identificationsFilename, sep='\t')
+        else:
+            matches_file = pd.read_csv(self.identificationsFilename)
 
-        if verbose:
-            print(matches_file)
+            if verbose:
+                print(matches_file)
 
-        print('Number of unique sequences found: {}'.format(len(matches_file['Sequence'].unique())))
+            print('Number of unique sequences found: {}'.format(len(matches_file['Sequence'].unique())))
 
-        #
-        # Inject new columns to hold the scan sequence within the file and the file name, recovered from the 
-        # "Spectrum Title" information.
-        #
+            #
+            # Inject new columns to hold the scan sequence within the file and the file name, recovered from the 
+            # "Spectrum Title" information.
+            #
 
-        matches_file['File Sequence'] = \
-            matches_file['Spectrum Title'].str.split("_", expand = True).iloc[:, 3].str.zfill(MGF.SCAN_SEQUENCE_MAX_DIGITS)
+            matches_file['File Sequence'] = \
+                matches_file['Spectrum Title'].str.split("_", expand = True).iloc[:, 3].str.zfill(MGF.SCAN_SEQUENCE_MAX_DIGITS)
+            
+            matches_file['File'] = matches_file['Spectrum Title'].str.split("_", expand = True).iloc[:, 2]
+
+            ordered = matches_file.sort_values(['File', 'File Sequence'])
+
+
+            #
+            # Select only unique "Sequence" + "First Scan" combination:
+            #
+            # - Same spectrum can contain different sequences
+            # - Different sequences can be read in different scans
+
+            duplicatesIndication = ordered.duplicated(['Spectrum Title', 'Sequence', 'First Scan'])
+
+            self.uniqueCombination = ordered[~duplicatesIndication]
+            print('Unique combinations found: {}'.format(self.uniqueCombination.shape))
+
+            # print('Unique combinations file {}: {}'.format('b01', 
+            #                                                self.uniqueCombination[self.uniqueCombination['File'] == 'b01'].shape))
+
+            if filteredFilesList:
+                self.uniqueCombination = self.uniqueCombination[self.uniqueCombination['File'].isin(filteredFilesList)]
+
+
+    def read_spectra_crux(self, spectraParser, storeUnrecognized = True):
+        currentFileName      = ''
+        currentScanFileIndex = ''
+
+        currentFile  = None
+        lastScan     = None
+
+        startTime = time.time()
+
+        spectraFiles = PXD000561.MATCHES_TO_CRUX_FILES_LIST[self.identificationsFilename]
+
+        for index, row in self.uniqueCombination.iterrows():
+            try:
+                if (spectraFiles[row['file_idx']] != currentFileName):
+                    if (currentFile != None):
+
+                        if storeUnrecognized:
+                            #
+                            # Dumps the rest of current file as unrecognized spectra
+                            #
+
+                            spectraParser.read_spectrum(currentFile, str(currentScanFileIndex) + '_', 
+                                                        MGF.SCAN_SEQUENCE_OVER_LIMIT, 
+                                                        '', 
+                                                        self.totalSpectra, useScanIndex = True)
+
+                            print('File {}. Processing time of {} seconds'.format(currentFile.name, 
+                                                                                time.time() - startTime))
+
+                        currentFile.close()
+
+                        # break
+
+                    currentScanFileIndex = row['file_idx']
+                    currentFileName = spectraFiles[currentScanFileIndex]
+
+                    print('Will open file \"{}\"'.format(currentFileName))
+
+                    currentFile = open(currentFileName, 'r')
+                    lastScan    = None
+
+                _, lastScan, _ = spectraParser.read_spectrum(currentFile, 
+                                                             str(currentScanFileIndex) + '_', 
+                                                             row['scan'], 
+                                                             row['sequence'], 
+                                                             self.totalSpectra, 
+                                                             currentScan = lastScan,
+                                                             storeUnrecognized = storeUnrecognized,
+                                                             useScanIndex = True)
+            except KeyError:
+                Logger()("- Identification file key {} has not corresponding spectra file.")
+
+        Logger()('{} Total processing time {} seconds'.format(self.identificationsFilename, time.time() - startTime))
         
-        matches_file['File'] = matches_file['Spectrum Title'].str.split("_", expand = True).iloc[:, 2]
-
-        ordered = matches_file.sort_values(['File', 'File Sequence'])
+        self.totalSpectra.save_spectra(self.spectraFilename)
 
 
-        #
-        # Select only unique "Sequence" + "First Scan" combination:
-        #
-        # - Same spectrum can contain different sequences
-        # - Different sequences can be read in different scans
-
-        duplicatesIndication = ordered.duplicated(['Spectrum Title', 'Sequence', 'First Scan'])
-
-        self.uniqueCombination = ordered[~duplicatesIndication]
-        print('Unique combinations found: {}'.format(self.uniqueCombination.shape))
-
-        # print('Unique combinations file {}: {}'.format('b01', 
-        #                                                self.uniqueCombination[self.uniqueCombination['File'] == 'b01'].shape))
-
-        if filteredFilesList:
-            self.uniqueCombination = self.uniqueCombination[self.uniqueCombination['File'].isin(filteredFilesList)]
-
-
-    def read_spectra(self, spectraParser, storeUnrecognized = True):
+    def read_spectra_msf(self, spectraParser, storeUnrecognized = True):
         currentFileName           = ''
         currentScanFileNamePrefix = ''
 
@@ -491,5 +908,13 @@ class PXD000561:
         Logger()('{} Total processing time {} seconds'.format(self.identificationsFilename, time.time() - startTime))
         
         self.totalSpectra.save_spectra(self.spectraFilename)
+
+
+    def read_spectra(self, spectraParser, storeUnrecognized = True):
+        if self.cruxIdentifications:
+            self.read_spectra_crux(spectraParser, storeUnrecognized)
+        else:
+            self.read_spectra_msf(spectraParser, storeUnrecognized)
+
 
 

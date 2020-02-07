@@ -12,36 +12,32 @@ from bootstrap.lib.options import Options
 from bootstrap.lib.logger import Logger
 
 
-class MixedSpectra(data.Dataset):
+class MixedSpectraCrux(data.Dataset):
 
-    CURRENT_TRAIN_VERSION = "v0.2"
-    CURRENT_TEST_VERSION = "v0.2"
+    CURRENT_TRAIN_VERSION = "v2.0"
+    CURRENT_TEST_VERSION = "v2.0"
 
-    TRAIN_FILENAME = "train_mixedSpectra_{}.pkl"
-    TEST_FILENAME = "test_mixedSpectra_{}.pkl"
+    TRAIN_FILENAME = "train_mixedSpectraCrux_{}.pkl"
+    TEST_FILENAME = "test_mixedSpectraCrux_{}.pkl"
 
     TRAIN_EXPERIMENTS_DATA = {
-        "fetal_brain_gel_velos.csv" : {"peaksFile" : "fetal_brain_gel_velos.pkl", "filesList": None, "constructor" : HumanProteome},
-        "fetal_ovary_brp_velos.csv" : {"peaksFile" : "fetal_ovary_brp_velos.pkl", "filesList": None, "constructor" : HumanProteome},
-        "fetal_ovary_brp_elite.csv" : {"peaksFile" : "fetal_ovary_brp_elite.pkl", "filesList": None, "constructor" : HumanProteome},
-        "adult_adrenalgland_gel_elite.csv" : {"peaksFile" : "adult_adrenalgland_gel_elite.pkl", "filesList": None, "constructor" : HumanProteome},
-        "adult_adrenalgland_gel_velos.csv" : {"peaksFile" : "adult_adrenalgland_gel_velos.pkl", "filesList": None, "constructor" : HumanProteome},
-        "adult_adrenalgland_bRP_velos.csv" : {"peaksFile" : "adult_adrenalgland_bRP_velos.pkl", "filesList": None, "constructor" : HumanProteome},
-        "adult_urinarybladder_gel_elite.csv" : {"peaksFile" : "adult_urinarybladder_gel_elite.pkl", "filesList": None, "constructor" : HumanProteome},
-        "adult_platelets_gel_elite.csv" : {"peaksFile" : "adult_platelets_gel_elite.pkl", "filesList": None, "constructor" : HumanProteome}
+        "Fetal_Brain_Gel_Velos_q_lt_0.01_identifications.tsv" : {"peaksFile" : "fetal_brain_gel_velos_crux.pkl", "filesList": None, "constructor" : HumanProteome},
+        "Fetal_Ovary_bRP_Velos_q_lt_0.01_identifications.tsv" : {"peaksFile" : "fetal_ovary_brp_velos_crux.pkl", "filesList": None, "constructor" : HumanProteome},
+        "Fetal_Ovary_bRP_Elite_q_lt_0.01_identifications.tsv" : {"peaksFile" : "fetal_ovary_brp_elite_crux.pkl", "filesList": None, "constructor" : HumanProteome},
+        "Adult_Adrenalgland_Gel_Elite_q_lt_0.01_identifications.tsv" : {"peaksFile" : "adult_adrenalgland_gel_elite_crux.pkl", "filesList": None, "constructor" : HumanProteome},
+        "Adult_Adrenalgland_Gel_Velos_q_lt_0.01_identifications.tsv" : {"peaksFile" : "adult_adrenalgland_gel_velos_crux.pkl", "filesList": None, "constructor" : HumanProteome},
+        "Adult_Adrenalgland_bRP_Velos_q_lt_0.01_identifications.tsv" : {"peaksFile" : "adult_adrenalgland_bRP_velos_crux.pkl", "filesList": None, "constructor" : HumanProteome},
+        "Adult_Urinarybladder_Gel_Elite_q_lt_0.01_identifications.tsv" : {"peaksFile" : "adult_urinarybladder_gel_elite_crux.pkl", "filesList": None, "constructor" : HumanProteome},
+        "Adult_Platelets_Gel_Elite_q_lt_0.01_identifications.tsv" : {"peaksFile" : "adult_platelets_gel_elite_crux.pkl", "filesList": None, "constructor" : HumanProteome}
     }
 
     TEST_EXPERIMENTS_DATA = {
-        "adult_heart_brp_velos.csv" : {"peaksFile" : "adult_heart_brp_velos.pkl", "filesList": ["A2", "A12", "B9"], "constructor" : HumanProteome}
-    }
-
-    TEST_EXPERIMENTS_DATA_SMALL = {
-        "adult_heart_brp_velos.csv" : {"peaksFile" : "adult_heart_brp_velos.pkl", "filesList": ["A12", "B9"], "constructor" : HumanProteome}
+        "Adult_Heart_bRP_Velos_q_lt_0.01_identifications.tsv" : {"peaksFile" : "adult_heart_brp_velos.pkl_crux", "filesList": None, "constructor" : HumanProteome}
     }
 
 
 
-    def __init__(self, dataDirectory = 'data/mixedSpectra', split = 'train', 
+    def __init__(self, dataDirectory = 'data/mixedSpectraCrux', split = 'train', 
                  batch_size = 100, nb_threads = 1, trainingDataset = None):
 
         self.split = split
@@ -65,18 +61,17 @@ class MixedSpectra(data.Dataset):
 
 
         if split == 'train':
-            peaksFile = MixedSpectra.TRAIN_FILENAME.format(Options().get("dataset.train_set_version", MixedSpectra.CURRENT_TRAIN_VERSION))
-            #peaksFile = MixedSpectra.TEST_FILENAME.format(Options().get("dataset.eval_set_version", MixedSpectra.CURRENT_TRAIN_VERSION))
-            experimentsData = MixedSpectra.TRAIN_EXPERIMENTS_DATA
+            peaksFile = MixedSpectraCrux.TRAIN_FILENAME.format(Options().get("dataset.train_set_version", MixedSpectraCrux.CURRENT_TRAIN_VERSION))
+            experimentsData = MixedSpectraCrux.TRAIN_EXPERIMENTS_DATA
         else:
-            testVersion = Options().get("dataset.eval_set_version", MixedSpectra.CURRENT_TEST_VERSION)
+            testVersion = Options().get("dataset.eval_set_version", MixedSpectraCrux.CURRENT_TEST_VERSION)
 
-            if testVersion == MixedSpectra.CURRENT_TEST_VERSION:
-                experimentsData = MixedSpectra.TEST_EXPERIMENTS_DATA
+            if testVersion == MixedSpectraCrux.CURRENT_TEST_VERSION:
+                experimentsData = MixedSpectraCrux.TEST_EXPERIMENTS_DATA
             else:
-                experimentsData = MixedSpectra.TEST_EXPERIMENTS_DATA_SMALL
+                raise ValueError("There is only test experiments version {}.".format(MixedSpectraCrux.CURRENT_TEST_VERSION))
 
-            peaksFile = MixedSpectra.TEST_FILENAME.format(testVersion)
+            peaksFile = MixedSpectraCrux.TEST_FILENAME.format(testVersion)
 
         peaksFilesFolder = os.path.join(self.dataDirectory, 'sequences')
 
@@ -87,10 +82,10 @@ class MixedSpectra(data.Dataset):
 
             print("*** Need to create the {} dataset".format(split))
 
-            if not self.trainingDataset:
+            if split != 'train' and not self.trainingDataset:
                 print("***** Need to load training dataset to get normalization parameters")
 
-                trainingPeaksFile = MixedSpectra.TRAIN_FILENAME.format(Options().get("dataset.train_set_version", MixedSpectra.CURRENT_TRAIN_VERSION))
+                trainingPeaksFile = MixedSpectraCrux.TRAIN_FILENAME.format(Options().get("dataset.train_set_version", MixedSpectraCrux.CURRENT_TRAIN_VERSION))
 
                 self.trainingDataset = SpectraFound(False, peaksFilesFolder)
                 self.trainingDataset.load_spectra(trainingPeaksFile)
@@ -108,13 +103,13 @@ class MixedSpectra(data.Dataset):
                 spectraPeaksFilename = experimentsData[experiment]["peaksFile"]
 
                 newExperiment = experimentsData[experiment]["constructor"](dataDirectory = dataDirectory,
-                                                                                           split = split,
-                                                                                           identificationsFilename = experiment, 
-                                                                                           spectraFilename = spectraPeaksFilename,
-                                                                                           filesList = experimentsData[experiment]["filesList"],
-                                                                                           normalizeData = False,
-                                                                                           storeUnrecognized = False, 
-                                                                                           cruxIdentifications = False)
+                                                                           split = split,
+                                                                           identificationsFilename = experiment, 
+                                                                           spectraFilename = spectraPeaksFilename,
+                                                                           filesList = experimentsData[experiment]["filesList"],
+                                                                           normalizeData = False,
+                                                                           storeUnrecognized = False,
+                                                                           cruxIdentifications = True)
 
                 del newExperiment
 

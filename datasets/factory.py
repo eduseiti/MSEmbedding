@@ -1,6 +1,7 @@
 from bootstrap.lib.options import Options
 from .HumanProteome import HumanProteome
 from .MixedSpectra import MixedSpectra
+from .MixedSpectraCrux import MixedSpectraCrux
 from .Linfeng import Linfeng
 
 def factory(engine=None):
@@ -28,6 +29,16 @@ def factory(engine=None):
             else:
                 dataset['eval'] = factory_mixedSpectra(Options()['dataset']['eval_split'])
 
+    elif Options()['dataset']['name'] == "mixedSpectraCrux":
+        if Options()['dataset'].get('train_split', None):
+            dataset['train'] = factory_mixedSpectraCrux(Options()['dataset']['train_split'])
+
+        if Options()['dataset'].get('eval_split', None):
+            if 'train' in dataset:
+                dataset['eval'] = factory_mixedSpectraCrux(Options()['dataset']['eval_split'], dataset['train'])
+            else:
+                dataset['eval'] = factory_mixedSpectraCrux(Options()['dataset']['eval_split'])
+
     elif Options()['dataset']['name'] == "linfeng":
         if Options()['dataset'].get('eval_split', None):
             dataset['eval'] = factory_linfeng(Options()['dataset']['eval_split'])
@@ -49,6 +60,16 @@ def factory_humanProteome(split, trainingDataset = None):
 
 def factory_mixedSpectra(split, trainingDataset = None):
     dataset = MixedSpectra(
+        Options()['dataset']['dir'],
+        split,
+        batch_size = Options()['dataset']['batch_size'],
+        nb_threads = Options()['dataset']['nb_threads'], 
+        trainingDataset = trainingDataset)
+    return dataset
+
+
+def factory_mixedSpectraCrux(split, trainingDataset = None):
+    dataset = MixedSpectraCrux(
         Options()['dataset']['dir'],
         split,
         batch_size = Options()['dataset']['batch_size'],

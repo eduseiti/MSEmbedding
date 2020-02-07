@@ -361,11 +361,12 @@ class MGF:
        
     def read_spectrum(self, whichFile, scanFilenamePrefix, searchedScan, decodedSequence, spectraFound, 
                       currentScan = None,
-                      storeUnrecognized = True):
+                      storeUnrecognized = True, useScanIndex = False):
 
         totalScansAdded = 0
+        currentScanIndex = -1
 
-        Logger()('read_spectrum: file={}, scan={}, sequence={}'.format(whichFile.name, searchedScan, decodedSequence))
+        # Logger()('read_spectrum: file={}, scan={}, sequence={}'.format(whichFile.name, searchedScan, decodedSequence))
 
         hasFoundScan = False
 
@@ -374,6 +375,10 @@ class MGF:
         #
 
         if currentScan != None:
+
+            if useScanIndex:
+                currentScanIndex = currentScan.scan
+
             if currentScan.scan == searchedScan:                            
                 spectraFound.add_scan(currentScan, decodedSequence)
 
@@ -405,9 +410,13 @@ class MGF:
                                                                                                            json.dump(newScan.to_dict)))
 
                             newScan = Scan(scanFilenamePrefix, MGF.SCAN_SEQUENCE_MAX_DIGITS)
+                            currentScanIndex += 1
 
                         elif (i == MGF.TITLE_FIELD):
-                            newScan.scan = int(parsing.group(1))
+                            if useScanIndex:
+                                newScan.scan = currentScanIndex
+                            else:
+                                newScan.scan = int(parsing.group(1))
 
                         elif (i == MGF.RTINSECONDS_FIELD):
                             newScan.retentionTime = float(parsing.group(1))
