@@ -122,7 +122,11 @@ class MixedSpectraCrux(data.Dataset):
             self.totalSpectra.list_single_and_multiple_scans_sequences()
 
             # And finally normalize the data
-            self.totalSpectra.normalize_data(self.trainingDataset.normalizationParameters)
+
+            if self.trainingDataset:
+                self.totalSpectra.normalize_data(self.trainingDataset.normalizationParameters)
+            else:
+                self.totalSpectra.normalize_data()
 
             # Save the entire data
             self.totalSpectra.save_spectra(peaksFile, True)
