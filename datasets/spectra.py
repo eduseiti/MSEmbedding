@@ -364,7 +364,9 @@ class MGF:
                       storeUnrecognized = True, useScanIndex = False):
 
         totalScansAdded = 0
-        currentScanIndex = -1
+
+        # scan index starts with 1 in crux identifications
+        currentScanIndex = 0
 
         # Logger()('read_spectrum: file={}, scan={}, sequence={}'.format(whichFile.name, searchedScan, decodedSequence))
 

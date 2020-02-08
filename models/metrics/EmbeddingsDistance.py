@@ -12,6 +12,8 @@ import pickle
 
 class EmbeddingsDistance(torch.nn.Module):
 
+    PERCENTILES = list(range(0, 105, 5))
+
     wrongCount = 0
 
     def __init__(self, engine = None, mode = 'train'):
@@ -52,6 +54,30 @@ class EmbeddingsDistance(torch.nn.Module):
 
         epochEmbeddingsNorm = nn.functional.normalize(epochEmbeddings)
         allCosineDistances = 1 - torch.mm(epochEmbeddingsNorm, epochEmbeddingsNorm.t())
+
+
+        #
+        # Calculate distances statistics
+        #
+
+        allCosineDistances_np = allCosineDistances.cpu().numpy()
+
+        cosDist_percentiles = np.percentile(allCosineDistances_np, EmbeddingsDistance.PERCENTILES)
+        cosDist_mean = np.mean(allCosineDistances_np)
+        cosDist_std = np.std(allCosineDistances_np)
+        cosDist_max = np.amax(allCosineDistances_np)
+        cosDist_min = np.amin(allCosineDistances_np)
+
+        Logger()('cosine distance stats\nmean={}, std={}, max={}, min={}'.format(cosDist_mean, cosDist_std, cosDist_max, cosDist_min))
+
+
+        output = ""
+
+        for i in range(len(EmbeddingsDistance.PERCENTILES)):
+            output = output + "{}={:.6f}  ".format(EmbeddingsDistance.PERCENTILES[i], cosDist_percentiles[i])
+
+        Logger()('Percentiles:\n{}\n'.format(output))
+
 
         # ltZeroCount = (allCosineDistances < 0).sum()
         # gtOneCount = (allCosineDistances > 1).sum()
