@@ -74,7 +74,7 @@ class EmbeddingsDistance(torch.nn.Module):
         output = ""
 
         for i in range(len(EmbeddingsDistance.PERCENTILES)):
-            output = output + "{}={:.6f}  ".format(EmbeddingsDistance.PERCENTILES[i], cosDist_percentiles[i])
+            output = output + "{}\t{:.6f}\t".format(EmbeddingsDistance.PERCENTILES[i], cosDist_percentiles[i])
 
         Logger()('Percentiles:\n{}\n'.format(output))
 
