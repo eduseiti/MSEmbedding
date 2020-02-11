@@ -68,15 +68,26 @@ class EmbeddingsDistance(torch.nn.Module):
         cosDist_max = np.amax(allCosineDistances_np)
         cosDist_min = np.amin(allCosineDistances_np)
 
+        cosDist_histogram, cosDist_bin_edges = np.histogram(allCosineDistances_np, 1000)
+
         Logger()('cosine distance stats\nmean={}, std={}, max={}, min={}'.format(cosDist_mean, cosDist_std, cosDist_max, cosDist_min))
 
 
         output = ""
 
         for i in range(len(EmbeddingsDistance.PERCENTILES)):
-            output = output + "{}\t{:.6f}\t".format(EmbeddingsDistance.PERCENTILES[i], cosDist_percentiles[i])
+            output = output + "{}\t{:.6f}\n".format(EmbeddingsDistance.PERCENTILES[i], cosDist_percentiles[i])
 
         Logger()('Percentiles:\n{}\n'.format(output))
+
+
+        output = ""
+
+        for i in len(cosDist_histogram):
+            output = output + "a{}\t{:.6f}\t{:.6f}\n".format(cosDist_histogram[i], cosDist_bin_edges[i], cosDist_bin_edges[i + 1])
+
+        Logger()('Histogram:\n{}\n'.format(output))
+
 
 
         # ltZeroCount = (allCosineDistances < 0).sum()

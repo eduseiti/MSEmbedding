@@ -6,9 +6,9 @@ import numpy as np
 from bootstrap.lib.logger import Logger
 from bootstrap.lib.options import Options
 
-
 import os
 import pickle
+import sys
 
 import time
 
@@ -18,7 +18,7 @@ class BatchLoaderEncoder(object):
     MAX_LOADED_BATCHES = 10
 
 
-    def __init__(self, spectraList, batchSize, dataFolder):
+    def __init__(self, spectraList, batchSize, dataFolder, experimentsFileList = None):
 
         self.spectraList = spectraList
         self.batchSize = batchSize
@@ -35,6 +35,18 @@ class BatchLoaderEncoder(object):
         self.currentBatchesStartingIndex = 0
 
         self.batchLimits = self.define_batches()
+
+        #
+        # The following properties optionally hold the experiment spectra files
+        #
+
+        self.currentExperimentIndex = 0
+
+        # ExperimentsFileList is a list of tuples (<experiments file name>, <number of spectra in experiment>)
+        self.currentExperimentFilesList = experimentsFileList
+
+        self.currentExperimentSpectraCount = 0
+
 
         # Already read the first batch, to avoid racing conditions...
 
@@ -115,17 +127,37 @@ class BatchLoaderEncoder(object):
 
             while self.currentSpectrumIndex <= lastIndex:
 
-                splittedFilename = self.spectraList[self.currentSpectrumIndex]['filename'].split('_')
-                pklFilename = splittedFilename[2] + "_" + splittedFilename[1] + ".pkl"
+                # Check if use the spectra name changing as an indication to load new experiment
 
-                if self.currentFilename != pklFilename:
-                    self.currentFilename = pklFilename
-                    print("Opening new experiment file: {}".format(self.currentFilename))
+                if not self.currentExperimentFilesList:
 
-                    with open(os.path.join(self.dataFolder, self.currentFilename), 'rb') as inputFile:
-                        self.currentExperiment = pickle.load(inputFile)
+                    splittedFilename = self.spectraList[self.currentSpectrumIndex]['filename'].split('_')
+                    pklFilename = splittedFilename[2] + "_" + splittedFilename[1] + ".pkl"
 
-                    self.currentIndexInExperiment = 0
+                    if self.currentFilename != pklFilename:
+                        self.currentFilename = pklFilename
+
+                        print("Opening new experiment file {} for spectra file {}".format(self.currentFilename))
+
+                        with open(os.path.join(self.dataFolder, self.currentFilename), 'rb') as inputFile:
+                            self.currentExperiment = pickle.load(inputFile)
+
+                        self.currentIndexInExperiment = 0
+                else:
+                    # In this case, use the self.curentExperimentsFilesList to check when to read a new experiment file
+
+                    if self.currentIndexInExperiment >= self.currentExperimentSpectraCount:
+                    
+                        self.currentExperimentSpectraCount = self.currentExperimentFilesList[self.currentExperimentIndex][1]
+
+                        print("Opening new experiment file {} for the next {} spectra".format(self.currentExperimentFilesList[self.currentExperimentIndex][0],
+                                                                                              self.currentExperimentSpectraCount))
+                        
+                        with open(os.path.join(self.dataFolder, self.currentExperimentFilesList[self.currentExperimentIndex][0]), 'rb') as inputFile:
+                            self.currentExperiment = pickle.load(inputFile) 
+
+                        self.currentExperimentIndex += 1
+                        self.currentIndexInExperiment = 0
 
                 peaksList.append(self.currentExperiment['spectra']['unrecognized'][self.currentIndexInExperiment]['nzero_peaks'])
                 peaksLen.append(len(self.currentExperiment['spectra']['unrecognized'][self.currentIndexInExperiment]['nzero_peaks']))

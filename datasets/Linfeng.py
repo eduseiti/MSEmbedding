@@ -23,7 +23,9 @@ class Linfeng(data.Dataset):
 
     SPECTRA_LIST_FILE_DEFAULT = "linfeng_spectra_index"
     SPECTRA_FOLDER = "sequence"
+
     SPECTRA_FILES_EXTENSION = ".pkl"
+    SPECTRA_EXPERIMENT_LIST_FILE_EXTENSION = "_experiments.pkl"
 
     TMP_EMBEDDINGS_FILENAME = "tmp_files_list.txt"
 
@@ -97,7 +99,9 @@ class Linfeng(data.Dataset):
 
         spectraList = []
 
-        print("HERE: {}".format(os.getcwd()))
+        experimentsList = []
+
+        print("Linfeng.read_spectra current folder: {}".format(os.getcwd()))
 
         with open(os.path.join(self.currentDirectory, self.embeddingsFolder, Linfeng.TMP_EMBEDDINGS_FILENAME), "w") as outputFile:
             for folder in folders:
@@ -166,11 +170,15 @@ class Linfeng(data.Dataset):
 
                 spectraFound.save_spectra(folder + Linfeng.SPECTRA_FILES_EXTENSION)
 
+                print("- Folder {} had total of {} spectra".format(folder, len(spectraFound.spectra[Scan.UNRECOGNIZED_SEQUENCE])))
+
+                experimentsList.append([folder + Linfeng.SPECTRA_FILES_EXTENSION, len(spectraFound.spectra[Scan.UNRECOGNIZED_SEQUENCE])])
+
         os.rename(os.path.join(self.currentDirectory, self.embeddingsFolder, Linfeng.TMP_EMBEDDINGS_FILENAME), 
                   os.path.join(self.currentDirectory, self.embeddingsFolder, 
                                self.fileListFilename.format(str(math.ceil(totalSpectraCount / self.batch_size)).zfill(6)) + SaveEmbeddings.EMBEDDINGS_FILES_LIST_FILE_EXTENSION))
 
-        return totalSpectraCount, spectraList
+        return totalSpectraCount, spectraList, experimentsList
 
 
 
@@ -183,11 +191,15 @@ class Linfeng(data.Dataset):
         self.dataDirectory = dataDirectory
 
         self.spectraListFilename = Options().get("dataset.spectra_list_file", Linfeng.SPECTRA_LIST_FILE_DEFAULT) + Linfeng.SPECTRA_FILES_EXTENSION
+        self.experimentsListFilename = self.spectraListFilename + Linfeng.SPECTRA_EXPERIMENT_LIST_FILE_EXTENSION
+
         self.spectraExperimentsFolder = getattr(Linfeng, Options().get("dataset.mgf_experiments", "EXPERIMENTS_FOLDERS_ALL"))
         self.fileListFilename = SaveEmbeddings.build_embeddings_filename()
         self.embeddingsFolder = Options().get("dataset.embeddings_dir", SaveEmbeddings.EMBEDDINGS_FOLDER)
 
         self.currentDirectory = os.getcwd()
+
+        self.experimentsFileList = None
 
         print('Working directory: ' + os.getcwd())
 
@@ -214,16 +226,22 @@ class Linfeng(data.Dataset):
 
             os.chdir(dataDirectory)
 
-            self.totalSpectraCount, self.spectraList = self.read_spectra(self.spectraExperimentsFolder,
-                                                                         mgfFilesFolder, 
-                                                                         Linfeng.SPECTRA_FOLDER, 
-                                                                         normalizationParameters)
+            self.totalSpectraCount, self.spectraList, self.experimentsFileList = self.read_spectra(self.spectraExperimentsFolder,
+                                                                                                   mgfFilesFolder, 
+                                                                                                   Linfeng.SPECTRA_FOLDER, 
+                                                                                                   normalizationParameters)
 
             with open(os.path.join(Linfeng.SPECTRA_FOLDER, self.spectraListFilename), 'wb') as outputFile:
-                pickle.dump(self.spectraList, outputFile, pickle.HIGHEST_PROTOCOL)            
+                pickle.dump(self.spectraList, outputFile, pickle.HIGHEST_PROTOCOL)
+
+            with open(os.path.join(Linfeng.SPECTRA_FOLDER, self.experimentsListFilename), 'wb') as outputFile:
+                pickle.dump(self.experimentsFileList, outputFile, pickle.HIGHEST_PROTOCOL)
         else:
             with open(os.path.join(dataDirectory, Linfeng.SPECTRA_FOLDER, self.spectraListFilename), 'rb') as inputFile:
                 self.spectraList = pickle.load(inputFile)
+
+            with open(os.path.join(dataDirectory, Linfeng.SPECTRA_FOLDER, self.experimentsListFilename), 'rb') as inputFile:
+                self.experimentsFileList = pickle.load(inputFile)
 
             self.totalSpectraCount = len(self.spectraList)            
 
@@ -259,7 +277,10 @@ class Linfeng(data.Dataset):
 
     def make_batch_loader(self):
 
-        self.batchSampler = BatchLoaderEncoder(self.spectraList, self.batch_size, os.path.join(self.dataDirectory, Linfeng.SPECTRA_FOLDER))
+        self.batchSampler = BatchLoaderEncoder(self.spectraList, 
+                                               self.batch_size, 
+                                               os.path.join(self.dataDirectory, Linfeng.SPECTRA_FOLDER), 
+                                               self.experimentsFileList)
 
         self.numberOfBatches = len(self.batchSampler.spectraList) // self.batch_size
 
