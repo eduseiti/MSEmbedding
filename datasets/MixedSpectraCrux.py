@@ -14,25 +14,37 @@ from bootstrap.lib.logger import Logger
 
 class MixedSpectraCrux(data.Dataset):
 
-    CURRENT_TRAIN_VERSION = "v2.0"
-    CURRENT_TEST_VERSION = "v2.0"
+    CURRENT_TRAIN_VERSION = "v2.1"
+    CURRENT_TEST_VERSION = "v2.1"
 
     TRAIN_FILENAME = "train_mixedSpectraCrux_{}.pkl"
     TEST_FILENAME = "test_mixedSpectraCrux_{}.pkl"
 
     TRAIN_EXPERIMENTS_DATA = {
-        "Fetal_Brain_Gel_Velos_q_lt_0.01_identifications.tsv" : {"peaksFile" : "fetal_brain_gel_velos_crux.pkl", "filesList": None, "constructor" : HumanProteome},
-        "Fetal_Ovary_bRP_Velos_q_lt_0.01_identifications.tsv" : {"peaksFile" : "fetal_ovary_brp_velos_crux.pkl", "filesList": None, "constructor" : HumanProteome},
-        "Fetal_Ovary_bRP_Elite_q_lt_0.01_identifications.tsv" : {"peaksFile" : "fetal_ovary_brp_elite_crux.pkl", "filesList": None, "constructor" : HumanProteome},
-        "Adult_Adrenalgland_Gel_Elite_q_lt_0.01_identifications.tsv" : {"peaksFile" : "adult_adrenalgland_gel_elite_crux.pkl", "filesList": None, "constructor" : HumanProteome},
-        "Adult_Adrenalgland_Gel_Velos_q_lt_0.01_identifications.tsv" : {"peaksFile" : "adult_adrenalgland_gel_velos_crux.pkl", "filesList": None, "constructor" : HumanProteome},
-        "Adult_Adrenalgland_bRP_Velos_q_lt_0.01_identifications.tsv" : {"peaksFile" : "adult_adrenalgland_bRP_velos_crux.pkl", "filesList": None, "constructor" : HumanProteome},
-        "Adult_Urinarybladder_Gel_Elite_q_lt_0.01_identifications.tsv" : {"peaksFile" : "adult_urinarybladder_gel_elite_crux.pkl", "filesList": None, "constructor" : HumanProteome},
-        "Adult_Platelets_Gel_Elite_q_lt_0.01_identifications.tsv" : {"peaksFile" : "adult_platelets_gel_elite_crux.pkl", "filesList": None, "constructor" : HumanProteome}
+        "Fetal_Brain_Gel_Velos_q_lt_0.001_identifications.tsv" : {"peaksFile" : "fetal_brain_gel_velos_crux.pkl", "filesList": None, "constructor" : HumanProteome},
+        "Fetal_Ovary_bRP_Velos_q_lt_0.001_identifications.tsv" : {"peaksFile" : "fetal_ovary_brp_velos_crux.pkl", "filesList": None, "constructor" : HumanProteome},
+        "Fetal_Ovary_bRP_Elite_q_lt_0.001_identifications.tsv" : {"peaksFile" : "fetal_ovary_brp_elite_crux.pkl", "filesList": None, "constructor" : HumanProteome},
+        "Adult_Adrenalgland_Gel_Elite_q_lt_0.001_identifications.tsv" : {"peaksFile" : "adult_adrenalgland_gel_elite_crux.pkl", "filesList": None, "constructor" : HumanProteome},
+        "Adult_Adrenalgland_Gel_Velos_q_lt_0.001_identifications.tsv" : {"peaksFile" : "adult_adrenalgland_gel_velos_crux.pkl", "filesList": None, "constructor" : HumanProteome},
+        "Adult_Adrenalgland_bRP_Velos_q_lt_0.001_identifications.tsv" : {"peaksFile" : "adult_adrenalgland_bRP_velos_crux.pkl", "filesList": None, "constructor" : HumanProteome},
+        "Adult_Urinarybladder_Gel_Elite_q_lt_0.001_identifications.tsv" : {"peaksFile" : "adult_urinarybladder_gel_elite_crux.pkl", "filesList": None, "constructor" : HumanProteome},
+        "Adult_Platelets_Gel_Elite_q_lt_0.001_identifications.tsv" : {"peaksFile" : "adult_platelets_gel_elite_crux.pkl", "filesList": None, "constructor" : HumanProteome}
     }
 
+    # TRAIN_EXPERIMENTS_DATA = {
+    #     "Fetal_Brain_Gel_Velos_q_lt_0.01_identifications.tsv" : {"peaksFile" : "fetal_brain_gel_velos_crux.pkl", "filesList": None, "constructor" : HumanProteome},
+    #     "Fetal_Ovary_bRP_Velos_q_lt_0.01_identifications.tsv" : {"peaksFile" : "fetal_ovary_brp_velos_crux.pkl", "filesList": None, "constructor" : HumanProteome},
+    #     "Fetal_Ovary_bRP_Elite_q_lt_0.01_identifications.tsv" : {"peaksFile" : "fetal_ovary_brp_elite_crux.pkl", "filesList": None, "constructor" : HumanProteome},
+    #     "Adult_Adrenalgland_Gel_Elite_q_lt_0.01_identifications.tsv" : {"peaksFile" : "adult_adrenalgland_gel_elite_crux.pkl", "filesList": None, "constructor" : HumanProteome},
+    #     "Adult_Adrenalgland_Gel_Velos_q_lt_0.01_identifications.tsv" : {"peaksFile" : "adult_adrenalgland_gel_velos_crux.pkl", "filesList": None, "constructor" : HumanProteome},
+    #     "Adult_Adrenalgland_bRP_Velos_q_lt_0.01_identifications.tsv" : {"peaksFile" : "adult_adrenalgland_bRP_velos_crux.pkl", "filesList": None, "constructor" : HumanProteome},
+    #     "Adult_Urinarybladder_Gel_Elite_q_lt_0.01_identifications.tsv" : {"peaksFile" : "adult_urinarybladder_gel_elite_crux.pkl", "filesList": None, "constructor" : HumanProteome},
+    #     "Adult_Platelets_Gel_Elite_q_lt_0.01_identifications.tsv" : {"peaksFile" : "adult_platelets_gel_elite_crux.pkl", "filesList": None, "constructor" : HumanProteome}
+    # }
+
+
     TEST_EXPERIMENTS_DATA = {
-        "Adult_Heart_bRP_Velos_q_lt_0.01_identifications.tsv" : {"peaksFile" : "adult_heart_brp_velos.pkl_crux", "filesList": None, "constructor" : HumanProteome}
+        "Adult_Heart_bRP_Velos_q_lt_0.001_identifications.tsv" : {"peaksFile" : "adult_heart_brp_velos.pkl_crux", "filesList": None, "constructor" : HumanProteome}
     }
 
 

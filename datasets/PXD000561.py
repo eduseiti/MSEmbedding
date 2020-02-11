@@ -730,8 +730,19 @@ class PXD000561:
         "Adult_Urinarybladder_Gel_Elite_q_lt_0.01_identifications.tsv" : ADULT_URINARYBLADDER_GEL_ELITE_CRUX_FILES,
         "Fetal_Brain_Gel_Velos_q_lt_0.01_identifications.tsv" : FETAL_BRAIN_GEL_VELOS_CRUX_FILES,
         "Fetal_Ovary_bRP_Velos_q_lt_0.01_identifications.tsv" : FETAL_OVARY_BRP_VELOS_CRUX_FILES,
-        "Fetal_Ovary_bRP_Elite_q_lt_0.01_identifications.tsv" : FETAL_OVARY_BRP_ELITE_CRUX_FILES
+        "Fetal_Ovary_bRP_Elite_q_lt_0.01_identifications.tsv" : FETAL_OVARY_BRP_ELITE_CRUX_FILES,
+
+        "Adult_Adrenalgland_Gel_Elite_q_lt_0.001_identifications.tsv" : ADULT_ADRENALGLAND_GEL_ELITE_CRUX_FILES,
+        "Adult_Adrenalgland_Gel_Velos_q_lt_0.001_identifications.tsv" : ADULT_ADRENALGLAND_GEL_VELOS_CRUX_FILES,
+        "Adult_Adrenalgland_bRP_Velos_q_lt_0.001_identifications.tsv" : ADULT_ADRENALGLAND_BRP_VELOS_CRUX_FILES,
+        "Adult_Heart_bRP_Velos_q_lt_0.001_identifications.tsv" : ADULT_HEART_BRP_VELOS_CRUX_FILES,
+        "Adult_Platelets_Gel_Elite_q_lt_0.001_identifications.tsv" : ADULT_PLATELETS_GEL_ELITE_CRUX_FILES,
+        "Adult_Urinarybladder_Gel_Elite_q_lt_0.001_identifications.tsv" : ADULT_URINARYBLADDER_GEL_ELITE_CRUX_FILES,
+        "Fetal_Brain_Gel_Velos_q_lt_0.001_identifications.tsv" : FETAL_BRAIN_GEL_VELOS_CRUX_FILES,
+        "Fetal_Ovary_bRP_Velos_q_lt_0.001_identifications.tsv" : FETAL_OVARY_BRP_VELOS_CRUX_FILES,
+        "Fetal_Ovary_bRP_Elite_q_lt_0.001_identifications.tsv" : FETAL_OVARY_BRP_ELITE_CRUX_FILES
     }
+
 
 
     def __init__(self, identificationsFilename = None, spectraFilename = None, cruxIdentifications = False):
