@@ -84,7 +84,7 @@ class EmbeddingsDistance(torch.nn.Module):
         output = ""
 
         for i in range(len(cosDist_histogram)):
-            output = output + "a{}\t{:.6f}\t{:.6f}\n".format(cosDist_histogram[i], cosDist_bin_edges[i], cosDist_bin_edges[i + 1])
+            output = output + "{}\t{:.6f}\t{:.6f}\n".format(cosDist_histogram[i], cosDist_bin_edges[i], cosDist_bin_edges[i + 1])
 
         Logger()('Histogram:\n{}\n'.format(output))
 
