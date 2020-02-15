@@ -4,7 +4,7 @@
 # 
 # This script calls crux to identify the consensus spectra calculated for each cluster obtained using the "caclulate_consensus.sh" script.
 #
-# How to use; ./identify_consensus.sh <consensus folders name root> <crux executable path> <peptides identification database file>
+# How to use; ./identify_consensus.sh <consensus folders name root> <crux executable path> <peptides identification database file> <crux parameters file>
 #
 # The consensus folders should be in the following naming format: <anything>consensus_<cluster identification>.
 # 
@@ -19,6 +19,7 @@ NC='\033[0m'
 
 CRUX_PATH=$2
 DB_PATH=$3
+CRUX_PARAMS_FILE=$4
 
 CONSENSUS_FOLDERS=($(ls -d $1*))
 
@@ -37,23 +38,23 @@ for folder in "${CONSENSUS_FOLDERS[@]}"; do
 	echo "Start processing consensus folder \"$folder\"" &>> $LOGFILE
 	echo "" &>> $LOGFILE
 
-	echo "{ time $CRUX_PATH/crux tide-search ${folder}/* ${DB_PATH} --output-dir ${IDENTIFICATION_FOLDER} --overwrite T ; } &>> $LOGFILE"
+	echo "{ time $CRUX_PATH/crux tide-search ${folder}/* ${DB_PATH} --parameter-file $CRUX_PARAMS_FILE --output-dir ${IDENTIFICATION_FOLDER} --overwrite T ; } &>> $LOGFILE"
 	echo
 
-	echo "time $CRUX_PATH/crux tide-search ${folder}/* ${DB_PATH} --output-dir ${IDENTIFICATION_FOLDER} --overwrite T " &>> $LOGFILE
+	echo "time $CRUX_PATH/crux tide-search ${folder}/* ${DB_PATH} --parameter-file $CRUX_PARAMS_FILE --output-dir ${IDENTIFICATION_FOLDER} --overwrite T " &>> $LOGFILE
 	echo "" &>> $LOGFILE
 
-	{ time $CRUX_PATH/crux tide-search ${folder}/* ${DB_PATH} --output-dir ${IDENTIFICATION_FOLDER} --overwrite T ; } &>> $LOGFILE
+	{ time $CRUX_PATH/crux tide-search ${folder}/* ${DB_PATH} --parameter-file $CRUX_PARAMS_FILE --output-dir ${IDENTIFICATION_FOLDER} --overwrite T ; } &>> $LOGFILE
 
 	if [ $? -eq 0 ]; then
 
-		echo "{ time $CRUX_PATH/crux percolator $IDENTIFICATION_FOLDER/tide-search.target.txt --output-dir $IDENTIFICATION_FOLDER --overwrite T ; } &>> $LOGFILE"
+		echo "{ time $CRUX_PATH/crux percolator $IDENTIFICATION_FOLDER/tide-search.target.txt --parameter-file $CRUX_PARAMS_FILE --output-dir $IDENTIFICATION_FOLDER --overwrite T ; } &>> $LOGFILE"
 		echo
 
-		echo "time $CRUX_PATH/crux percolator $IDENTIFICATION_FOLDER/tide-search.target.txt --output-dir $IDENTIFICATION_FOLDER --overwrite T" &>> $LOGFILE
+		echo "time $CRUX_PATH/crux percolator $IDENTIFICATION_FOLDER/tide-search.target.txt --parameter-file $CRUX_PARAMS_FILE --output-dir $IDENTIFICATION_FOLDER --overwrite T" &>> $LOGFILE
 		echo "" &>> $LOGFILE
 
-		{ time $CRUX_PATH/crux percolator $IDENTIFICATION_FOLDER/tide-search.target.txt --output-dir $IDENTIFICATION_FOLDER --overwrite T ; } &>> $LOGFILE
+		{ time $CRUX_PATH/crux percolator $IDENTIFICATION_FOLDER/tide-search.target.txt --parameter-file $CRUX_PARAMS_FILE --output-dir $IDENTIFICATION_FOLDER --overwrite T ; } &>> $LOGFILE
 
 		if [ $? -eq 0 ]; then
 
