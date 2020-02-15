@@ -5,7 +5,7 @@
 #
 # Kim, Min-Sik, Sneha M. Pinto, Derese Getnet, Raja Sekhar Nirujogi, Srikanth S. Manda, Raghothama Chaerkady, Anil K. Madugundu et al. "A draft map of the human proteome." Nature 509, no. 7502 (2014): 575-581.
 #
-# How to use; ./identify_experiments.sh <experiments folders folder> <identifications destination folder> <crux executable path> <peptides identification database file>
+# How to use; ./identify_experiments.sh <experiments folders folder> <identifications destination folder> <crux executable path> <peptides identification database file> <crux parameters file>
 #
 
 GREEN='\033[0;32m\033[1m'
@@ -16,6 +16,7 @@ NC='\033[0m'
 IDENTIFICATIONS_PATH=$2
 CRUX_PATH=$3
 DB_PATH=$4
+CRUX_PARAMS_FILE=$5
 
 EXPERIMENTS_FOLDERS=($(ls -d $1/*))
 
@@ -34,23 +35,23 @@ for folder in "${EXPERIMENTS_FOLDERS[@]}"; do
 	echo "Start processing experiment folder \"$folder\"" &>> $LOGFILE
 	echo "" &>> $LOGFILE
 
-	echo "{ time $CRUX_PATH/crux tide-search ${folder}/* ${DB_PATH} --output-dir ${IDENTIFICATION_FOLDER} --overwrite T ; } &>> $LOGFILE"
+	echo "{ time $CRUX_PATH/crux tide-search ${folder}/* ${DB_PATH} --parameter-file $CRUX_PARAMS_FILE --output-dir ${IDENTIFICATION_FOLDER} --overwrite T ; } &>> $LOGFILE"
 	echo
 
-	echo "time $CRUX_PATH/crux tide-search ${folder}/* ${DB_PATH} --output-dir ${IDENTIFICATION_FOLDER} --overwrite T " &>> $LOGFILE
+	echo "time $CRUX_PATH/crux tide-search ${folder}/* ${DB_PATH} --parameter-file $CRUX_PARAMS_FILE --output-dir ${IDENTIFICATION_FOLDER} --overwrite T " &>> $LOGFILE
 	echo "" &>> $LOGFILE
 
-	{ time $CRUX_PATH/crux tide-search ${folder}/* ${DB_PATH} --output-dir ${IDENTIFICATION_FOLDER} --overwrite T ; } &>> $LOGFILE
+	{ time $CRUX_PATH/crux tide-search ${folder}/* ${DB_PATH} --parameter-file $CRUX_PARAMS_FILE --output-dir ${IDENTIFICATION_FOLDER} --overwrite T ; } &>> $LOGFILE
 
 	if [ $? -eq 0 ]; then
 
-		echo "{ time $CRUX_PATH/crux percolator $IDENTIFICATION_FOLDER/tide-search.target.txt --output-dir $IDENTIFICATION_FOLDER --overwrite T ; } &>> $LOGFILE"
+		echo "{ time $CRUX_PATH/crux percolator $IDENTIFICATION_FOLDER/tide-search.target.txt --parameter-file $CRUX_PARAMS_FILE --output-dir $IDENTIFICATION_FOLDER --overwrite T ; } &>> $LOGFILE"
 		echo
 
-		echo "time $CRUX_PATH/crux percolator $IDENTIFICATION_FOLDER/tide-search.target.txt --output-dir $IDENTIFICATION_FOLDER --overwrite T" &>> $LOGFILE
+		echo "time $CRUX_PATH/crux percolator $IDENTIFICATION_FOLDER/tide-search.target.txt --parameter-file $CRUX_PARAMS_FILE --output-dir $IDENTIFICATION_FOLDER --overwrite T" &>> $LOGFILE
 		echo "" &>> $LOGFILE
 
-		{ time $CRUX_PATH/crux percolator $IDENTIFICATION_FOLDER/tide-search.target.txt --output-dir $IDENTIFICATION_FOLDER --overwrite T ; } &>> $LOGFILE
+		{ time $CRUX_PATH/crux percolator $IDENTIFICATION_FOLDER/tide-search.target.txt --parameter-file $CRUX_PARAMS_FILE --output-dir $IDENTIFICATION_FOLDER --overwrite T ; } &>> $LOGFILE
 
 		if [ $? -eq 0 ]; then
 
