@@ -75,7 +75,7 @@ def identify_clusters_spectra(which_clusters, identifications):
         else:
             clusters[row['cluster']] = [new]
             
-    print("Not identified scans count = {}".format(how_many_not_identified))
+    # print("Not identified scans count = {}".format(how_many_not_identified))
             
     return clusters
 
