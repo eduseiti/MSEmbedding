@@ -28,7 +28,12 @@ CLUSTERS_IDENTIFICATIONS_FILE_EXTENSION = "_identifications.tsv"
 clusters = pd.read_csv(os.path.join(CLUSTERS_FOLDER, BASENAME + CLUSTERS_FILE_EXTENSION), 
                        names=["file", "scan", "cluster"], sep="\t")
 
-# --> First scan is index 0 in clusters file
+#
+# Observations on the clusters file
+#
+# - First scan is index 0 in clusters file
+# - However, first cluster is index 1
+#
 
 
 total_spectra = clusters.shape[0]
@@ -36,7 +41,13 @@ total_clusters = clusters['cluster'].drop_duplicates().shape[0]
 
 all_consensus_identifications = pd.read_csv(os.path.join(IDENTIFICATION_FOLDER, IDENTIFICATIONS_FILE), sep="\t")
 
-# --> First scan is index 1 in identifications file
+#
+# Observations on the identifications file:
+#
+# - First scan is index 1 in identifications file
+# - In this file, each scan corresponds to a cluster, since that is the consensus spectra result ― 1 spectrum per cluster; consecutive clusters are consecutive scans 
+#   in the consensus spectra files.
+#
 
 
 high_quality_consensus_identifications = all_consensus_identifications[all_consensus_identifications['percolator q-value'] < 0.01].sort_values('scan')

@@ -26,7 +26,27 @@ CLUSTERED_FILES_LIST = sys.argv[6]
 
 
 all_ids = pd.read_csv(ALL_IDENTIFICATIONS, sep="\t")
+
+#
+# Observations on identifications file:
+#
+# - File indexes start in 0
+# - Scan indexes start in 1
+#
+
+
+
 clusters = pd.read_csv(CLUSTER, names=["file", "scan", "cluster"], sep="\t")
+
+#
+# Observations on clusters file:
+#
+# - Clusters index starts in 1
+# - Scan index starts in 0
+#
+
+
+
 consensus_ids = pd.read_csv(CLUSTER_CONSENSUS_IDENTIFICATIONS, sep="\t")
 
 spectra_files = {}
@@ -55,7 +75,7 @@ def identify_clusters_spectra(which_clusters, identifications):
     for index, row in which_clusters.iterrows():
         
         scanIdFound = identifications[(identifications['file_idx'] == spectra_files[row['file']]) & 
-                                      (identifications['scan'] == row['scan'])]
+                                      (identifications['scan'] - 1 == row['scan'])]
 
         if len(scanIdFound['sequence'].values) > 0:
             new = {"sequence":scanIdFound['sequence'].values[0], 
