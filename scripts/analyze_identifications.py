@@ -2,6 +2,8 @@
 # coding: utf-8
 
 #
+# Analyzes a consensus spectra identification to create a list of high quality (q < 0.01) identified clusters.
+#
 # analyze_identifications.py <identifications folder> <clusters folder> <cluster basename>
 #
 

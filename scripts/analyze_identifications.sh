@@ -1,6 +1,8 @@
 #!/bin/bash
 
 #
+# This script analyzes all the cluster consensus spectra identification, filtering only the high quality (q < 0.01) identified clusters.
+#
 # This script analyzes the crux proteome identification files, which should have been obtained after applying the "identify_consensus.sh" script.
 #
 # It calls the "analyze_identifications.py" script for each consensus spectra identifications result file.
