@@ -62,6 +62,31 @@ with open(CLUSTERED_FILES_LIST, "r") as inputFile:
         else:
             break
 
+
+#
+# Create a file index column in clusters dataframe
+#
+
+file_index = np.zeros(clusters.shape[0])
+
+def fileindex(row):
+    file_index[row.name] = spectra_files[row['file']]  
+
+clusters.apply(fileindex, axis=1)
+
+clusters['file_idx'] = file_index.astype(int)
+
+
+#
+# Filter only the high quality identifications, and fix the scan indexing to match
+# the cluster results
+#
+
+all_ids = all_ids[all_ids['percolator q-value'] < 0.01]
+all_ids['scan'] = all_ids['scan'] - 1
+
+
+
 #
 # For each cluster, analyzes its spectra identification
 #
@@ -74,18 +99,18 @@ def identify_clusters_spectra(which_clusters, identifications):
     
     for index, row in which_clusters.iterrows():
         
-        scanIdFound = identifications[(identifications['file_idx'] == spectra_files[row['file']]) & 
-                                      (identifications['scan'] - 1 == row['scan'])]
+        scanIdFound = identifications[(identifications['file_idx'] == row['file_idx']) & 
+                                      (identifications['scan'] == row['scan'])]
 
         if len(scanIdFound['sequence'].values) > 0:
             new = {"sequence":scanIdFound['sequence'].values[0], 
                    "q-value":scanIdFound['percolator q-value'].values[0], 
-                   "file":spectra_files[row['file']],
+                   "file":row['file_idx'],
                    "scan":row['scan']}
         else:
             new = {"sequence":'not identified', 
                    "q-value":'no q-value', 
-                   "file":spectra_files[row['file']],
+                   "file":row['file_idx'],
                    "scan":row['scan']}
             
             how_many_not_identified += 1
