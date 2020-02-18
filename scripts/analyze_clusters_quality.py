@@ -5,6 +5,7 @@ import pandas as pd
 import plotly
 import os
 import sys
+import numpy as np
 
 CLUSTER = sys.argv[1]
 # "/media/eduseiti/bigdata02/unicamp/doutorado/clustering/linfeng/sample/clusters_sample_0.1_embeddings_q0.001/sample_embeddings_q0.001.clusters_p95.897800.tsv"
