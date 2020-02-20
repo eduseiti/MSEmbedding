@@ -7,7 +7,7 @@
 #
 # It calls the "analyze_identifications.py" script for each consensus spectra identifications result file.
 #
-# How to use; ./analyze_identifications.sh <identifications folders name root> <clusters folder>
+# How to use; ./analyze_identifications.sh <identifications folders name root> <clusters folder> <output folder>
 #
 
 GREEN='\033[0;32m\033[1m'
@@ -19,6 +19,8 @@ EXECUTION_PATH=$(echo $0 | sed -r "s/(.+\/)?(.+)$/\1/")
 
 CLUSTERS_PATH=$2
 CLUSTER_FOLDER_NAME=$(echo $CLUSTERS_PATH | sed -r "s/(.+\/)?([^\/]+$)/\2/")
+
+OUTPUT_FOLDER=$3
 
 IDENTIFICATION_FOLDERS=($(ls -d $1*))
 
@@ -37,9 +39,9 @@ for folder in "${IDENTIFICATION_FOLDERS[@]}"; do
 	echo -e ${BLUE}Start processing identification folder \"$folder\"...${NC}
 	echo
 
-	echo "./analyze_identifications.py $folder $CLUSTERS_PATH $BASENAME $>> $OUTPUT_FILE"
+	echo "./analyze_identifications.py $folder $CLUSTERS_PATH $BASENAME $OUTPUT_FOLDER $>> $OUTPUT_FILE"
 	
-	${EXECUTION_PATH}analyze_identifications.py $folder $CLUSTERS_PATH $BASENAME $>> $OUTPUT_FILE
+	${EXECUTION_PATH}analyze_identifications.py $folder $CLUSTERS_PATH $BASENAME $OUTPUT_FOLDER $>> $OUTPUT_FILE
 
 	folderTotalTime=$(echo "$(date +%s.%N) - $folderStartTime" | bc)
 

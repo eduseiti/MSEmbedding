@@ -17,7 +17,7 @@ CLUSTER_CONSENSUS_IDENTIFICATIONS = sys.argv[3]
 # "/media/eduseiti/bigdata02/unicamp/doutorado/clustering/linfeng/sample/clusters_sample_0.1_embeddings_q0.001/sample_embeddings_q0.001.clusters_p95.897800_identifications.tsv"
 
 ANALYSIS_OUTPUT_FILE = sys.argv[4]
-# "/media/eduseiti/bigdata02/unicamp/doutorado/clustering/linfeng/sample/clusters_sample_0.1_embeddings_q0.001/sample_embeddings_q0.001.clusters_p95.897800_identifications_analysis.tsv"
+# "/media/eduseiti/bigdata02/unicamp/doutorado/clustering/linfeng/sample/clusters_sample_0.1_embeddings_q0.001/sample_embeddings_q0.001.clusters_p95.897800_identifications_analysis"
 
 ALL_IDENTIFICATIONS = sys.argv[5]
 # "/media/eduseiti/bigdata02/unicamp/doutorado/clustering/linfeng/sample/identifications_sample_0.1_nterm/sample_experiment_identifications/percolator.target.psms.txt"
@@ -25,6 +25,7 @@ ALL_IDENTIFICATIONS = sys.argv[5]
 CLUSTERED_FILES_LIST = sys.argv[6]
 # "/media/eduseiti/bigdata02/unicamp/doutorado/clustering/linfeng/sample/sample_0.1_files.txt"
 
+RESULT_FILE_EXTENSION = ".tsv"
 
 all_ids = pd.read_csv(ALL_IDENTIFICATIONS, sep="\t")
 
@@ -87,44 +88,83 @@ all_ids = all_ids[all_ids['percolator q-value'] < 0.01]
 all_ids['scan'] = all_ids['scan'] - 1
 
 
+#
+# Sort both dataframes to speedup their processing
+#
+
+clusters = clusters.sort_values(['file_idx', 'scan'])
+all_ids = all_ids.sort_values(['file_idx', 'scan'])
+
+
 
 #
 # For each cluster, analyzes its spectra identification
 #
 
-def identify_clusters_spectra(which_clusters, identifications):
-    
-    clusters = {}
-    
+def identify_clusters_spectra_fast(which_clusters, identifications):
+
+    clusters_spectra = {}
+
     how_many_not_identified = 0
     
-    for index, row in which_clusters.iterrows():
-        
-        scanIdFound = identifications[(identifications['file_idx'] == row['file_idx']) & 
-                                      (identifications['scan'] == row['scan'])]
+    ids_index = 0
+    
+    max_ids_index = identifications.shape[0]
 
-        if len(scanIdFound['sequence'].values) > 0:
-            new = {"sequence":scanIdFound['sequence'].values[0], 
-                   "q-value":scanIdFound['percolator q-value'].values[0], 
-                   "file":row['file_idx'],
-                   "scan":row['scan']}
-        else:
+    #
+    # Transform the dataframes into numpy arrays
+    #
+
+    clusters_array = which_clusters.to_numpy()
+    identifications_array = identifications.to_numpy()
+    
+    #
+    # Get required columns indexes
+    #
+
+    CLUSTERS_FILE_IDX = which_clusters.columns.get_loc("file_idx")
+    CLUSTERS_SCAN = which_clusters.columns.get_loc("scan")
+    CLUSTERS_CLUSTER = which_clusters.columns.get_loc("cluster")
+
+    IDS_FILE_IDX = identifications.columns.get_loc("file_idx")
+    IDX_SCAN = identifications.columns.get_loc("scan")
+    IDX_QVALUE = identifications.columns.get_loc("percolator q-value")
+    IDX_SEQUENCE = identifications.columns.get_loc("sequence")
+
+
+    for index in range(len(clusters_array)):
+        
+        new = {}
+        
+        while (ids_index < max_ids_index) and (identifications_array[ids_index][IDS_FILE_IDX] < clusters_array[index][CLUSTERS_FILE_IDX]):
+            ids_index += 1
+            
+        if (ids_index < max_ids_index) and identifications_array[ids_index][IDS_FILE_IDX] == clusters_array[index][CLUSTERS_FILE_IDX]:
+            while (ids_index < max_ids_index) and (identifications_array[ids_index][IDX_SCAN] < clusters_array[index][CLUSTERS_SCAN]):
+                ids_index += 1
+                
+            if (ids_index < max_ids_index) and identifications_array[ids_index][IDX_SCAN] == clusters_array[index][CLUSTERS_SCAN]:
+                new = {"sequence":identifications_array[ids_index][IDX_SEQUENCE], 
+                       "q-value":identifications_array[ids_index][IDX_QVALUE], 
+                       "file":identifications_array[ids_index][IDS_FILE_IDX],
+                       "scan":identifications_array[ids_index][IDX_SCAN]}
+
+                ids_index += 1
+            
+        if len(new) == 0:
             new = {"sequence":'not identified', 
-                   "q-value":'no q-value', 
-                   "file":row['file_idx'],
-                   "scan":row['scan']}
+                   "q-value":1.0, 
+                   "file":clusters_array[index][CLUSTERS_FILE_IDX],
+                   "scan":clusters_array[index][CLUSTERS_SCAN]}
             
             how_many_not_identified += 1
-    
-        if row['cluster'] in clusters:
-            clusters[row['cluster']].append(new)
+            
+        if clusters_array[index][CLUSTERS_CLUSTER] in clusters_spectra:
+            clusters_spectra[clusters_array[index][CLUSTERS_CLUSTER]].append(new)
         else:
-            clusters[row['cluster']] = [new]
+            clusters_spectra[clusters_array[index][CLUSTERS_CLUSTER]] = [new]
             
-    # print("Not identified scans count = {}".format(how_many_not_identified))
-            
-    return clusters
-
+    return clusters_spectra
 
 
 #
@@ -154,7 +194,7 @@ def check_clusters(clusters, consensus_id):
             else:
                 current_cluster_sequences[spectrum['sequence']] = 1
                 
-            if (longest_sequence_len < current_cluster_sequences[spectrum['sequence']]) and                (spectrum['sequence'] != "not identified"):
+            if (longest_sequence_len < current_cluster_sequences[spectrum['sequence']]) and (spectrum['sequence'] != "not identified"):
                     
                 longest_sequence_len = current_cluster_sequences[spectrum['sequence']]
                 longest_sequence = spectrum['sequence']
@@ -164,6 +204,7 @@ def check_clusters(clusters, consensus_id):
         
         purity_consensus = 0.0
         purity_majority = 0.0
+        consensus_sequence_len = 0
         
         if current_consensus.shape[0] > 0:
             consensus_sequence = current_consensus['sequence'].values[0]
@@ -171,7 +212,8 @@ def check_clusters(clusters, consensus_id):
             # Calculate the cluster purity based on the consensus identification
             
             if consensus_sequence in current_cluster_sequences.keys():
-                purity_consensus = current_cluster_sequences[consensus_sequence]/len(cluster_data)
+                consensus_sequence_len = current_cluster_sequences[consensus_sequence]
+                purity_consensus = consensus_sequence_len/len(cluster_data)
                 
         if longest_sequence != "":
             purity_majority = current_cluster_sequences[longest_sequence]/len(cluster_data)
@@ -182,19 +224,66 @@ def check_clusters(clusters, consensus_id):
                                   "longest_sequence":longest_sequence,
                                   "longest_sequence_len":longest_sequence_len,
                                   "consensus_sequence":consensus_sequence,
+                                  "consensus_sequence_len":consensus_sequence_len,
                                   "purity_consensus":purity_consensus, 
                                   "purity_majority":purity_majority})
         
     return clusters_analysis
 
 
-cluster_ids = identify_clusters_spectra(clusters, all_ids)
+cluster_ids = identify_clusters_spectra_fast(clusters, all_ids)
 
 cluster_analysis_result = check_clusters(cluster_ids, consensus_ids)
 
 cluster_analysis_result_pd = pd.DataFrame(cluster_analysis_result)
 
-cluster_analysis_result_pd.to_csv(ANALYSIS_OUTPUT_FILE, index=False, sep='\t')
+
+#
+# Compile the results per cluster size bins, using original MaRaCluster work bins
+#
+
+grouped_clusters_by_size = cluster_analysis_result_pd.groupby(pd.cut(cluster_analysis_result_pd['size'],
+                                                                   pd.IntervalIndex.from_tuples([(0, 1), 
+                                                                                                 (2, 3), 
+                                                                                                 (4, 7), 
+                                                                                                 (8, 15),
+                                                                                                 (16, 31),
+                                                                                                 (32, 63),
+                                                                                                 (64, 127),
+                                                                                                 (128, 255),
+                                                                                                 (256, 511),
+                                                                                                 (512, sys.maxsize)],
+                                                                                                closed="both")))
+
+
+size_groups_result = []
+total_clusters = 0
+
+for size, size_group in grouped_clusters_by_size:
+    all_clusters_mean = size_group['purity_consensus'].mean()
+    
+    identified_clusters = size_group[size_group['consensus_sequence'] != 'not identified']
+    
+    identified_clusters_mean = identified_clusters['purity_consensus'].mean()
+    size_groups_result.append({"size":size, 
+                               "clusters":size_group.shape[0], 
+                               "all clusters mean":all_clusters_mean,
+                               "identified clusters":identified_clusters.shape[0],
+                               "identified clusters mean":identified_clusters_mean})
+    
+    total_clusters += size_group.shape[0]
+
+
+size_groups_result_pd = pd.DataFrame(size_groups_result)
+
+
+
+#
+# Save both dataframes
+#
+
+size_groups_result_pd.to_csv(ANALYSIS_OUTPUT_FILE + "_clusters_size" + RESULT_FILE_EXTENSION, index=False, sep='\t')
+cluster_analysis_result_pd.to_csv(ANALYSIS_OUTPUT_FILE + RESULT_FILE_EXTENSION, index=False, sep='\t')
 
 
 

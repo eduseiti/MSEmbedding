@@ -4,7 +4,7 @@
 #
 # Analyzes a consensus spectra identification to create a list of high quality (q < 0.01) identified clusters.
 #
-# analyze_identifications.py <identifications folder> <clusters folder> <cluster basename>
+# analyze_identifications.py <identifications folder> <clusters folder> <cluster basename> <output folder>
 #
 
 import pandas as pd
@@ -19,6 +19,9 @@ CLUSTERS_FOLDER = sys.argv[2]
 
 BASENAME = sys.argv[3]
 # "sample_embeddings.clusters_p100.000000"
+
+OUTPUT_FOLDER = sys.argv[4]
+
 
 CLUSTERS_FILE_EXTENSION = ".tsv"
 IDENTIFICATIONS_FILE = "percolator.target.peptides.txt"
@@ -93,7 +96,7 @@ for i in range(clusters_size_df.shape[0] - cluster_index):
 
 
 clusters_size_df['sequence'] = cluster_identifications
-clusters_size_df[clusters_size_df['sequence'] != 'unrecognized'].to_csv(os.path.join(CLUSTERS_FOLDER, BASENAME + CLUSTERS_IDENTIFICATIONS_FILE_EXTENSION), index=False, sep='\t')
+clusters_size_df[clusters_size_df['sequence'] != 'unrecognized'].to_csv(os.path.join(OUTPUT_FOLDER, BASENAME + CLUSTERS_IDENTIFICATIONS_FILE_EXTENSION), index=False, sep='\t')
 
 print("{}, {}, {}, {}".format(BASENAME, total_clusters, total_spectra, num_identified_consensus))
 
