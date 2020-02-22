@@ -44,7 +44,7 @@ for cluster in "${CLUSTERS_FILES[@]}"; do
 	BASENAME=$(echo $cluster | sed -r "s/(.+\/)?([^\/]+)\.tsv$/\2/")
 
 	CONSENSUS_IDENTIFICATIONS_FILENAME=${CONSENSUS_PATH}/${BASENAME}_identifications.tsv
-	ANALYSIS_OUTPUT_FILE=${CONSENSUS_PATH}/${BASENAME}_identifications_analysis.tsv
+	ANALYSIS_OUTPUT_FILE=${CONSENSUS_PATH}/${BASENAME}_identifications_analysis
 
 	echo
 	echo -e ${BLUE}Start analyzing cluster \"$cluster\"...${NC}
