@@ -15,6 +15,8 @@ OUTPUT_FOLDER = sys.argv[3]
 # "/media/eduseiti/bigdata01/unicamp/doutorado/PXD000561/identifications"
 
 Q_SCORE = float(sys.argv[4])
+# "0.01" or "0.001"
+
 
 FILE = "percolator.target.psms.txt"
 
