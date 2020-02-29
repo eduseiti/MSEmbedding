@@ -31,7 +31,7 @@ Q_SCORE=$3
 
 IDENTIFICATION_LAST_PATH=$(echo $1 | sed -r "s/(.+\/)?(.+)$/\2/")
 
-OUTPUT_FILE=$(echo ${IDENTIFICATION_LAST_PATH}_preparation_$(date +%Y%m%d).csv)
+OUTPUT_FILE=$(echo ${IDENTIFICATION_LAST_PATH}_preparation_${Q_SCORE}_$(date +%Y%m%d).csv)
 
 echo "experiment, q<${Q_SCORE} identifications, total identifications" &>> $OUTPUT_FILE
 
