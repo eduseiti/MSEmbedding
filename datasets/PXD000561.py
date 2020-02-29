@@ -21,6 +21,10 @@ from .spectra import MGF
 
 class PXD000561:
 
+#
+# This initial set of files depends on the identifications provided by the original work, in the form of .msf files converted to .csv
+#
+
     ADULT_ADRENALGLAND_GEL_ELITE_FILES = {
         'b01' : 'Adult_Adrenalgland_Gel_Elite_49_f01.mgf',
         'b02' : 'Adult_Adrenalgland_Gel_Elite_49_f02.mgf',
@@ -364,6 +368,11 @@ class PXD000561:
     }
 
 
+
+    #
+    # This dictionary maps the identifications file into the corresponding experimental .mgf spectra
+    #
+
     MATCHES_TO_FILES_LIST = {
         "adult_adrenalgland_gel_elite.csv" : ADULT_ADRENALGLAND_GEL_ELITE_FILES,
         "adult_adrenalgland_gel_velos.csv" : ADULT_ADRENALGLAND_GEL_VELOS_FILES,
@@ -377,6 +386,9 @@ class PXD000561:
         "fetal_ovary_brp_elite.csv" : FETAL_OVARY_BRP_ELITE_FILES
     }
 
+#
+# This second set of files are used with identification files created using crux tool
+#
 
     ADULT_ADRENALGLAND_GEL_ELITE_CRUX_FILES = [
         'Adult_Adrenalgland_Gel_Elite_49_f01.mgf',
@@ -721,6 +733,437 @@ class PXD000561:
     ]
 
 
+
+
+
+
+
+
+
+    ADULT_BCELLS_BRP_ELITE_CRUX_FILES = [
+        "Adult_Bcells_bRP_Elite_75_f01.mgf",
+        "Adult_Bcells_bRP_Elite_75_f02.mgf",
+        "Adult_Bcells_bRP_Elite_75_f03.mgf",
+        "Adult_Bcells_bRP_Elite_75_f04.mgf",
+        "Adult_Bcells_bRP_Elite_75_f05.mgf",
+        "Adult_Bcells_bRP_Elite_75_f06.mgf",
+        "Adult_Bcells_bRP_Elite_75_f07.mgf",
+        "Adult_Bcells_bRP_Elite_75_f08.mgf",
+        "Adult_Bcells_bRP_Elite_75_f09.mgf",
+        "Adult_Bcells_bRP_Elite_75_f10.mgf",
+        "Adult_Bcells_bRP_Elite_75_f11.mgf",
+        "Adult_Bcells_bRP_Elite_75_f12.mgf",
+        "Adult_Bcells_bRP_Elite_75_f13.mgf",
+        "Adult_Bcells_bRP_Elite_75_f14.mgf",
+        "Adult_Bcells_bRP_Elite_75_f15.mgf",
+        "Adult_Bcells_bRP_Elite_75_f16.mgf",
+        "Adult_Bcells_bRP_Elite_75_f17.mgf",
+        "Adult_Bcells_bRP_Elite_75_f18.mgf",
+        "Adult_Bcells_bRP_Elite_75_f19.mgf",
+        "Adult_Bcells_bRP_Elite_75_f20.mgf",
+        "Adult_Bcells_bRP_Elite_75_f21.mgf",
+        "Adult_Bcells_bRP_Elite_75_f22.mgf",
+        "Adult_Bcells_bRP_Elite_75_f23.mgf",
+        "Adult_Bcells_bRP_Elite_75_f24.mgf"
+    ]
+
+    ADULT_BCELLS_BRP_VELOS_CRUX_FILES = [
+        "Adult_Bcells_bRP_Velos_42_f01.mgf",
+        "Adult_Bcells_bRP_Velos_42_f02.mgf",
+        "Adult_Bcells_bRP_Velos_42_f03.mgf",
+        "Adult_Bcells_bRP_Velos_42_f04.mgf",
+        "Adult_Bcells_bRP_Velos_42_f05.mgf",
+        "Adult_Bcells_bRP_Velos_42_f06.mgf",
+        "Adult_Bcells_bRP_Velos_42_f07.mgf",
+        "Adult_Bcells_bRP_Velos_42_f08.mgf",
+        "Adult_Bcells_bRP_Velos_42_f09.mgf",
+        "Adult_Bcells_bRP_Velos_42_f10.mgf",
+        "Adult_Bcells_bRP_Velos_42_f11.mgf",
+        "Adult_Bcells_bRP_Velos_42_f12.mgf",
+        "Adult_Bcells_bRP_Velos_42_f13.mgf",
+        "Adult_Bcells_bRP_Velos_42_f14.mgf",
+        "Adult_Bcells_bRP_Velos_42_f15.mgf",
+        "Adult_Bcells_bRP_Velos_42_f16.mgf",
+        "Adult_Bcells_bRP_Velos_42_f17.mgf",
+        "Adult_Bcells_bRP_Velos_42_f18.mgf",
+        "Adult_Bcells_bRP_Velos_42_f19.mgf",
+        "Adult_Bcells_bRP_Velos_42_f20.mgf",
+        "Adult_Bcells_bRP_Velos_42_f21.mgf",
+        "Adult_Bcells_bRP_Velos_42_f22.mgf",
+        "Adult_Bcells_bRP_Velos_42_f23.mgf",
+        "Adult_Bcells_bRP_Velos_42_f24.mgf",
+        "Adult_Bcells_bRP_Velos_42_f25.mgf",
+        "Adult_Bcells_bRP_Velos_42_f26.mgf",
+        "Adult_Bcells_bRP_Velos_42_f27.mgf",
+        "Adult_Bcells_bRP_Velos_42_f28.mgf",
+        "Adult_Bcells_bRP_Velos_42_f29.mgf",
+        "Adult_Bcells_bRP_Velos_42_f30.mgf",
+        "Adult_Bcells_bRP_Velos_42_f31.mgf",
+        "Adult_Bcells_bRP_Velos_42_f32.mgf"
+    ]
+
+    ADULT_BCELLS_GEL_ELITE_CRUX_FILES = [
+        "Adult_Bcells_Gel_Elite_76_f01.mgf",
+        "Adult_Bcells_Gel_Elite_76_f02.mgf",
+        "Adult_Bcells_Gel_Elite_76_f03.mgf",
+        "Adult_Bcells_Gel_Elite_76_f04.mgf",
+        "Adult_Bcells_Gel_Elite_76_f05.mgf",
+        "Adult_Bcells_Gel_Elite_76_f06.mgf",
+        "Adult_Bcells_Gel_Elite_76_f07.mgf",
+        "Adult_Bcells_Gel_Elite_76_f08.mgf",
+        "Adult_Bcells_Gel_Elite_76_f09.mgf",
+        "Adult_Bcells_Gel_Elite_76_f10.mgf",
+        "Adult_Bcells_Gel_Elite_76_f11.mgf",
+        "Adult_Bcells_Gel_Elite_76_f12.mgf",
+        "Adult_Bcells_Gel_Elite_76_f13.mgf",
+        "Adult_Bcells_Gel_Elite_76_f14.mgf",
+        "Adult_Bcells_Gel_Elite_76_f15.mgf",
+        "Adult_Bcells_Gel_Elite_76_f16.mgf",
+        "Adult_Bcells_Gel_Elite_76_f17.mgf",
+        "Adult_Bcells_Gel_Elite_76_f18.mgf",
+        "Adult_Bcells_Gel_Elite_76_f19.mgf",
+        "Adult_Bcells_Gel_Elite_76_f20.mgf",
+        "Adult_Bcells_Gel_Elite_76_f21.mgf",
+        "Adult_Bcells_Gel_Elite_76_f22.mgf",
+        "Adult_Bcells_Gel_Elite_76_f23.mgf",
+        "Adult_Bcells_Gel_Elite_76_f24.mgf"
+    ]
+
+    ADULT_CD4TCELLS_GEL_VELOS_CRUX_FILES = [
+        "Adult_CD4Tcells_Gel_Velos_30_f01.mgf",
+        "Adult_CD4Tcells_Gel_Velos_30_f02.mgf",
+        "Adult_CD4Tcells_Gel_Velos_30_f03.mgf",
+        "Adult_CD4Tcells_Gel_Velos_30_f04.mgf",
+        "Adult_CD4Tcells_Gel_Velos_30_f05.mgf",
+        "Adult_CD4Tcells_Gel_Velos_30_f06.mgf",
+        "Adult_CD4Tcells_Gel_Velos_30_f07.mgf",
+        "Adult_CD4Tcells_Gel_Velos_30_f08.mgf",
+        "Adult_CD4Tcells_Gel_Velos_30_f09.mgf",
+        "Adult_CD4Tcells_Gel_Velos_30_f10.mgf",
+        "Adult_CD4Tcells_Gel_Velos_30_f11.mgf",
+        "Adult_CD4Tcells_Gel_Velos_30_f12.mgf",
+        "Adult_CD4Tcells_Gel_Velos_30_f13.mgf",
+        "Adult_CD4Tcells_Gel_Velos_30_f14.mgf",
+        "Adult_CD4Tcells_Gel_Velos_30_f15.mgf",
+        "Adult_CD4Tcells_Gel_Velos_30_f16.mgf",
+        "Adult_CD4Tcells_Gel_Velos_30_f17.mgf",
+        "Adult_CD4Tcells_Gel_Velos_30_f18.mgf",
+        "Adult_CD4Tcells_Gel_Velos_30_f19.mgf",
+        "Adult_CD4Tcells_Gel_Velos_30_f20.mgf",
+        "Adult_CD4Tcells_Gel_Velos_30_f21.mgf",
+        "Adult_CD4Tcells_Gel_Velos_30_f22.mgf",
+        "Adult_CD4Tcells_Gel_Velos_30_f23.mgf",
+        "Adult_CD4Tcells_Gel_Velos_30_f24.mgf",
+        "Adult_CD4Tcells_Gel_Velos_30_f25.mgf",
+        "Adult_CD4Tcells_Gel_Velos_30_f26.mgf",
+        "Adult_CD4Tcells_Gel_Velos_30_f27.mgf",
+        "Adult_CD4Tcells_Gel_Velos_30_f28.mgf",
+        "Adult_CD4Tcells_Gel_Velos_30_f29.mgf",
+        "Adult_CD4Tcells_Gel_Velos_30_f30.mgf",
+        "Adult_CD4Tcells_Gel_Velos_30_f31.mgf",
+        "Adult_CD4Tcells_Gel_Velos_30_f32.mgf",
+        "Adult_CD4Tcells_Gel_Velos_30_f33.mgf",
+        "Adult_CD4Tcells_Gel_Velos_30_f34.mgf",
+        "Adult_CD4Tcells_Gel_Velos_30_f35.mgf",
+        "Adult_CD4Tcells_Gel_Velos_30_f36.mgf",
+        "Adult_CD4Tcells_Gel_Velos_30_f37.mgf",
+        "Adult_CD4Tcells_Gel_Velos_30_f38.mgf",
+        "Adult_CD4Tcells_Gel_Velos_30_f39.mgf",
+        "Adult_CD4Tcells_Gel_Velos_30_f40.mgf",
+        "Adult_CD4Tcells_Gel_Velos_30_f41.mgf",
+        "Adult_CD4Tcells_Gel_Velos_30_f42.mgf"
+    ]
+
+    ADULT_CD8TCELLS_GEL_ELITE_CRUX_FILES = [
+        "Adult_CD8Tcells_Gel_Elite_44_f01.mgf",
+        "Adult_CD8Tcells_Gel_Elite_44_f02.mgf",
+        "Adult_CD8Tcells_Gel_Elite_44_f03.mgf",
+        "Adult_CD8Tcells_Gel_Elite_44_f04.mgf",
+        "Adult_CD8Tcells_Gel_Elite_44_f05.mgf",
+        "Adult_CD8Tcells_Gel_Elite_44_f06.mgf",
+        "Adult_CD8Tcells_Gel_Elite_44_f07.mgf",
+        "Adult_CD8Tcells_Gel_Elite_44_f08.mgf",
+        "Adult_CD8Tcells_Gel_Elite_44_f09.mgf",
+        "Adult_CD8Tcells_Gel_Elite_44_f10.mgf",
+        "Adult_CD8Tcells_Gel_Elite_44_f11.mgf",
+        "Adult_CD8Tcells_Gel_Elite_44_f12.mgf",
+        "Adult_CD8Tcells_Gel_Elite_44_f13.mgf",
+        "Adult_CD8Tcells_Gel_Elite_44_f14.mgf",
+        "Adult_CD8Tcells_Gel_Elite_44_f15.mgf",
+        "Adult_CD8Tcells_Gel_Elite_44_f16.mgf",
+        "Adult_CD8Tcells_Gel_Elite_44_f17.mgf",
+        "Adult_CD8Tcells_Gel_Elite_44_f18.mgf",
+        "Adult_CD8Tcells_Gel_Elite_44_f19.mgf",
+        "Adult_CD8Tcells_Gel_Elite_44_f20.mgf",
+        "Adult_CD8Tcells_Gel_Elite_44_f21.mgf",
+        "Adult_CD8Tcells_Gel_Elite_44_f22.mgf",
+        "Adult_CD8Tcells_Gel_Elite_44_f23.mgf",
+        "Adult_CD8Tcells_Gel_Elite_44_f24.mgf"
+    ]
+
+    ADULT_COLON_GEL_ELITE_CRUX_FILES = [
+        "Adult_Colon_Gel_Elite_51_f01.mgf",
+        "Adult_Colon_Gel_Elite_51_f02.mgf",
+        "Adult_Colon_Gel_Elite_51_f03.mgf",
+        "Adult_Colon_Gel_Elite_51_f04.mgf",
+        "Adult_Colon_Gel_Elite_51_f05.mgf",
+        "Adult_Colon_Gel_Elite_51_f06.mgf",
+        "Adult_Colon_Gel_Elite_51_f07.mgf",
+        "Adult_Colon_Gel_Elite_51_f08.mgf",
+        "Adult_Colon_Gel_Elite_51_f09.mgf",
+        "Adult_Colon_Gel_Elite_51_f10.mgf",
+        "Adult_Colon_Gel_Elite_51_f11.mgf",
+        "Adult_Colon_Gel_Elite_51_f12.mgf",
+        "Adult_Colon_Gel_Elite_51_f13.mgf",
+        "Adult_Colon_Gel_Elite_51_f14.mgf",
+        "Adult_Colon_Gel_Elite_51_f15.mgf",
+        "Adult_Colon_Gel_Elite_51_f16.mgf",
+        "Adult_Colon_Gel_Elite_51_f17.mgf",
+        "Adult_Colon_Gel_Elite_51_f18.mgf",
+        "Adult_Colon_Gel_Elite_51_f19.mgf",
+        "Adult_Colon_Gel_Elite_51_f20.mgf",
+        "Adult_Colon_Gel_Elite_51_f21.mgf",
+        "Adult_Colon_Gel_Elite_51_f22.mgf",
+        "Adult_Colon_Gel_Elite_51_f23.mgf",
+        "Adult_Colon_Gel_Elite_51_f24.mgf"
+    ]
+
+    ADULT_ESOPHAGUS_GEL_VELOS_CRUX_FILES = [
+        "Adult_Esophagus_Gel_Velos_4_f01.mgf",
+        "Adult_Esophagus_Gel_Velos_4_f02.mgf",
+        "Adult_Esophagus_Gel_Velos_4_f03.mgf",
+        "Adult_Esophagus_Gel_Velos_4_f04.mgf",
+        "Adult_Esophagus_Gel_Velos_4_f05.mgf",
+        "Adult_Esophagus_Gel_Velos_4_f06.mgf",
+        "Adult_Esophagus_Gel_Velos_4_f07.mgf",
+        "Adult_Esophagus_Gel_Velos_4_f08.mgf",
+        "Adult_Esophagus_Gel_Velos_4_f09.mgf",
+        "Adult_Esophagus_Gel_Velos_4_f10.mgf",
+        "Adult_Esophagus_Gel_Velos_4_f11.mgf",
+        "Adult_Esophagus_Gel_Velos_4_f12.mgf",
+        "Adult_Esophagus_Gel_Velos_4_f13.mgf",
+        "Adult_Esophagus_Gel_Velos_4_f14.mgf",
+        "Adult_Esophagus_Gel_Velos_4_f15.mgf",
+        "Adult_Esophagus_Gel_Velos_4_f16.mgf",
+        "Adult_Esophagus_Gel_Velos_4_f17.mgf",
+        "Adult_Esophagus_Gel_Velos_4_f18.mgf",
+        "Adult_Esophagus_Gel_Velos_4_f19.mgf",
+        "Adult_Esophagus_Gel_Velos_4_f20.mgf",
+        "Adult_Esophagus_Gel_Velos_4_f21.mgf",
+        "Adult_Esophagus_Gel_Velos_4_f22.mgf",
+        "Adult_Esophagus_Gel_Velos_4_f23.mgf",
+        "Adult_Esophagus_Gel_Velos_4_f24.mgf"
+    ]
+
+    ADULT_NKCELLS_BRP_ELITE_CRUX_FILES = [
+        "Adult_NKcells_bRP_Elite_34_f01.mgf",
+        "Adult_NKcells_bRP_Elite_34_f02.mgf",
+        "Adult_NKcells_bRP_Elite_34_f03.mgf",
+        "Adult_NKcells_bRP_Elite_34_f04.mgf",
+        "Adult_NKcells_bRP_Elite_34_f05.mgf",
+        "Adult_NKcells_bRP_Elite_34_f06.mgf",
+        "Adult_NKcells_bRP_Elite_34_f07.mgf",
+        "Adult_NKcells_bRP_Elite_34_f08.mgf",
+        "Adult_NKcells_bRP_Elite_34_f09.mgf",
+        "Adult_NKcells_bRP_Elite_34_f10.mgf",
+        "Adult_NKcells_bRP_Elite_34_f11.mgf",
+        "Adult_NKcells_bRP_Elite_34_f12.mgf",
+        "Adult_NKcells_bRP_Elite_34_f13.mgf",
+        "Adult_NKcells_bRP_Elite_34_f14.mgf",
+        "Adult_NKcells_bRP_Elite_34_f15.mgf",
+        "Adult_NKcells_bRP_Elite_34_f16.mgf",
+        "Adult_NKcells_bRP_Elite_34_f17.mgf",
+        "Adult_NKcells_bRP_Elite_34_f18.mgf",
+        "Adult_NKcells_bRP_Elite_34_f19.mgf",
+        "Adult_NKcells_bRP_Elite_34_f20.mgf",
+        "Adult_NKcells_bRP_Elite_34_f21.mgf",
+        "Adult_NKcells_bRP_Elite_34_f22.mgf",
+        "Adult_NKcells_bRP_Elite_34_f23.mgf",
+        "Adult_NKcells_bRP_Elite_34_f24.mgf",
+        "Adult_NKcells_bRP_Elite_34_f25.mgf",
+        "Adult_NKcells_bRP_Elite_34_f26.mgf",
+        "Adult_NKcells_bRP_Elite_34_f27.mgf",
+        "Adult_NKcells_bRP_Elite_34_f28.mgf"
+    ]
+
+    ADULT_NKCELLS_BRP_VELOS_CRUX_FILES = [
+        "Adult_NKcells_bRP_Velos_46_f01.mgf",
+        "Adult_NKcells_bRP_Velos_46_f02.mgf",
+        "Adult_NKcells_bRP_Velos_46_f03.mgf",
+        "Adult_NKcells_bRP_Velos_46_f04.mgf",
+        "Adult_NKcells_bRP_Velos_46_f05.mgf",
+        "Adult_NKcells_bRP_Velos_46_f06.mgf",
+        "Adult_NKcells_bRP_Velos_46_f07.mgf",
+        "Adult_NKcells_bRP_Velos_46_f08.mgf",
+        "Adult_NKcells_bRP_Velos_46_f09.mgf",
+        "Adult_NKcells_bRP_Velos_46_f10.mgf",
+        "Adult_NKcells_bRP_Velos_46_f11.mgf",
+        "Adult_NKcells_bRP_Velos_46_f12.mgf",
+        "Adult_NKcells_bRP_Velos_46_f13.mgf",
+        "Adult_NKcells_bRP_Velos_46_f14.mgf",
+        "Adult_NKcells_bRP_Velos_46_f15.mgf",
+        "Adult_NKcells_bRP_Velos_46_f16.mgf",
+        "Adult_NKcells_bRP_Velos_46_f17.mgf",
+        "Adult_NKcells_bRP_Velos_46_f18.mgf",
+        "Adult_NKcells_bRP_Velos_46_f19.mgf",
+        "Adult_NKcells_bRP_Velos_46_f20.mgf",
+        "Adult_NKcells_bRP_Velos_46_f21.mgf",
+        "Adult_NKcells_bRP_Velos_46_f22.mgf",
+        "Adult_NKcells_bRP_Velos_46_f23.mgf",
+        "Adult_NKcells_bRP_Velos_46_f24.mgf"
+    ]
+
+    ADULT_PANCREAS_BRP_ELITE_CRUX_FILES = [
+        "Adult_Pancreas_bRP_Elite_59_f01.mgf",
+        "Adult_Pancreas_bRP_Elite_59_f02.mgf",
+        "Adult_Pancreas_bRP_Elite_59_f03.mgf",
+        "Adult_Pancreas_bRP_Elite_59_f04.mgf",
+        "Adult_Pancreas_bRP_Elite_59_f05.mgf",
+        "Adult_Pancreas_bRP_Elite_59_f06.mgf",
+        "Adult_Pancreas_bRP_Elite_59_f07.mgf",
+        "Adult_Pancreas_bRP_Elite_59_f08.mgf",
+        "Adult_Pancreas_bRP_Elite_59_f09.mgf",
+        "Adult_Pancreas_bRP_Elite_59_f10.mgf",
+        "Adult_Pancreas_bRP_Elite_59_f11.mgf",
+        "Adult_Pancreas_bRP_Elite_59_f12.mgf",
+        "Adult_Pancreas_bRP_Elite_59_f13.mgf",
+        "Adult_Pancreas_bRP_Elite_59_f14.mgf",
+        "Adult_Pancreas_bRP_Elite_59_f15.mgf",
+        "Adult_Pancreas_bRP_Elite_59_f16.mgf",
+        "Adult_Pancreas_bRP_Elite_59_f17.mgf",
+        "Adult_Pancreas_bRP_Elite_59_f18.mgf",
+        "Adult_Pancreas_bRP_Elite_59_f19.mgf",
+        "Adult_Pancreas_bRP_Elite_59_f20.mgf",
+        "Adult_Pancreas_bRP_Elite_59_f21.mgf",
+        "Adult_Pancreas_bRP_Elite_59_f22.mgf",
+        "Adult_Pancreas_bRP_Elite_59_f23.mgf",
+        "Adult_Pancreas_bRP_Elite_59_f24.mgf"
+    ]
+
+    FETAL_GUT_GEL_VELOS_CRUX_FILES = [
+        "Fetal_Gut_Gel_Velos_72_f01.mgf",
+        "Fetal_Gut_Gel_Velos_72_f02.mgf",
+        "Fetal_Gut_Gel_Velos_72_f03.mgf",
+        "Fetal_Gut_Gel_Velos_72_f04.mgf",
+        "Fetal_Gut_Gel_Velos_72_f05.mgf",
+        "Fetal_Gut_Gel_Velos_72_f06.mgf",
+        "Fetal_Gut_Gel_Velos_72_f07.mgf",
+        "Fetal_Gut_Gel_Velos_72_f08.mgf",
+        "Fetal_Gut_Gel_Velos_72_f09.mgf",
+        "Fetal_Gut_Gel_Velos_72_f10.mgf",
+        "Fetal_Gut_Gel_Velos_72_f11.mgf",
+        "Fetal_Gut_Gel_Velos_72_f12.mgf",
+        "Fetal_Gut_Gel_Velos_72_f13.mgf",
+        "Fetal_Gut_Gel_Velos_72_f14.mgf",
+        "Fetal_Gut_Gel_Velos_72_f15.mgf",
+        "Fetal_Gut_Gel_Velos_72_f16.mgf",
+        "Fetal_Gut_Gel_Velos_72_f17.mgf",
+        "Fetal_Gut_Gel_Velos_72_f18.mgf",
+        "Fetal_Gut_Gel_Velos_72_f19.mgf",
+        "Fetal_Gut_Gel_Velos_72_f20.mgf",
+        "Fetal_Gut_Gel_Velos_72_f21.mgf",
+        "Fetal_Gut_Gel_Velos_72_f22.mgf",
+        "Fetal_Gut_Gel_Velos_72_f23.mgf",
+        "Fetal_Gut_Gel_Velos_72_f24.mgf"
+    ]
+
+    FETAL_LIVER_BRP_ELITE_23_CRUX_FILES = [
+        "Fetal_Liver_bRP_Elite_23_f01.mgf",
+        "Fetal_Liver_bRP_Elite_23_f02.mgf",
+        "Fetal_Liver_bRP_Elite_23_f03.mgf",
+        "Fetal_Liver_bRP_Elite_23_f04.mgf",
+        "Fetal_Liver_bRP_Elite_23_f05.mgf",
+        "Fetal_Liver_bRP_Elite_23_f06.mgf",
+        "Fetal_Liver_bRP_Elite_23_f07.mgf",
+        "Fetal_Liver_bRP_Elite_23_f08.mgf",
+        "Fetal_Liver_bRP_Elite_23_f09.mgf",
+        "Fetal_Liver_bRP_Elite_23_f10.mgf",
+        "Fetal_Liver_bRP_Elite_23_f11.mgf",
+        "Fetal_Liver_bRP_Elite_23_f12.mgf",
+        "Fetal_Liver_bRP_Elite_23_f13.mgf",
+        "Fetal_Liver_bRP_Elite_23_f14.mgf",
+        "Fetal_Liver_bRP_Elite_23_f15.mgf",
+        "Fetal_Liver_bRP_Elite_23_f16.mgf",
+        "Fetal_Liver_bRP_Elite_23_f17.mgf",
+        "Fetal_Liver_bRP_Elite_23_f18.mgf",
+        "Fetal_Liver_bRP_Elite_23_f19.mgf",
+        "Fetal_Liver_bRP_Elite_23_f20.mgf",
+        "Fetal_Liver_bRP_Elite_23_f21.mgf",
+        "Fetal_Liver_bRP_Elite_23_f22.mgf",
+        "Fetal_Liver_bRP_Elite_23_f23.mgf",
+        "Fetal_Liver_bRP_Elite_23_f24.mgf"
+    ]
+
+    FETAL_LIVER_GEL_VELOS_CRUX_FILES = [
+        "Fetal_Liver_Gel_Velos_24_f01.mgf",
+        "Fetal_Liver_Gel_Velos_24_f02.mgf",
+        "Fetal_Liver_Gel_Velos_24_f03.mgf",
+        "Fetal_Liver_Gel_Velos_24_f04.mgf",
+        "Fetal_Liver_Gel_Velos_24_f05.mgf",
+        "Fetal_Liver_Gel_Velos_24_f06.mgf",
+        "Fetal_Liver_Gel_Velos_24_f07.mgf",
+        "Fetal_Liver_Gel_Velos_24_f08.mgf",
+        "Fetal_Liver_Gel_Velos_24_f09.mgf",
+        "Fetal_Liver_Gel_Velos_24_f10.mgf",
+        "Fetal_Liver_Gel_Velos_24_f11.mgf",
+        "Fetal_Liver_Gel_Velos_24_f12.mgf",
+        "Fetal_Liver_Gel_Velos_24_f13.mgf",
+        "Fetal_Liver_Gel_Velos_24_f14.mgf",
+        "Fetal_Liver_Gel_Velos_24_f15.mgf",
+        "Fetal_Liver_Gel_Velos_24_f16.mgf",
+        "Fetal_Liver_Gel_Velos_24_f17.mgf",
+        "Fetal_Liver_Gel_Velos_24_f18.mgf",
+        "Fetal_Liver_Gel_Velos_24_f19.mgf",
+        "Fetal_Liver_Gel_Velos_24_f20.mgf",
+        "Fetal_Liver_Gel_Velos_24_f21.mgf",
+        "Fetal_Liver_Gel_Velos_24_f22.mgf",
+        "Fetal_Liver_Gel_Velos_24_f23.mgf",
+        "Fetal_Liver_Gel_Velos_24_f24.mgf",
+        "Fetal_Liver_Gel_Velos_24_f25.mgf",
+        "Fetal_Liver_Gel_Velos_24_f26.mgf",
+        "Fetal_Liver_Gel_Velos_24_f27.mgf"
+    ]
+
+    FETAL_TESTIS_BRP_ELITE_CRUX_FILES = [
+        "Fetal_Testis_bRP_Elite_26_f01.mgf",
+        "Fetal_Testis_bRP_Elite_26_f02.mgf",
+        "Fetal_Testis_bRP_Elite_26_f03.mgf",
+        "Fetal_Testis_bRP_Elite_26_f04.mgf",
+        "Fetal_Testis_bRP_Elite_26_f05.mgf",
+        "Fetal_Testis_bRP_Elite_26_f06.mgf",
+        "Fetal_Testis_bRP_Elite_26_f07.mgf",
+        "Fetal_Testis_bRP_Elite_26_f08.mgf",
+        "Fetal_Testis_bRP_Elite_26_f09.mgf",
+        "Fetal_Testis_bRP_Elite_26_f10.mgf",
+        "Fetal_Testis_bRP_Elite_26_f11.mgf",
+        "Fetal_Testis_bRP_Elite_26_f12.mgf",
+        "Fetal_Testis_bRP_Elite_26_f13.mgf",
+        "Fetal_Testis_bRP_Elite_26_f14.mgf",
+        "Fetal_Testis_bRP_Elite_26_f15.mgf",
+        "Fetal_Testis_bRP_Elite_26_f16.mgf",
+        "Fetal_Testis_bRP_Elite_26_f17.mgf",
+        "Fetal_Testis_bRP_Elite_26_f18.mgf",
+        "Fetal_Testis_bRP_Elite_26_f19.mgf",
+        "Fetal_Testis_bRP_Elite_26_f20.mgf",
+        "Fetal_Testis_bRP_Elite_26_f21.mgf",
+        "Fetal_Testis_bRP_Elite_26_f22.mgf",
+        "Fetal_Testis_bRP_Elite_26_f23.mgf",
+        "Fetal_Testis_bRP_Elite_26_f24.mgf",
+        "Fetal_Testis_bRP_Elite_26_f25.mgf",
+        "Fetal_Testis_bRP_Elite_26_f26.mgf",
+        "Fetal_Testis_bRP_Elite_26_f27.mgf",
+        "Fetal_Testis_bRP_Elite_26_f28.mgf",
+        "Fetal_Testis_bRP_Elite_26_f29.mgf"
+    ]
+
+
+
+    #
+    # This dictionary maps the identifications file into the corresponding experimental .mgf spectra.
+    # 
+    # Multiple identifications files for the same experiment indicates different confidence levels.
+    #
+
     MATCHES_TO_CRUX_FILES_LIST = {
         "Adult_Adrenalgland_Gel_Elite_q_lt_0.01_identifications.tsv" : ADULT_ADRENALGLAND_GEL_ELITE_CRUX_FILES,
         "Adult_Adrenalgland_Gel_Velos_q_lt_0.01_identifications.tsv" : ADULT_ADRENALGLAND_GEL_VELOS_CRUX_FILES,
@@ -732,6 +1175,21 @@ class PXD000561:
         "Fetal_Ovary_bRP_Velos_q_lt_0.01_identifications.tsv" : FETAL_OVARY_BRP_VELOS_CRUX_FILES,
         "Fetal_Ovary_bRP_Elite_q_lt_0.01_identifications.tsv" : FETAL_OVARY_BRP_ELITE_CRUX_FILES,
 
+        "Adult_Bcells_bRP_Elite_q_lt_0.01_identifications.tsv" : ADULT_BCELLS_BRP_ELITE_CRUX_FILES,
+        "Adult_Bcells_bRP_Velos_q_lt_0.01_identifications.tsv" : ADULT_BCELLS_BRP_VELOS_CRUX_FILES,
+        "Adult_Bcells_Gel_Elite_q_lt_0.01_identifications.tsv" : ADULT_BCELLS_GEL_ELITE_CRUX_FILES,
+        "Adult_CD4Tcells_Gel_Velos_q_lt_0.01_identifications.tsv" : ADULT_CD4TCELLS_GEL_VELOS_CRUX_FILES,
+        "Adult_CD8Tcells_Gel_Elite_q_lt_0.01_identifications.tsv" : ADULT_CD8TCELLS_GEL_ELITE_CRUX_FILES,
+        "Adult_Colon_Gel_Elite_q_lt_0.01_identifications.tsv" : ADULT_COLON_GEL_ELITE_CRUX_FILES,
+        "Adult_Esophagus_Gel_Velos_q_lt_0.01_identifications.tsv" : ADULT_ESOPHAGUS_GEL_VELOS_CRUX_FILES,
+        "Adult_NKcells_bRP_Elite_q_lt_0.01_identifications.tsv" : ADULT_NKCELLS_BRP_ELITE_CRUX_FILES,
+        "Adult_NKcells_bRP_Velos_q_lt_0.01_identifications.tsv" : ADULT_NKCELLS_BRP_VELOS_CRUX_FILES,
+        "Adult_Pancreas_bRP_Elite_q_lt_0.01_identifications.tsv" : ADULT_PANCREAS_BRP_ELITE_CRUX_FILES,
+        "Fetal_Gut_Gel_Velos_q_lt_0.01_identifications.tsv" : FETAL_GUT_GEL_VELOS_CRUX_FILES,
+        "Fetal_Liver_bRP_Elite_23_q_lt_0.01_identifications.tsv" : FETAL_LIVER_BRP_ELITE_23_CRUX_FILES,
+        "Fetal_Liver_Gel_Velos_q_lt_0.01_identifications.tsv" : FETAL_LIVER_GEL_VELOS_CRUX_FILES,
+        "Fetal_Testis_bRP_Elite_q_lt_0.01_identifications.tsv" : FETAL_TESTIS_BRP_ELITE_CRUX_FILES,
+
         "Adult_Adrenalgland_Gel_Elite_q_lt_0.001_identifications.tsv" : ADULT_ADRENALGLAND_GEL_ELITE_CRUX_FILES,
         "Adult_Adrenalgland_Gel_Velos_q_lt_0.001_identifications.tsv" : ADULT_ADRENALGLAND_GEL_VELOS_CRUX_FILES,
         "Adult_Adrenalgland_bRP_Velos_q_lt_0.001_identifications.tsv" : ADULT_ADRENALGLAND_BRP_VELOS_CRUX_FILES,
@@ -740,7 +1198,22 @@ class PXD000561:
         "Adult_Urinarybladder_Gel_Elite_q_lt_0.001_identifications.tsv" : ADULT_URINARYBLADDER_GEL_ELITE_CRUX_FILES,
         "Fetal_Brain_Gel_Velos_q_lt_0.001_identifications.tsv" : FETAL_BRAIN_GEL_VELOS_CRUX_FILES,
         "Fetal_Ovary_bRP_Velos_q_lt_0.001_identifications.tsv" : FETAL_OVARY_BRP_VELOS_CRUX_FILES,
-        "Fetal_Ovary_bRP_Elite_q_lt_0.001_identifications.tsv" : FETAL_OVARY_BRP_ELITE_CRUX_FILES
+        "Fetal_Ovary_bRP_Elite_q_lt_0.001_identifications.tsv" : FETAL_OVARY_BRP_ELITE_CRUX_FILES,
+
+        "Adult_Bcells_bRP_Elite_q_lt_0.001_identifications.tsv" : ADULT_BCELLS_BRP_ELITE_CRUX_FILES,
+        "Adult_Bcells_bRP_Velos_q_lt_0.001_identifications.tsv" : ADULT_BCELLS_BRP_VELOS_CRUX_FILES,
+        "Adult_Bcells_Gel_Elite_q_lt_0.001_identifications.tsv" : ADULT_BCELLS_GEL_ELITE_CRUX_FILES,
+        "Adult_CD4Tcells_Gel_Velos_q_lt_0.001_identifications.tsv" : ADULT_CD4TCELLS_GEL_VELOS_CRUX_FILES,
+        "Adult_CD8Tcells_Gel_Elite_q_lt_0.001_identifications.tsv" : ADULT_CD8TCELLS_GEL_ELITE_CRUX_FILES,
+        "Adult_Colon_Gel_Elite_q_lt_0.001_identifications.tsv" : ADULT_COLON_GEL_ELITE_CRUX_FILES,
+        "Adult_Esophagus_Gel_Velos_q_lt_0.001_identifications.tsv" : ADULT_ESOPHAGUS_GEL_VELOS_CRUX_FILES,
+        "Adult_NKcells_bRP_Elite_q_lt_0.001_identifications.tsv" : ADULT_NKCELLS_BRP_ELITE_CRUX_FILES,
+        "Adult_NKcells_bRP_Velos_q_lt_0.001_identifications.tsv" : ADULT_NKCELLS_BRP_VELOS_CRUX_FILES,
+        "Adult_Pancreas_bRP_Elite_q_lt_0.001_identifications.tsv" : ADULT_PANCREAS_BRP_ELITE_CRUX_FILES,
+        "Fetal_Gut_Gel_Velos_q_lt_0.001_identifications.tsv" : FETAL_GUT_GEL_VELOS_CRUX_FILES,
+        "Fetal_Liver_bRP_Elite_23_q_lt_0.001_identifications.tsv" : FETAL_LIVER_BRP_ELITE_23_CRUX_FILES,
+        "Fetal_Liver_Gel_Velos_q_lt_0.001_identifications.tsv" : FETAL_LIVER_GEL_VELOS_CRUX_FILES,
+        "Fetal_Testis_bRP_Elite_q_lt_0.001_identifications.tsv" : FETAL_TESTIS_BRP_ELITE_CRUX_FILES
     }
 
 
