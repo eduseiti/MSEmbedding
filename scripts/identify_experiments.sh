@@ -26,7 +26,7 @@ for folder in "${EXPERIMENTS_FOLDERS[@]}"; do
 
 	BASENAME=$(echo $folder | sed -r "s/(.+\/)?(.+)$/\2/")
 	LOGFILE=$(echo log_identify_experiment_${BASENAME}_$(date +%Y%m%d).txt)
-	IDENTIFICATION_FOLDER=$(echo ./${IDENTIFICATIONS_PATH}/${BASENAME}_identifications)
+	IDENTIFICATION_FOLDER=$(echo ${IDENTIFICATIONS_PATH}/${BASENAME}_identifications)
 
 	echo
 	echo -e ${BLUE}Start processing experiment folder \"$folder\"...${NC}
