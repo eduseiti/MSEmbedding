@@ -386,6 +386,9 @@ class PXD000561:
         "fetal_ovary_brp_elite.csv" : FETAL_OVARY_BRP_ELITE_FILES
     }
 
+
+
+
 #
 # This second set of files are used with identification files created using crux tool
 #
@@ -417,7 +420,6 @@ class PXD000561:
         'Adult_Adrenalgland_Gel_Elite_49_f24.mgf'
     ]
 
-
     ADULT_ADRENALGLAND_GEL_VELOS_CRUX_FILES = [
         'Adult_Adrenalgland_Gel_Velos_2_f01.mgf',
         'Adult_Adrenalgland_Gel_Velos_2_f02.mgf',
@@ -446,7 +448,6 @@ class PXD000561:
         'Adult_Adrenalgland_Gel_Velos_2_f25.mgf',
         'Adult_Adrenalgland_Gel_Velos_2_f26.mgf'
     ]
-
 
     ADULT_ADRENALGLAND_BRP_VELOS_CRUX_FILES = [
         'Adult_Adrenalgland_bRP_Velos_1_f01.mgf',
@@ -487,7 +488,6 @@ class PXD000561:
         'Adult_Adrenalgland_bRP_Velos_1_f36.mgf'
     ]
 
-
     ADULT_HEART_BRP_ELITE_CRUX_FILES = [
         'Adult_Heart_bRP_Elite_81_f01.mgf',
         'Adult_Heart_bRP_Elite_81_f02.mgf',
@@ -514,7 +514,6 @@ class PXD000561:
         'Adult_Heart_bRP_Elite_81_f23.mgf',
         'Adult_Heart_bRP_Elite_81_f24.mgf'
     ]
-
 
     ADULT_HEART_BRP_VELOS_CRUX_FILES = [
         'Adult_Heart_bRP_Velos_6_f01.mgf',
@@ -545,7 +544,6 @@ class PXD000561:
         'Adult_Heart_bRP_Velos_6_f26.mgf'
     ]
 
-
     ADULT_PLATELETS_GEL_ELITE_CRUX_FILES = [
         'Adult_Platelets_Gel_Elite_48_f01.mgf',
         'Adult_Platelets_Gel_Elite_48_f02.mgf',
@@ -572,7 +570,6 @@ class PXD000561:
         'Adult_Platelets_Gel_Elite_48_f23.mgf',
         'Adult_Platelets_Gel_Elite_48_f24.mgf'
     ]
-
 
     ADULT_URINARYBLADDER_GEL_ELITE_CRUX_FILES = [
         'Adult_Urinarybladder_Gel_Elite_70_f01.mgf',
@@ -601,7 +598,6 @@ class PXD000561:
         'Adult_Urinarybladder_Gel_Elite_70_f24.mgf',
         'Adult_Urinarybladder_Gel_Elite_70_f25.mgf'
     ]
-
 
     FETAL_BRAIN_GEL_VELOS_CRUX_FILES = [
 		"Fetal_Brain_Gel_Velos_16_f01.mgf",
@@ -634,7 +630,6 @@ class PXD000561:
 		"Fetal_Brain_Gel_Velos_16_f28.mgf",
 		"Fetal_Brain_Gel_Velos_16_f29.mgf"
     ]
-
 
     FETAL_LIVER_BRP_ELITE_CRUX_FILES = [
         'Fetal_Liver_bRP_Elite_22_f01.mgf',
@@ -674,7 +669,6 @@ class PXD000561:
         'Fetal_Liver_bRP_Elite_22_f35.mgf'
     ]
 
-
     FETAL_OVARY_BRP_VELOS_CRUX_FILES = [
         'Fetal_Ovary_bRP_Velos_41_f01.mgf',
         'Fetal_Ovary_bRP_Velos_41_f02.mgf',
@@ -704,7 +698,6 @@ class PXD000561:
         'Fetal_Ovary_bRP_Velos_41_f26.mgf'
     ]
 
-
     FETAL_OVARY_BRP_ELITE_CRUX_FILES = [
         'Fetal_Ovary_bRP_Elite_25_f01.mgf',
         'Fetal_Ovary_bRP_Elite_25_f02.mgf',
@@ -731,12 +724,6 @@ class PXD000561:
         'Fetal_Ovary_bRP_Elite_25_f23.mgf',
         'Fetal_Ovary_bRP_Elite_25_f24.mgf'
     ]
-
-
-
-
-
-
 
 
 
