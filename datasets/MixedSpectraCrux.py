@@ -79,7 +79,9 @@ class MixedSpectraCrux(data.Dataset):
         "Adult_Pancreas_bRP_Elite_q_lt_0.01_identifications.tsv" : {"peaksFile" : "adult_pancreas_brp_elite_crux_q_0.01.pkl", "filesList" : None, "constructor" : HumanProteome},
         "Fetal_Gut_Gel_Velos_q_lt_0.01_identifications.tsv" : {"peaksFile" : "fetal_gut_gel_velos_crux_q_0.01.pkl", "filesList" : None, "constructor" : HumanProteome},
         "Fetal_Liver_bRP_Elite_23_q_lt_0.01_identifications.tsv" : {"peaksFile" : "fetal_liver_brp_elite_23_crux_q_0.01.pkl", "filesList" : None, "constructor" : HumanProteome},
-        "Fetal_Testis_bRP_Elite_q_lt_0.01_identifications.tsv" : {"peaksFile" : "fetal_testis_brp_elite_crux_q_0.01.pkl", "filesList" : None, "constructor" : HumanProteome}
+        "Fetal_Testis_bRP_Elite_q_lt_0.01_identifications.tsv" : {"peaksFile" : "fetal_testis_brp_elite_crux_q_0.01.pkl", "filesList" : None, "constructor" : HumanProteome},
+        "Adult_Bcells_Gel_Elite_q_lt_0.01_identifications.tsv" : {"peaksFile" : "adult_bcells_gel_elite_crux_q_0.01.pkl", "filesList" : None, "constructor" : HumanProteome},
+        "Fetal_Liver_Gel_Velos_q_lt_0.01_identifications.tsv" : {"peaksFile" : "fetal_liver_gel_velos_crux_q_0.01.pkl", "filesList" : None, "constructor" : HumanProteome}
     }
 
     TRAIN_EXPERIMENTS_DATA_3_1 = {
@@ -102,7 +104,9 @@ class MixedSpectraCrux(data.Dataset):
         "Adult_Pancreas_bRP_Elite_q_lt_0.001_identifications.tsv" : {"peaksFile" : "adult_pancreas_brp_elite_crux_q_0.001.pkl", "filesList" : None, "constructor" : HumanProteome},
         "Fetal_Gut_Gel_Velos_q_lt_0.001_identifications.tsv" : {"peaksFile" : "fetal_gut_gel_velos_crux_q_0.001.pkl", "filesList" : None, "constructor" : HumanProteome},
         "Fetal_Liver_bRP_Elite_23_q_lt_0.001_identifications.tsv" : {"peaksFile" : "fetal_liver_brp_elite_23_crux_q_0.001.pkl", "filesList" : None, "constructor" : HumanProteome},
-        "Fetal_Testis_bRP_Elite_q_lt_0.001_identifications.tsv" : {"peaksFile" : "fetal_testis_brp_elite_crux_q_0.001.pkl", "filesList" : None, "constructor" : HumanProteome}
+        "Fetal_Testis_bRP_Elite_q_lt_0.001_identifications.tsv" : {"peaksFile" : "fetal_testis_brp_elite_crux_q_0.001.pkl", "filesList" : None, "constructor" : HumanProteome},
+        "Adult_Bcells_Gel_Elite_q_lt_0.001_identifications.tsv" : {"peaksFile" : "adult_bcells_gel_elite_crux_q_0.001.pkl", "filesList" : None, "constructor" : HumanProteome},
+        "Fetal_Liver_Gel_Velos_q_lt_0.001_identifications.tsv" : {"peaksFile" : "fetal_liver_gel_velos_crux_q_0.001.pkl", "filesList" : None, "constructor" : HumanProteome}
     }
 
 
@@ -120,17 +124,13 @@ class MixedSpectraCrux(data.Dataset):
     TEST_EXPERIMENTS_DATA_3_0 = {
         "Adult_Heart_bRP_Velos_q_lt_0.01_identifications.tsv" : {"peaksFile" : "adult_heart_brp_velos_crux_q_0.01.pkl", "filesList": None, "constructor" : HumanProteome},
 
-        "Adult_NKcells_bRP_Elite_q_lt_0.01_identifications.tsv" : {"peaksFile" : "adult_nkcells_brp_elite_crux_q_0.01.pkl", "filesList" : None, "constructor" : HumanProteome},
-        "Fetal_Liver_Gel_Velos_q_lt_0.01_identifications.tsv" : {"peaksFile" : "fetal_liver_gel_velos_crux_q_0.01.pkl", "filesList" : None, "constructor" : HumanProteome},
-        "Adult_Bcells_Gel_Elite_q_lt_0.01_identifications.tsv" : {"peaksFile" : "adult_bcells_gel_elite_crux_q_0.01.pkl", "filesList" : None, "constructor" : HumanProteome}
+        "Adult_NKcells_bRP_Elite_q_lt_0.01_identifications.tsv" : {"peaksFile" : "adult_nkcells_brp_elite_crux_q_0.01.pkl", "filesList" : None, "constructor" : HumanProteome}
     }
 
     TEST_EXPERIMENTS_DATA_3_1 = {
         "Adult_Heart_bRP_Velos_q_lt_0.001_identifications.tsv" : {"peaksFile" : "adult_heart_brp_velos_crux_q_0.001.pkl", "filesList": None, "constructor" : HumanProteome},
 
-        "Adult_NKcells_bRP_Elite_q_lt_0.001_identifications.tsv" : {"peaksFile" : "adult_nkcells_brp_elite_crux_q_0.001.pkl", "filesList" : None, "constructor" : HumanProteome},
-        "Fetal_Liver_Gel_Velos_q_lt_0.001_identifications.tsv" : {"peaksFile" : "fetal_liver_gel_velos_crux_q_0.001.pkl", "filesList" : None, "constructor" : HumanProteome},
-        "Adult_Bcells_Gel_Elite_q_lt_0.001_identifications.tsv" : {"peaksFile" : "adult_bcells_gel_elite_crux_q_0.001.pkl", "filesList" : None, "constructor" : HumanProteome}
+        "Adult_NKcells_bRP_Elite_q_lt_0.001_identifications.tsv" : {"peaksFile" : "adult_nkcells_brp_elite_crux_q_0.001.pkl", "filesList" : None, "constructor" : HumanProteome}
     }
 
 
