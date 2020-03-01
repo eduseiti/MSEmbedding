@@ -22,7 +22,7 @@ from bootstrap.lib.logger import Logger
 class Linfeng(data.Dataset):
 
     SPECTRA_LIST_FILE_DEFAULT = "linfeng_spectra_index"
-    SPECTRA_FOLDER = "sequence"
+    SPECTRA_FOLDER = "sequences"
 
     SPECTRA_FILES_EXTENSION = ".pkl"
     SPECTRA_EXPERIMENT_LIST_FILE_EXTENSION = "_experiments.pkl"
