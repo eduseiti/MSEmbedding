@@ -23,6 +23,7 @@ CRUX_PARAMS_FILE=$4
 
 CONSENSUS_FOLDERS=($(ls -d $1*))
 
+startTimeAll=$(date +%s.%N)
 
 for folder in "${CONSENSUS_FOLDERS[@]}"; do
 	startTime=$(date +%s.%N)
@@ -74,3 +75,10 @@ for folder in "${CONSENSUS_FOLDERS[@]}"; do
 	echo "== Elapse time $totalTime seconds." &>> $LOGFILE
 	echo "" &>> $LOGFILE
 done
+
+totalTimeAll=$(echo "$(date +%s.%N) - $startTimeAll" | bc)
+
+echo Elapse time for all consensus spectra: $totalTimeAll seconds.
+echo
+echo "Elapse time for all consensus spectra: $totalTimeAll seconds." &>> $LOGFILE
+echo "" &>> $LOGFILE
