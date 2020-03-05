@@ -14,6 +14,8 @@ NC='\033[0m'
 
 CLUSTERS_FILES=($(ls $1/*.tsv))
 
+startTimeAll=$(date +%s.%N)
+
 for file in "${CLUSTERS_FILES[@]}"; do
 	startTime=$(date +%s.%N)
 
@@ -50,3 +52,9 @@ for file in "${CLUSTERS_FILES[@]}"; do
 	echo "" &>> $LOGFILE
 done
 
+totalTimeAll=$(echo "$(date +%s.%N) - $startTimeAll" | bc)
+
+echo Elapse time for creating all consensus spectra: $totalTimeAll seconds.
+echo
+echo "Elapse time for creating all consensus spectra: $totalTimeAll seconds." &>> $LOGFILE
+echo "" &>> $LOGFILE
