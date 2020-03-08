@@ -190,8 +190,15 @@ class Linfeng(data.Dataset):
         self.batch_size = batch_size
         self.dataDirectory = dataDirectory
 
-        self.spectraListFilename = Options().get("dataset.spectra_list_file", Linfeng.SPECTRA_LIST_FILE_DEFAULT) + Linfeng.SPECTRA_FILES_EXTENSION
-        self.experimentsListFilename = self.spectraListFilename + Linfeng.SPECTRA_EXPERIMENT_LIST_FILE_EXTENSION
+        trainingPeaksCompleteFile = Options().get("dataset.train_normalization_file", None)
+
+        trainingDatasetVersion = trainingPeaksCompleteFile.split("_")[-1].split(".pkl")[0]
+
+        if trainingDatasetVersion == "":
+            raise ValueError("Training dataset filename should respect the filename convention with version: <anything>_v<version>.pkl")
+
+        self.spectraListFilename = Options().get("dataset.spectra_list_file", Linfeng.SPECTRA_LIST_FILE_DEFAULT) + "_" + trainingDatasetVersion + Linfeng.SPECTRA_FILES_EXTENSION
+        self.experimentsListFilename = Options().get("dataset.spectra_list_file", Linfeng.SPECTRA_LIST_FILE_DEFAULT) + "_" + trainingDatasetVersion + Linfeng.SPECTRA_EXPERIMENT_LIST_FILE_EXTENSION
 
         self.spectraExperimentsFolder = getattr(Linfeng, Options().get("dataset.mgf_experiments", "EXPERIMENTS_FOLDERS_ALL"))
         self.fileListFilename = SaveEmbeddings.build_embeddings_filename()
@@ -208,8 +215,6 @@ class Linfeng(data.Dataset):
             print("*** Need to create the spectra list !!!")
 
             print("***** Need to load training dataset to get normalization parameters")
-
-            trainingPeaksCompleteFile = Options().get("dataset.train_normalization_file", None)
 
             mgfFilesFolder = Options().get("dataset.mgf_dir", None)
 
