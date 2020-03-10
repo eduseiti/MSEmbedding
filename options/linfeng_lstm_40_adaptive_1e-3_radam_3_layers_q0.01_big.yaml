@@ -19,9 +19,9 @@ engine:
 model:
   name: MSEmbedding_encoding
   network:
-    lstm_out_dim: 30
+    lstm_out_dim: 40
     bidirecional_lstm: True
-    num_of_layers: 2
+    num_of_layers: 3
   metric:
     name: saveEmbeddings
     import: MSEmbedding.models.metrics.factory    
