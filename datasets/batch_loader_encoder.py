@@ -137,7 +137,8 @@ class BatchLoaderEncoder(object):
                     if self.currentFilename != pklFilename:
                         self.currentFilename = pklFilename
 
-                        print("Opening new experiment file {} for spectra file {}".format(self.currentFilename))
+                        print("Opening new experiment file {} for spectra file {}".format(self.currentFilename, 
+                                                                                          self.spectraList[self.currentSpectrumIndex]['filename']))
 
                         with open(os.path.join(self.dataFolder, self.currentFilename), 'rb') as inputFile:
                             self.currentExperiment = pickle.load(inputFile)

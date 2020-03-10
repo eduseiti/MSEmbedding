@@ -128,8 +128,8 @@ class Linfeng(data.Dataset):
                         currentFile = open(os.path.join(mgfFolder, folder, fileName), 'r')
 
                         _, _, spectraCountInFile = spectraParser.read_spectrum(currentFile, 
-                                                                            fileName + '_', 
-                                                                            None, None, spectraFound)
+                                                                               fileName + '_', 
+                                                                               None, None, spectraFound)
     
                     spectraFound.spectraCount += spectraCountInFile
 
@@ -168,11 +168,11 @@ class Linfeng(data.Dataset):
 
                 # Save spectra for this folder in a separated file to be processed by the batch loader
 
-                spectraFound.save_spectra(folder + Linfeng.SPECTRA_FILES_EXTENSION)
+                spectraFound.save_spectra(folder + "_" + self.trainingDatasetVersion + Linfeng.SPECTRA_FILES_EXTENSION)
 
-                print("- Folder {} had total of {} spectra".format(folder, len(spectraFound.spectra[Scan.UNRECOGNIZED_SEQUENCE])))
+                print("- Folder {} had total of {} spectra".format(folder + "_" + self.trainingDatasetVersion, len(spectraFound.spectra[Scan.UNRECOGNIZED_SEQUENCE])))
 
-                experimentsList.append([folder + Linfeng.SPECTRA_FILES_EXTENSION, len(spectraFound.spectra[Scan.UNRECOGNIZED_SEQUENCE])])
+                experimentsList.append([folder + "_" + self.trainingDatasetVersion + Linfeng.SPECTRA_FILES_EXTENSION, len(spectraFound.spectra[Scan.UNRECOGNIZED_SEQUENCE])])
 
         os.rename(os.path.join(self.currentDirectory, self.embeddingsFolder, Linfeng.TMP_EMBEDDINGS_FILENAME), 
                   os.path.join(self.currentDirectory, self.embeddingsFolder, 
@@ -192,13 +192,13 @@ class Linfeng(data.Dataset):
 
         trainingPeaksCompleteFile = Options().get("dataset.train_normalization_file", None)
 
-        trainingDatasetVersion = trainingPeaksCompleteFile.split("_")[-1].split(".pkl")[0]
+        self.trainingDatasetVersion = trainingPeaksCompleteFile.split("_")[-1].split(".pkl")[0]
 
         if trainingDatasetVersion == "":
             raise ValueError("Training dataset filename should respect the filename convention with version: <anything>_v<version>.pkl")
 
-        self.spectraListFilename = Options().get("dataset.spectra_list_file", Linfeng.SPECTRA_LIST_FILE_DEFAULT) + "_" + trainingDatasetVersion + Linfeng.SPECTRA_FILES_EXTENSION
-        self.experimentsListFilename = Options().get("dataset.spectra_list_file", Linfeng.SPECTRA_LIST_FILE_DEFAULT) + "_" + trainingDatasetVersion + Linfeng.SPECTRA_EXPERIMENT_LIST_FILE_EXTENSION
+        self.spectraListFilename = Options().get("dataset.spectra_list_file", Linfeng.SPECTRA_LIST_FILE_DEFAULT) + "_" + self.trainingDatasetVersion + Linfeng.SPECTRA_FILES_EXTENSION
+        self.experimentsListFilename = Options().get("dataset.spectra_list_file", Linfeng.SPECTRA_LIST_FILE_DEFAULT) + "_" + self.trainingDatasetVersion + Linfeng.SPECTRA_EXPERIMENT_LIST_FILE_EXTENSION
 
         self.spectraExperimentsFolder = getattr(Linfeng, Options().get("dataset.mgf_experiments", "EXPERIMENTS_FOLDERS_ALL"))
         self.fileListFilename = SaveEmbeddings.build_embeddings_filename()
