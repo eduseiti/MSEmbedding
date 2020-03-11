@@ -194,7 +194,7 @@ class Linfeng(data.Dataset):
 
         self.trainingDatasetVersion = trainingPeaksCompleteFile.split("_")[-1].split(".pkl")[0]
 
-        if trainingDatasetVersion == "":
+        if self.trainingDatasetVersion == "":
             raise ValueError("Training dataset filename should respect the filename convention with version: <anything>_v<version>.pkl")
 
         self.spectraListFilename = Options().get("dataset.spectra_list_file", Linfeng.SPECTRA_LIST_FILE_DEFAULT) + "_" + self.trainingDatasetVersion + Linfeng.SPECTRA_FILES_EXTENSION
