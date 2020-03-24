@@ -3,12 +3,12 @@ exp:
   dir: logs/MSEmbedding/linfeng_radam_lstm_40_LR1e-3_margin0.48_1000_epochs_wd1e-5_adaptive_epsilon_1e-6_bi-lstm_3_layers_q0.001_big
 dataset:
   name: linfeng
-  dir: data/linfeng_q0.001
+  dir: data/linfeng_q0.001_margin0.48
   mgf_dir: /media/eduseiti/bigdata01/unicamp/doutorado/linfeng
   mgf_experiments: SAMPLE_EXPERIMENTS_FOLDERS
-  spectra_list_file: sample_linfeng_q0.001
+  spectra_list_file: sample_linfeng_q0.001_big_lstm40_3layer_margin0.48
   embeddings_file: sample_embeddings_q0.001_big_lstm40_3layer_margin0.48
-  embeddings_dir: data/linfeng_q0.001
+  embeddings_dir: data/linfeng_q0.001_margin0.48
   train_split: 
   eval_split: test
   train_normalization_file: data/mixedSpectraCrux/sequences/train_mixedSpectraCrux_v3.1.pkl
