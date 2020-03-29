@@ -1205,12 +1205,14 @@ class PXD000561:
 
 
 
-    def __init__(self, identificationsFilename = None, spectraFilename = None, cruxIdentifications = False):
+    def __init__(self, identificationsFilename = None, spectraFilename = None, cruxIdentifications = False, maxPvalue = None):
     
         self.identificationsFilename = identificationsFilename
         self.spectraFilename = spectraFilename
         self.cruxIdentifications = cruxIdentifications
     
+        self.maxPvalue = maxPvalue
+
         self.totalSpectra = SpectraFound(False, 'sequences')
     
     
@@ -1229,6 +1231,21 @@ class PXD000561:
 
         if self.cruxIdentifications:
             self.uniqueCombination = pd.read_csv(self.identificationsFilename, sep='\t')
+
+
+            # Check if has to filter using maximun pvalue threshold
+
+            if self.maxPvalue:
+                self.uniqueCombination = self.uniqueCombination[self.uniqueCombination['pvalue'] <= self.maxPvalue]
+
+                if self.uniqueCombination.shape[0] == 0:
+                    raise ValueError("{} identifications file has no pvalue within the specified max pvalue threhsold ― {})".format(self.identificationsFilename,
+                                                                                                                                    self.maxPvalue))
+                else:
+                    Logger()("Identification file {} has {} spectra within the specified max pvalue threshold ― {}".format(self.identificationsFilename,
+                                                                                                                           self.uniqueCombination.shape[0],
+                                                                                                                           self.maxPvalue))
+
         else:
             matches_file = pd.read_csv(self.identificationsFilename)
 

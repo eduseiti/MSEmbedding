@@ -18,7 +18,12 @@ class HumanProteome(data.Dataset):
 
     def __init__(self, dataDirectory = 'data/humanProteome', split = 'train', 
                  batch_size = 100, nb_threads = 1, trainingDataset = None, 
-                 identificationsFilename = None, spectraFilename = None, filesList = None, normalizeData = True, storeUnrecognized = True, cruxIdentifications = False):
+                 identificationsFilename = None, 
+                 spectraFilename = None, 
+                 filesList = None, 
+                 normalizeData = True, 
+                 storeUnrecognized = True, 
+                 cruxIdentifications = False):
 
         self.split = split
         self.nb_threads = nb_threads
@@ -60,7 +65,11 @@ class HumanProteome(data.Dataset):
             if not filesList:
                 filteredFilesList = Options().get("dataset.eval_filtered_files_list", None)
 
-        self.dataset = PXD000561(identificationsFilename = matchesFile, spectraFilename = peaksFile, cruxIdentifications = cruxIdentifications)
+        self.dataset = PXD000561(identificationsFilename = matchesFile, 
+                                 spectraFilename = peaksFile, 
+                                 cruxIdentifications = cruxIdentifications,
+                                 maxPvalue = Options().get("dataset.max_pvalue", None))
+
         self.dataset.load_identifications(filteredFilesList = filteredFilesList)
 
 
