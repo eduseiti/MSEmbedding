@@ -134,7 +134,7 @@ class MixedSpectraCrux(data.Dataset):
         "Fetal_Liver_Gel_Velos_q_lt_0.01_identifications.tsv" : {"peaksFile" : "fetal_liver_gel_velos_crux_q_0.01_pvalue{}.pkl", "filesList" : None, "constructor" : HumanProteome}
     }
 
-
+    TRAIN_EXPERIMENTS_DATA_4_2 = TRAIN_EXPERIMENTS_DATA_4_1 = TRAIN_EXPERIMENTS_DATA_4_0
 
 
     TEST_EXPERIMENTS_DATA_2_0 = {
@@ -163,6 +163,7 @@ class MixedSpectraCrux(data.Dataset):
         "Adult_NKcells_bRP_Elite_q_lt_0.01_identifications.tsv" : {"peaksFile" : "adult_nkcells_brp_elite_crux_q_0.01_pvalue{}.pkl", "filesList" : None, "constructor" : HumanProteome}
     }
 
+    TEST_EXPERIMENTS_DATA_4_2 = TEST_EXPERIMENTS_DATA_4_1 = TEST_EXPERIMENTS_DATA_4_0
 
 
     def __init__(self, dataDirectory = 'data/mixedSpectraCrux', split = 'train', 
