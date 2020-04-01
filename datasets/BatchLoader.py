@@ -127,7 +127,7 @@ class BatchLoader(object):
         # Check if there is a last batch
 
         if additionalBatch:
-            print('Last batch {}: from {} to {}; size {}'.format(batch + 1, 
+            print('Last batch {}: from {} to {}; size {}'.format(howManyCompleteBatches, 
                                                         howManyCompleteBatches * self.batchSize, 
                                                         howManyCompleteBatches * self.batchSize + len(self.epoch) % self.batchSize - 1,
                                                         len(self.epoch) % self.batchSize))
