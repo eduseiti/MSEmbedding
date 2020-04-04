@@ -151,7 +151,7 @@ class SpectraFound:
                     sequenceMaxLen = key
 
         Logger()('Maximum non-zero peaks list len = {}. key = {}'.format(self.maxPeaksListLen, sequenceMaxLen))
-        Logger()('Average peaks list len = {}'.format(totalLen / self.spectraCount))
+        Logger()('Average peaks list len = {}'.format(float('NaN') if self.spectraCount == 0 else totalLen / self.spectraCount))
         Logger()('Number of sequences with a single scan = {}'.format(sequencesWithSingleScan))
         Logger()('Number of sequences with more than 1 scan = {}'.format(sequencesWithMultipleScans))
         Logger()('Max number of scans in a single sequence = {}'.format(maxScansInSequence))

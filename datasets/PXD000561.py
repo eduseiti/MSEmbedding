@@ -1239,8 +1239,8 @@ class PXD000561:
                 self.uniqueCombination = self.uniqueCombination[self.uniqueCombination['pvalue'] <= self.maxPvalue]
 
                 if self.uniqueCombination.shape[0] == 0:
-                    raise ValueError("{} identifications file has no pvalue within the specified max pvalue threhsold ― {})".format(self.identificationsFilename,
-                                                                                                                                    self.maxPvalue))
+                    Logger()("{} identifications file has no pvalue within the specified max pvalue threhsold ― {})".format(self.identificationsFilename,
+                                                                                                                            self.maxPvalue))
                 else:
                     Logger()("Identification file {} has {} spectra within the specified max pvalue threshold ― {}".format(self.identificationsFilename,
                                                                                                                            self.uniqueCombination.shape[0],
