@@ -5,7 +5,11 @@
 #
 # Kim, Min-Sik, Sneha M. Pinto, Derese Getnet, Raja Sekhar Nirujogi, Srikanth S. Manda, Raghothama Chaerkady, Anil K. Madugundu et al. "A draft map of the human proteome." Nature 509, no. 7502 (2014): 575-581.
 #
-# How to use; ./identify_experiments.sh <experiments folders folder> <identifications destination folder> <crux executable path> <peptides identification database file> <crux parameters file>
+# How to use; ./identify_experiments.sh <experiments folders folder> 
+#										<identifications destination folder> 
+#										<crux executable path> 
+#										<peptides identification database file> 
+#										<crux parameters file>
 #
 
 GREEN='\033[0;32m\033[1m'
