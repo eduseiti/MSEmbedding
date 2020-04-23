@@ -215,7 +215,7 @@ class MixedSpectraCrux(data.Dataset):
         "Fetal_Gut_bRP_Elite_18_q_lt_0.01_identifications.tsv" : {"peaksFile" : "Fetal_Gut_bRP_Elite_18_crux_q0.01_pvalue{}.pkl", "filesList" : None, "constructor" : HumanProteome}
 }
 
-    TRAIN_EXPERIMENTS_DATA_5_1 = TRAIN_EXPERIMENTS_DATA_5_0
+    TRAIN_EXPERIMENTS_DATA_5_4 = TRAIN_EXPERIMENTS_DATA_5_3 = TRAIN_EXPERIMENTS_DATA_5_2 = TRAIN_EXPERIMENTS_DATA_5_1 = TRAIN_EXPERIMENTS_DATA_5_0
 
 
 
@@ -264,7 +264,7 @@ class MixedSpectraCrux(data.Dataset):
     }
 
 
-    TEST_EXPERIMENTS_DATA_5_1 = TEST_EXPERIMENTS_DATA_5_0
+    TEST_EXPERIMENTS_DATA_5_4 = TEST_EXPERIMENTS_DATA_5_3 = TEST_EXPERIMENTS_DATA_5_2 = TEST_EXPERIMENTS_DATA_5_1 = TEST_EXPERIMENTS_DATA_5_0
 
 
     def __init__(self, dataDirectory = 'data/mixedSpectraCrux', split = 'train', 
