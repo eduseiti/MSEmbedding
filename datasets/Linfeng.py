@@ -159,7 +159,8 @@ class Linfeng(data.Dataset):
 
 
                     peaksList['nzero_peaks'][:, 0] = (peaksList['nzero_peaks'][:, 0] - normalizationParameters['mz_mean']) / normalizationParameters['mz_std']
-                    peaksList['nzero_peaks'][:, 1] = (peaksList['nzero_peaks'][:, 1] - normalizationParameters['intensity_mean']) / normalizationParameters['intensity_std']
+                    peaksList['nzero_peaks'][:, 1] = torch.log(peaksList['nzero_peaks'][:, 1])
+                    # peaksList['nzero_peaks'][:, 1] = (peaksList['nzero_peaks'][:, 1] - normalizationParameters['intensity_mean']) / normalizationParameters['intensity_std']
 
                     # Save the original filename in the spectra filelist file
 
