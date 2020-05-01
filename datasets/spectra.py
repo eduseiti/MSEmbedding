@@ -287,7 +287,8 @@ class SpectraFound:
         for key in self.multipleScansSequences + self.singleScanSequences:
             for peaksList in self.spectra[key]:
                 peaksList['nzero_peaks'][:, 0] = (peaksList['nzero_peaks'][:, 0] - self.normalizationParameters['mz_mean']) / self.normalizationParameters['mz_std']
-                peaksList['nzero_peaks'][:, 1] = (peaksList['nzero_peaks'][:, 1] - self.normalizationParameters['intensity_mean']) / self.normalizationParameters['intensity_std']
+                peaksList['nzero_peaks'][:, 1] = torch.log(peaksList['nzero_peaks'][:, 1])
+                # peaksList['nzero_peaks'][:, 1] = (peaksList['nzero_peaks'][:, 1] - self.normalizationParameters['intensity_mean']) / self.normalizationParameters['intensity_std']
 
 
 
