@@ -30,18 +30,12 @@ class MatrixTripletMargin(nn.Module):
 
         out = {}
 
-        originalIndexes = torch.zeros(len(networkOutput[1]), dtype = torch.int32)
-
-        for i in range(len(networkOutput[1])):
-            originalIndexes[networkOutput[1][i]] = i
-
-        embeddings = networkOutput[0]
-        originalIndexes = originalIndexes.tolist()
+        embeddings = networkOutput
 
         # print("criterion: embeddings.shape={}".format(embeddings.shape))
 
-        anchors = embeddings[originalIndexes[::2]]
-        positive = embeddings[originalIndexes[1::2]]
+        anchors = embeddings[::2]
+        positive = embeddings[1::2]
 
         normalizedAnchors = nn.functional.normalize(anchors)
 
@@ -77,7 +71,5 @@ class MatrixTripletMargin(nn.Module):
             out['loss'] = torch.sum(loss) / non_zeroed_losses
         else:
             out['loss'] = torch.mean(loss)
-
-        out['originalIndexes'] = originalIndexes
 
         return out

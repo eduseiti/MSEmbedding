@@ -233,9 +233,11 @@ class SpectraFound:
 
             mzSum = 0.0
             intensitySum = 0.0
+            pepmassSum = 0.0
+
             totalNonZeroPeaks = 0
 
-            print("\nStart to calculate the mzMean and intensityMean...")
+            print("\nStart to calculate the mzMean, intensityMean, and pepmassMean...")
 
             for key in self.multipleScansSequences + self.singleScanSequences:
                 for peaksList in self.spectra[key]:
@@ -243,32 +245,43 @@ class SpectraFound:
                     intensitySum += peaksList['nzero_peaks'][:, 1].sum()
                     totalNonZeroPeaks += len(peaksList['nzero_peaks'])
 
+                    pepmassSum += peaksList['pepmass'][0]
+
 
             self.normalizationParameters = {}
 
             mzMean = mzSum / totalNonZeroPeaks
             intensityMean = intensitySum / totalNonZeroPeaks
+            pepmassMean = pepmassSum / totalNonZeroPeaks
 
-            print("Start to calculate the mzStd and intensityStd...")
+
+            print("Start to calculate the mzStd, intensityStd, and pepmassStd...")
 
             mzSquaredMeanReducedSum = 0.0
             intensitySquaredMeanReducedSum = 0.0
+            pepmassSquaredMeanReducedSum = 0.0
 
             for key in self.multipleScansSequences + self.singleScanSequences:
                 for peaksList in self.spectra[key]:
                     mzSquaredMeanReducedSum += torch.pow(peaksList['nzero_peaks'][:, 0] - mzMean, 2).sum()
                     intensitySquaredMeanReducedSum += torch.pow(peaksList['nzero_peaks'][:, 1] - intensityMean, 2).sum()
 
+                    pepmassSquaredMeanReducedSum += (peaksList['pepmass'][0] - pepmassMean) ** 2
+
             mzStd = math.sqrt(mzSquaredMeanReducedSum / totalNonZeroPeaks)
             intensityStd = math.sqrt(intensitySquaredMeanReducedSum / totalNonZeroPeaks)
+            pepmassStd = math.sqrt(pepmassSquaredMeanReducedSum / totalNonZeroPeaks)
 
             self.normalizationParameters['mz_mean'] = mzMean
             self.normalizationParameters['mz_std'] = mzStd
             self.normalizationParameters['intensity_mean'] = intensityMean
             self.normalizationParameters['intensity_std']  = intensityStd
+            self.normalizationParameters['pepmass_mean'] = pepmassMean
+            self.normalizationParameters['pepmass_std']  = pepmassStd
 
             Logger()('mz mean: {}, mz std: {}'.format(self.normalizationParameters['mz_mean'], self.normalizationParameters['mz_std']))
             Logger()('intensity mean: {}, intensity std: {}'.format(self.normalizationParameters['intensity_mean'], self.normalizationParameters['intensity_std']))
+            Logger()('pepmass mean: {}, pepmass std: {}'.format(self.normalizationParameters['pepmass_mean'], self.normalizationParameters['pepmass_std']))
 
         else:
             self.normalizationParameters = normalizationParameters
@@ -276,6 +289,7 @@ class SpectraFound:
             Logger()("\nWill apply the following normalization parameters, from training dataset")
             Logger()('mz mean: {}, mz std: {}'.format(self.normalizationParameters['mz_mean'], self.normalizationParameters['mz_std']))
             Logger()('intensity mean: {}, intensity std: {}'.format(self.normalizationParameters['intensity_mean'], self.normalizationParameters['intensity_std']))
+            Logger()('pepmass mean: {}, pepmass std: {}'.format(self.normalizationParameters['pepmass_mean'], self.normalizationParameters['pepmass_std']))
             
 
         #
@@ -288,7 +302,7 @@ class SpectraFound:
             for peaksList in self.spectra[key]:
                 peaksList['nzero_peaks'][:, 0] = (peaksList['nzero_peaks'][:, 0] - self.normalizationParameters['mz_mean']) / self.normalizationParameters['mz_std']
                 peaksList['nzero_peaks'][:, 1] = (peaksList['nzero_peaks'][:, 1] - self.normalizationParameters['intensity_mean']) / self.normalizationParameters['intensity_std']
-
+                peaksList['pepmass'][0] = (peaksList['pepmass'][0] - self.normalizationParameters['pepmass_mean']) / self.normalizationParameters['pepmass_std']
 
 
     def save_spectra(self, spectraName, overwrite = False):

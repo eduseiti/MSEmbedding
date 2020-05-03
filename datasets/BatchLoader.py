@@ -46,6 +46,7 @@ class BatchLoader(object):
 
         peaksList = []
         self.peaksLen = []
+        self.pepmass = []
 
 
         #
@@ -61,19 +62,23 @@ class BatchLoader(object):
             anchor = self.totalSpectra.spectra[sequence][positiveExamplesIndexes[0]]['nzero_peaks']
             peaksList.append(anchor)
             self.peaksLen.append(len(anchor))
+            self.pepmass.append(self.totalSpectra.spectra[sequence][positiveExamplesIndexes[0]]['pepmass'][0])
 
             positive = self.totalSpectra.spectra[sequence][positiveExamplesIndexes[1]]['nzero_peaks']
             peaksList.append(positive)
             self.peaksLen.append(len(positive))
+            self.pepmass.append(self.totalSpectra.spectra[sequence][positiveExamplesIndexes[1]]['pepmass'][0])
 
             if self.includeNegative:
                 negative = self.totalSpectra.spectra[self.totalSpectra.singleScanSequences[i % singleScanSequencesCount]][0]['nzero_peaks']
                 peaksList.append(negative)
                 self.peaksLen.append(len(negative))
+                self.pepmass.append(self.totalSpectra.spectra[self.totalSpectra.singleScanSequences[i % singleScanSequencesCount]][0]['pepmass'][0])
 
 
 
 
+        self.pepmass = np.array(self.pepmass, dtype = np.float32)
 
         #
         # Now, pad the sequence still on the original order: the batches will be sorted before going through the LSTM...
