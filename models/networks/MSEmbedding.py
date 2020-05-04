@@ -17,6 +17,7 @@ class MSEmbeddingNet(nn.Module):
         self.lstmOutDim = Options()['model']['network']['lstm_out_dim']
         self.bidirecionalLstm = Options()['model']['network']['bidirecional_lstm']
         self.numOfLayers = Options()['model']['network'].get('num_of_layers', 1)
+        self.applyPepmass = Options()['model']['network'].get('apply_pepmass', False)
         
         self.pepmassFinalDim = 16
 
@@ -36,14 +37,16 @@ class MSEmbeddingNet(nn.Module):
         if self.bidirecionalLstm:
             self.fusion = nn.Linear(self.lstmOutDim * 2, self.lstmOutDim)
 
-        #
-        # For handling the pepmass information
-        #
 
-        self.fcPepmass1 = nn.Linear(1, 32)
-        self.fcPepmass2 = nn.Linear(32, self.pepmassFinalDim)
+        if self.applyPepmass:
+            #
+            # For handling the pepmass information
+            #
 
-        self.pepmassCombination = nn.Linear(self.lstmOutDim + self.pepmassFinalDim, self.lstmOutDim)
+            self.fcPepmass1 = nn.Linear(1, 32)
+            self.fcPepmass2 = nn.Linear(32, self.pepmassFinalDim)
+
+            self.pepmassCombination = nn.Linear(self.lstmOutDim + self.pepmassFinalDim, self.lstmOutDim)
 
 
     #
@@ -112,25 +115,42 @@ class MSEmbeddingNet(nn.Module):
 
             x = F.relu(self.fusion(torch.cat((hidden_state[self.numOfLayers - 1, 0], hidden_state[self.numOfLayers - 1, 1]), 1)))
 
+            print("final x.shape={}".format(x.shape))
 
+        else:
+            x = hidden_state[self.numOfLayers - 1, 0]
 
-        #
-        # Process the pepmass
-        #
-
-        xPepmass = batch['pepmass']
-
-        print("-- shape pepmass={}".format(xPepmass.shape))
-
-        xPepmass = F.relu(self.fcPepmass1(batch['pepmass'].view(xPepmass.shape[0], -1)))
-        xPepmass = F.relu(self.fcPepmass2(xPepmass))
 
 
         #
-        # Combine pepmass and the LSTM internal state
+        # Return the hidden states to their original order
         #
 
-        x = F.relu(self.pepmassCombination(torch.cat((xPepmass, x), 1)))
+        originalIndexes = torch.zeros_like(indexesSortedPeaks)
+
+        for i in range(len(indexesSortedPeaks)):
+            originalIndexes[indexesSortedPeaks[i]] = i
+
+        x = x[originalIndexes]
+
+        if self.applyPepmass:
+            #
+            # Process the pepmass
+            #
+
+            xPepmass = batch['pepmass']
+
+            print("-- shape pepmass={}".format(xPepmass.shape))
+
+            xPepmass = F.relu(self.fcPepmass1(batch['pepmass'].view(xPepmass.shape[0], -1)))
+            xPepmass = F.relu(self.fcPepmass2(xPepmass))
+
+
+            #
+            # Combine pepmass and the LSTM internal state
+            #
+
+            x = F.relu(self.pepmassCombination(torch.cat((xPepmass, x), 1)))
 
         return x
 
