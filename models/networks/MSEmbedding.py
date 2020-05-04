@@ -87,27 +87,16 @@ class MSEmbeddingNet(nn.Module):
 
         transform = torch.nn.utils.rnn.pack_padded_sequence(transform, originalPeaksLen[indexesSortedPeaks], batch_first = True)
 
-        x, _ = self.lstm(transform)
+        x, (hidden_state, cell_state) = self.lstm(transform)
 
-        # print('Output={}, hidden={}'.format(x.shape, hidden))
+        print('Output type={}, hidden_state.shape={}, cell_state.shape={}'.format(type(x), hidden_state.shape, cell_state.shape))
 
         x, _ = torch.nn.utils.rnn.pad_packed_sequence(x, batch_first = True, total_length = originalPeaksMaxLen)
 
         print('-- After pack: Len = {}, shape = {}'.format(len(x), x.shape))
 
-        # for i in range(x.shape[1]):
-        #     print("x[0,{}]={}; x[1,{}]={}; x[2,{}]={}".format(i, x[0, i], i, x[1, i], i, x[2, i]))
+        hidden_state = hidden_state.view(self.numOfLayers, 2 if self.bidirecionalLstm else 1, hidden_state.shape[1], -1)
 
-        # #
-        # # Now, return the embeddings to their original sort order, to recover the triplets sequence ― (anchor, positive example, negative example)
-        # #
-
-        # originalIndexes = x.new_zeros(len(indexesSortedPeaks), dtype = torch.int32)
-
-        # for i in range(len(indexesSortedPeaks)):
-        #     originalIndexes[indexesSortedPeaks[i]] = i
-
-        # x = x[originalIndexes.tolist()]
 
         #
         # Apply the fusion layer if using bi-LSTM
@@ -115,24 +104,14 @@ class MSEmbeddingNet(nn.Module):
 
         if self.bidirecionalLstm:
 
-            print("-- shape originalPeaksLen={}".format((originalPeaksLen[indexesSortedPeaks] - 1).shape))
-
-            print("-- shape last={}".format(x[range(x.shape[0]), originalPeaksLen[indexesSortedPeaks] - 1, :].shape))
+            print("hidden_state.shape={}".format(hidden_state.shape))
+            print("last hidden layer.shape={}".format(hidden_state[self.numOfLayers - 1].shape))
+            # print("concatenated.shape={}".format(torch.cat((hidden_state[self.numOfLayers - 1, 0], hidden_state[self.numOfLayers - 1, 1]), 1).shape))
 
             # selects the last internal state of each direction
 
-            x = F.relu(self.fusion(x[range(x.shape[0]), originalPeaksLen[indexesSortedPeaks] - 1, :]))
+            x = F.relu(self.fusion(torch.cat((hidden_state[self.numOfLayers - 1, 0], hidden_state[self.numOfLayers - 1, 1]), 1)))
 
-        #
-        # Return the peaks to their original order
-        #
-
-        originalIndexes = torch.zeros_like(indexesSortedPeaks)
-
-        for i in range(len(indexesSortedPeaks)):
-            originalIndexes[indexesSortedPeaks[i]] = i
-
-        x = x[originalIndexes]
 
 
         #
