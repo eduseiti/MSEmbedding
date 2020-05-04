@@ -429,6 +429,7 @@ class MixedSpectraCrux(data.Dataset):
         item['peaks'] = self.batchSampler.epoch[index]
         item['peaksLen'] = self.batchSampler.peaksLen[index]
         item['pepmass'] = self.batchSampler.pepmass[index]
+        item['epoch_data'] = self.batchSampler.epoch_data[index]
 
         return item
 

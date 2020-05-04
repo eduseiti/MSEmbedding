@@ -13,6 +13,10 @@ import pickle
 class EmbeddingsDistance(torch.nn.Module):
 
     PERCENTILES = list(range(0, 105, 5))
+    SAVE_EPOCH_DATA = True
+    SAVE_EPOCH_FILENAME = "last_epoch_data.pkl"
+    SAVE_EPOCH_RANKS_FILENAME = "last_epoch_ranks_data.pkl"
+    SAVE_EPOCH_EMBEDDINGS_FILENAME = "last_epoch_embeddings_data.pkl"
 
     wrongCount = 0
 
@@ -21,6 +25,7 @@ class EmbeddingsDistance(torch.nn.Module):
 
         self.mode = mode
         self.allEmbeddings = []
+        self.entireBatchData = []
 
         if Options().get("dataset.include_negative", False):
             self.examplesPerSequence = 3
@@ -35,6 +40,9 @@ class EmbeddingsDistance(torch.nn.Module):
     def forward(self, criterionOutput, networkOutput, batch):
 
         self.allEmbeddings.append(networkOutput)
+
+        if EmbeddingsDistance.SAVE_EPOCH_DATA:
+            self.entireBatchData.append(batch['epoch_data'])
 
 
 
@@ -160,6 +168,20 @@ class EmbeddingsDistance(torch.nn.Module):
                 positiveExampleRankFast))
 
 
+
+        if EmbeddingsDistance.SAVE_EPOCH_DATA:
+            with open(EmbeddingsDistance.SAVE_EPOCH_FILENAME, "wb") as outputFile:
+                pickle.dump(self.entireBatchData, outputFile, pickle.HIGHEST_PROTOCOL)
+
+            with open(EmbeddingsDistance.SAVE_EPOCH_RANKS_FILENAME, "wb") as outputFile:
+                pickle.dump(ranks, outputFile, pickle.HIGHEST_PROTOCOL)
+
+            with open(EmbeddingsDistance.SAVE_EPOCH_EMBEDDINGS_FILENAME, "wb") as outputFile:
+                pickle.dump(epochEmbeddings, outputFile, pickle.HIGHEST_PROTOCOL)
+
+
+
+
         out = {}
 
         MedR = np.median(ranks)
@@ -175,3 +197,4 @@ class EmbeddingsDistance(torch.nn.Module):
             Logger().log_value('{}_epoch.metric.{}'.format(self.mode, key), float(value), should_print = True)
 
         self.allEmbeddings = []
+        self.entireBatch = []

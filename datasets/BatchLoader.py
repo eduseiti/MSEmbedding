@@ -50,6 +50,13 @@ class BatchLoader(object):
 
 
         #
+        # When the epoch data needs to be externalized
+        # 
+
+        self.epoch_data = []
+
+
+        #
         # If "includeNegative" enabled, Every 3 peaks corresponds to the following sequence: anchor, positive and negative examples.
         #
         # Otherwise, every 2 peaks corresponds to: anchr, positive example.
@@ -63,19 +70,20 @@ class BatchLoader(object):
             peaksList.append(anchor)
             self.peaksLen.append(len(anchor))
             self.pepmass.append(self.totalSpectra.spectra[sequence][positiveExamplesIndexes[0]]['pepmass'][0])
+            self.epoch_data.append({"sequence": sequence, "index": positiveExamplesIndexes[0]})
 
             positive = self.totalSpectra.spectra[sequence][positiveExamplesIndexes[1]]['nzero_peaks']
             peaksList.append(positive)
             self.peaksLen.append(len(positive))
             self.pepmass.append(self.totalSpectra.spectra[sequence][positiveExamplesIndexes[1]]['pepmass'][0])
+            self.epoch_data.append({"sequence": sequence, "index": positiveExamplesIndexes[1]})
 
             if self.includeNegative:
                 negative = self.totalSpectra.spectra[self.totalSpectra.singleScanSequences[i % singleScanSequencesCount]][0]['nzero_peaks']
                 peaksList.append(negative)
                 self.peaksLen.append(len(negative))
                 self.pepmass.append(self.totalSpectra.spectra[self.totalSpectra.singleScanSequences[i % singleScanSequencesCount]][0]['pepmass'][0])
-
-
+                self.epoch_data.append({"sequence": self.totalSpectra.singleScanSequences[i % singleScanSequencesCount], "index": 0})
 
 
         self.pepmass = np.array(self.pepmass, dtype = np.float32)
