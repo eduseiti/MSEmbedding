@@ -1,13 +1,13 @@
 __include__: abstract.yaml
 exp:
-  dir: logs/MSEmbedding/linfeng_lstm_40_3_layers_LR1e-3_margin0.3_q0.01_all_pvalue_0.1
+  dir: logs/MSEmbedding/linfeng_lstm_40_3_layers_LR1e-3_margin0.3_q0.01_all_pvalue_0.1_test
 dataset:
   name: linfeng
   dir: data/linfeng_all_q0.01_pvalue
   mgf_dir: /media/eduseiti/bigdata01/unicamp/doutorado/linfeng
   mgf_experiments: SAMPLE_EXPERIMENTS_FOLDERS
-  spectra_list_file: sample_linfeng_q0.01_all_pvalue_0.1
-  embeddings_file: sample_embeddings_q0.01_all_lstm40_3layer_pvalue_0.1
+  spectra_list_file: sample_linfeng_q0.01_all_pvalue_0.1_test
+  embeddings_file: sample_embeddings_q0.01_all_lstm40_3layer_pvalue_0.1_test
   embeddings_dir: data/linfeng_all_q0.01_pvalue
   train_split: 
   eval_split: test

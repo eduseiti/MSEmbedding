@@ -197,4 +197,4 @@ class EmbeddingsDistance(torch.nn.Module):
             Logger().log_value('{}_epoch.metric.{}'.format(self.mode, key), float(value), should_print = True)
 
         self.allEmbeddings = []
-        self.entireBatch = []
+        self.entireBatchData = []

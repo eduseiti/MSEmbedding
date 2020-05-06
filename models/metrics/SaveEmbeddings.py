@@ -45,19 +45,13 @@ class SaveEmbeddings(torch.nn.Module):
 
     def forward(self, criterionOutput, networkOutput, batch):
 
-        originalIndexes = torch.zeros(len(networkOutput[1]), dtype = torch.int32)
-
-        for i in range(len(networkOutput[1])):
-            originalIndexes[networkOutput[1][i]] = i
-
-        embeddings = networkOutput[0]
-        originalIndexes = originalIndexes.tolist()
+        embeddings = networkOutput
 
         print("**** size={}".format(embeddings.element_size() * embeddings.nelement()))
         print("**** element_size={}, nelement={}".format(embeddings.element_size(), embeddings.nelement()))
         print("**** shape={}".format(embeddings.shape))
         
-        lastHiddenState = embeddings[originalIndexes].cpu()
+        lastHiddenState = embeddings.cpu()
 
         print("**** shape lastHiddenState={}".format(lastHiddenState.shape))
 
