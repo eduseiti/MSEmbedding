@@ -157,6 +157,11 @@ class Linfeng(data.Dataset):
                                         'charge' : peaksList['charge'],
                                         'scan' : peaksList['scan']})
 
+                    #
+                    # First of all, limit the intensity value
+                    #
+
+                    peaksList['nzero_peaks'][:, 1][peaksList['nzero_peaks'][:, 1] > normalizationParameters['intensity_mean'][SpectraFound.LIMIT_PERCENTILE_INDEX][1]] = normalizationParameters['intensity_mean'][SpectraFound.LIMIT_PERCENTILE_INDEX][1]
 
                     peaksList['nzero_peaks'][:, 0] = (peaksList['nzero_peaks'][:, 0] - normalizationParameters['mz_mean']) / normalizationParameters['mz_std']
                     peaksList['nzero_peaks'][:, 1] = (peaksList['nzero_peaks'][:, 1] - normalizationParameters['intensity_mean']) / normalizationParameters['intensity_std']

@@ -56,7 +56,11 @@ class Scan:
         
         
 class SpectraFound:
-    
+
+    PERCENTILES_TO_CALCULATE = (1.0, 5.0, 10.0, 50.0, 75.0, 90.0, 95.0, 99.0, 99.99)
+    LIMIT_PERCENTILE_INDEX = -3
+
+
     def __init__(self, saveFiles, filesFolder):
                 
         #
@@ -237,10 +241,41 @@ class SpectraFound:
 
             totalNonZeroPeaks = 0
 
-            print("\nStart to calculate the mzMean, intensityMean, and pepmassMean...")
+
+            all_intensities = []
+
+            print("\nStart to calculate the intensities distribution for Winsorizing...")
 
             for key in self.multipleScansSequences + self.singleScanSequences:
                 for peaksList in self.spectra[key]:
+                    all_intensities.append(peaksList['nzero_peaks'][:, 1])
+
+
+            all_intensities = torch.cat(all_intensities)
+
+            print("all_intensities.shape={}".format(all_intensities.shape))
+
+
+            percentiles = np.percentile(all_intensities, SpectraFound.PERCENTILES_TO_CALCULATE)
+
+            for i in range(len(SpectraFound.PERCENTILES_TO_CALCULATE)):
+                print("Percentile={}, intensity={}".format(SpectraFound.PERCENTILES_TO_CALCULATE[i], percentiles[i]))
+
+
+            print("\nStart to calculate the mzMean, intensityMean, and pepmassMean applying the intensity limit of={}...".format(percentiles[SpectraFound.LIMIT_PERCENTILE_INDEX]))
+
+            for key in self.multipleScansSequences + self.singleScanSequences:
+                for peaksList in self.spectra[key]:
+                    #
+                    # First of all, limit the intensity value
+                    #
+
+                    peaksList['nzero_peaks'][:, 1][peaksList['nzero_peaks'][:, 1] > percentiles[SpectraFound.LIMIT_PERCENTILE_INDEX]] = percentiles[SpectraFound.LIMIT_PERCENTILE_INDEX]
+
+                    #
+                    # Now, calculate the sums
+                    #
+
                     mzSum += peaksList['nzero_peaks'][:, 0].sum()
                     intensitySum += peaksList['nzero_peaks'][:, 1].sum()
                     totalNonZeroPeaks += len(peaksList['nzero_peaks'])
@@ -276,11 +311,13 @@ class SpectraFound:
             self.normalizationParameters['mz_std'] = mzStd
             self.normalizationParameters['intensity_mean'] = intensityMean
             self.normalizationParameters['intensity_std']  = intensityStd
+            self.normalizationParameters['intensity_percentiles'] = list(zip(SpectraFound.PERCENTILES_TO_CALCULATE, percentiles))
             self.normalizationParameters['pepmass_mean'] = pepmassMean
             self.normalizationParameters['pepmass_std']  = pepmassStd
 
             Logger()('mz mean: {}, mz std: {}'.format(self.normalizationParameters['mz_mean'], self.normalizationParameters['mz_std']))
             Logger()('intensity mean: {}, intensity std: {}'.format(self.normalizationParameters['intensity_mean'], self.normalizationParameters['intensity_std']))
+            Logger()('intensities percentiles: {}'.format(self.normalizationParameters['intensity_percentiles']))
             Logger()('pepmass mean: {}, pepmass std: {}'.format(self.normalizationParameters['pepmass_mean'], self.normalizationParameters['pepmass_std']))
 
         else:
@@ -289,6 +326,7 @@ class SpectraFound:
             Logger()("\nWill apply the following normalization parameters, from training dataset")
             Logger()('mz mean: {}, mz std: {}'.format(self.normalizationParameters['mz_mean'], self.normalizationParameters['mz_std']))
             Logger()('intensity mean: {}, intensity std: {}'.format(self.normalizationParameters['intensity_mean'], self.normalizationParameters['intensity_std']))
+            Logger()('intensities percentiles: {}'.format(self.normalizationParameters['intensity_percentiles']))
             Logger()('pepmass mean: {}, pepmass std: {}'.format(self.normalizationParameters['pepmass_mean'], self.normalizationParameters['pepmass_std']))
             
 
@@ -300,6 +338,12 @@ class SpectraFound:
 
         for key in self.multipleScansSequences + self.singleScanSequences:
             for peaksList in self.spectra[key]:
+                #
+                # First of all, limit the intensity value
+                #
+
+                peaksList['nzero_peaks'][:, 1][peaksList['nzero_peaks'][:, 1] > self.normalizationParameters['intensity_percentiles'][SpectraFound.LIMIT_PERCENTILE_INDEX][1]] = self.normalizationParameters['intensity_percentiles'][SpectraFound.LIMIT_PERCENTILE_INDEX][1]
+
                 peaksList['nzero_peaks'][:, 0] = (peaksList['nzero_peaks'][:, 0] - self.normalizationParameters['mz_mean']) / self.normalizationParameters['mz_std']
                 peaksList['nzero_peaks'][:, 1] = (peaksList['nzero_peaks'][:, 1] - self.normalizationParameters['intensity_mean']) / self.normalizationParameters['intensity_std']
                 peaksList['pepmass'][0] = (peaksList['pepmass'][0] - self.normalizationParameters['pepmass_mean']) / self.normalizationParameters['pepmass_std']
