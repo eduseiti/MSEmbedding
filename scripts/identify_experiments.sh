@@ -39,34 +39,52 @@ for folder in "${EXPERIMENTS_FOLDERS[@]}"; do
 	echo "Start processing experiment folder \"$folder\"" &>> $LOGFILE
 	echo "" &>> $LOGFILE
 
-	echo "{ time $CRUX_PATH/crux tide-search ${folder}/* ${DB_PATH} --parameter-file $CRUX_PARAMS_FILE --output-dir ${IDENTIFICATION_FOLDER} --overwrite T ; } &>> $LOGFILE"
-	echo
+	EXPERIMENT_FILES=($(ls ${folder}/))
 
-	echo "time $CRUX_PATH/crux tide-search ${folder}/* ${DB_PATH} --parameter-file $CRUX_PARAMS_FILE --output-dir ${IDENTIFICATION_FOLDER} --overwrite T " &>> $LOGFILE
-	echo "" &>> $LOGFILE
+	FILE_IDX=0
 
-	{ time $CRUX_PATH/crux tide-search ${folder}/* ${DB_PATH} --parameter-file $CRUX_PARAMS_FILE --output-dir ${IDENTIFICATION_FOLDER} --overwrite T ; } &>> $LOGFILE
+	for file in "${EXPERIMENT_FILES[@]}"; do	
 
-	if [ $? -eq 0 ]; then
+		OUTPUT_FOLDER=$(echo ${IDENTIFICATION_FOLDER}/${file})
 
-		echo "{ time $CRUX_PATH/crux percolator $IDENTIFICATION_FOLDER/tide-search.target.txt --parameter-file $CRUX_PARAMS_FILE --output-dir $IDENTIFICATION_FOLDER --overwrite T ; } &>> $LOGFILE"
+		echo "{ time $CRUX_PATH/crux tide-search ${folder}/${file} ${DB_PATH} --parameter-file $CRUX_PARAMS_FILE --output-dir ${OUTPUT_FOLDER} --overwrite T ; } &>> $LOGFILE"
 		echo
 
-		echo "time $CRUX_PATH/crux percolator $IDENTIFICATION_FOLDER/tide-search.target.txt --parameter-file $CRUX_PARAMS_FILE --output-dir $IDENTIFICATION_FOLDER --overwrite T" &>> $LOGFILE
+		echo "time $CRUX_PATH/crux tide-search ${folder}/${file} ${DB_PATH} --parameter-file $CRUX_PARAMS_FILE --output-dir ${OUTPUT_FOLDER} --overwrite T " &>> $LOGFILE
 		echo "" &>> $LOGFILE
 
-		{ time $CRUX_PATH/crux percolator $IDENTIFICATION_FOLDER/tide-search.target.txt --parameter-file $CRUX_PARAMS_FILE --output-dir $IDENTIFICATION_FOLDER --overwrite T ; } &>> $LOGFILE
+		{ time $CRUX_PATH/crux tide-search ${folder}/${file} ${DB_PATH} --parameter-file $CRUX_PARAMS_FILE --output-dir ${OUTPUT_FOLDER} --overwrite T ; } &>> $LOGFILE
 
 		if [ $? -eq 0 ]; then
 
-			echo -e ${GREEN}= Successfully identified experiment folder $folder!!!${NC}
+			echo "{ time $CRUX_PATH/crux percolator $OUTPUT_FOLDER/tide-search.target.txt --parameter-file $CRUX_PARAMS_FILE --output-dir $OUTPUT_FOLDER --overwrite T ; } &>> $LOGFILE"
+			echo
 
+			echo "time $CRUX_PATH/crux percolator $OUTPUT_FOLDER/tide-search.target.txt --parameter-file $CRUX_PARAMS_FILE --output-dir $OUTPUT_FOLDER --overwrite T" &>> $LOGFILE
+			echo "" &>> $LOGFILE
+
+			{ time $CRUX_PATH/crux percolator $OUTPUT_FOLDER/tide-search.target.txt --parameter-file $CRUX_PARAMS_FILE --output-dir $OUTPUT_FOLDER --overwrite T ; } &>> $LOGFILE
+
+			if [ $? -eq 0 ]; then
+
+				echo -e ${GREEN}= Successfully identified experiment file $file!!!${NC}
+
+				if [ $FILE_IDX -eq 0 ]; then
+					cat $OUTPUT_FOLDER/percolator.target.psms.txt | sed -r "s/0(.+)$/${FILE_IDX}\1/" >> ${IDENTIFICATION_FOLDER}/percolator.target.psms.txt
+				else
+					tail --lines=+2 $OUTPUT_FOLDER/percolator.target.psms.txt | sed -r "s/0(.+)$/${FILE_IDX}\1/" >> ${IDENTIFICATION_FOLDER}/percolator.target.psms.txt
+				fi
+			else
+				echo -e ${RED}= Error while executing percolator...${NC}
+			fi
 		else
-			echo -e ${RED}= Error while executing percolator...${NC}
+			echo -e ${RED}= Error while executing tide-search...${NC}
 		fi
-	else
-		echo -e ${RED}= Error while executing tide-search...${NC}
-	fi
+
+		FILE_IDX=$((FILE_IDX+1))
+	done
+
+
 
 	totalTime=$(echo "$(date +%s.%N) - $startTime" | bc)
 
