@@ -217,10 +217,7 @@ class MixedSpectraCrux(data.Dataset):
 
     TRAIN_EXPERIMENTS_DATA_5_4 = TRAIN_EXPERIMENTS_DATA_5_3 = TRAIN_EXPERIMENTS_DATA_5_2 = TRAIN_EXPERIMENTS_DATA_5_1 = TRAIN_EXPERIMENTS_DATA_5_0
 
-    TRAIN_EXPERIMENTS_DATA_6_0 = {
-        "Fetal_Brain_Gel_Velos_q_lt_0.01_identifications.tsv" : {"peaksFile" : "fetal_brain_gel_velos_crux_q_0.01_pvalue{}.pkl", "filesList": None, "constructor" : HumanProteome},
-    }
-
+    TRAIN_EXPERIMENTS_DATA_6_0 = TRAIN_EXPERIMENTS_DATA_5_4
 
     TEST_EXPERIMENTS_DATA_2_0 = {
         "Adult_Heart_bRP_Velos_q_lt_0.01_identifications.tsv" : {"peaksFile" : "adult_heart_brp_velos_crux_q_0.01.pkl", "filesList": None, "constructor" : HumanProteome}
@@ -269,9 +266,7 @@ class MixedSpectraCrux(data.Dataset):
 
     TEST_EXPERIMENTS_DATA_5_4 = TEST_EXPERIMENTS_DATA_5_3 = TEST_EXPERIMENTS_DATA_5_2 = TEST_EXPERIMENTS_DATA_5_1 = TEST_EXPERIMENTS_DATA_5_0
 
-    TEST_EXPERIMENTS_DATA_6_0 = {
-        "Adult_Heart_bRP_Velos_q_lt_0.01_identifications.tsv" : {"peaksFile" : "adult_heart_brp_velos_crux_q_0.01_pvalue{}.pkl", "filesList": None, "constructor" : HumanProteome},
-    }
+    TEST_EXPERIMENTS_DATA_6_0 = TEST_EXPERIMENTS_DATA_5_4
 
 
 

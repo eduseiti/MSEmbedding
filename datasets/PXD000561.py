@@ -659,7 +659,12 @@ class PXD000561:
         'Fetal_Liver_bRP_Elite_22_f25.mgf',
         'Fetal_Liver_bRP_Elite_22_f26.mgf',
         'Fetal_Liver_bRP_Elite_22_f27.mgf',
-        'Fetal_Liver_bRP_Elite_22_f28.mgf',
+
+        #
+        # Removing this file since Crux has not found any identification here
+        #
+        # 'Fetal_Liver_bRP_Elite_22_f28.mgf',
+        
         'Fetal_Liver_bRP_Elite_22_f29.mgf',
         'Fetal_Liver_bRP_Elite_22_f30.mgf',
         'Fetal_Liver_bRP_Elite_22_f31.mgf',
@@ -857,8 +862,11 @@ class PXD000561:
         "Adult_CD4Tcells_Gel_Velos_30_f38.mgf",
         "Adult_CD4Tcells_Gel_Velos_30_f39.mgf",
         "Adult_CD4Tcells_Gel_Velos_30_f40.mgf",
-        "Adult_CD4Tcells_Gel_Velos_30_f41.mgf",
-        "Adult_CD4Tcells_Gel_Velos_30_f42.mgf"
+        "Adult_CD4Tcells_Gel_Velos_30_f41.mgf"
+        #
+        # Removing this file since it has no identifications
+        #
+        #, "Adult_CD4Tcells_Gel_Velos_30_f42.mgf"
     ]
 
     ADULT_CD8TCELLS_GEL_ELITE_CRUX_FILES = [
@@ -1860,7 +1868,10 @@ class PXD000561:
         "Adult_Monocytes_Gel_Velos_32_f27.mgf",
         "Adult_Monocytes_Gel_Velos_32_f28.mgf",
         "Adult_Monocytes_Gel_Velos_32_f29.mgf",
-        "Adult_Monocytes_Gel_Velos_32_f30.mgf",
+        #
+        # Removing this file since Crux has not found any identifications here
+        #
+        # "Adult_Monocytes_Gel_Velos_32_f30.mgf",
         "Adult_Monocytes_Gel_Velos_32_f32.mgf",
         "Adult_Monocytes_Gel_Velos_32_f33.mgf",
         "Adult_Monocytes_Gel_Velos_32_f34.mgf",
@@ -2646,9 +2657,17 @@ class PXD000561:
         "Fetal_Heart_bRP_Elite_19_f06.mgf",
         "Fetal_Heart_bRP_Elite_19_f07.mgf",
         "Fetal_Heart_bRP_Elite_19_f08.mgf",
-        "Fetal_Heart_bRP_Elite_19_f09.mgf",
+
+        #
+        # Removing this file since Crux has not found any identification here
+        #
+        # "Fetal_Heart_bRP_Elite_19_f09.mgf",
         "Fetal_Heart_bRP_Elite_19_f10.mgf",
-        "Fetal_Heart_bRP_Elite_19_f11.mgf",
+
+        #
+        # Removing this file since Crux has not found any identification here
+        #
+        # "Fetal_Heart_bRP_Elite_19_f11.mgf",
         "Fetal_Heart_bRP_Elite_19_f12.mgf",
         "Fetal_Heart_bRP_Elite_19_f13.mgf",
         "Fetal_Heart_bRP_Elite_19_f14.mgf",
@@ -2659,7 +2678,11 @@ class PXD000561:
         "Fetal_Heart_bRP_Elite_19_f19.mgf",
         "Fetal_Heart_bRP_Elite_19_f20.mgf",
         "Fetal_Heart_bRP_Elite_19_f21.mgf",
-        "Fetal_Heart_bRP_Elite_19_f22.mgf",
+
+        #
+        # Removing this file since Crux has not found any identification here
+        #
+        # "Fetal_Heart_bRP_Elite_19_f22.mgf",
         "Fetal_Heart_bRP_Elite_19_f23.mgf",
         "Fetal_Heart_bRP_Elite_19_f24.mgf",
         "Fetal_Heart_bRP_Elite_19_f25.mgf",

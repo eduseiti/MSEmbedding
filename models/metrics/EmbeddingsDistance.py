@@ -64,33 +64,25 @@ class EmbeddingsDistance(torch.nn.Module):
         # Calculate distances statistics
         #
 
-        allCosineDistances_np = allCosineDistances.cpu().numpy()
+        # allCosineDistances_np = allCosineDistances.cpu().numpy()
 
         # cosDist_percentiles = np.percentile(allCosineDistances_np, EmbeddingsDistance.PERCENTILES)
-        cosDist_mean = np.mean(allCosineDistances_np)
-        cosDist_std = np.std(allCosineDistances_np)
-        cosDist_max = np.amax(allCosineDistances_np)
-        cosDist_min = np.amin(allCosineDistances_np)
+        # cosDist_mean = np.mean(allCosineDistances_np)
+        # cosDist_std = np.std(allCosineDistances_np)
+        # cosDist_max = np.amax(allCosineDistances_np)
+        # cosDist_min = np.amin(allCosineDistances_np)
 
-        cosDist_histogram, cosDist_bin_edges = np.histogram(allCosineDistances_np, 1000)
+        # cosDist_histogram, cosDist_bin_edges = np.histogram(allCosineDistances_np, 1000)
 
-        Logger()('cosine distance stats\nmean={}, std={}, max={}, min={}'.format(cosDist_mean, cosDist_std, cosDist_max, cosDist_min))
+        # Logger()('cosine distance stats\nmean={}, std={}, max={}, min={}'.format(cosDist_mean, cosDist_std, cosDist_max, cosDist_min))
 
 
         # output = ""
 
-        # for i in range(len(EmbeddingsDistance.PERCENTILES)):
-        #     output = output + "{}\t{:.6f}\n".format(EmbeddingsDistance.PERCENTILES[i], cosDist_percentiles[i])
+        # for i in range(len(cosDist_histogram)):
+        #     output = output + "{}\t{:.6f}\t{:.6f}\n".format(cosDist_histogram[i], cosDist_bin_edges[i], cosDist_bin_edges[i + 1])
 
-        # Logger()('Percentiles:\n{}\n'.format(output))
-
-
-        output = ""
-
-        for i in range(len(cosDist_histogram)):
-            output = output + "{}\t{:.6f}\t{:.6f}\n".format(cosDist_histogram[i], cosDist_bin_edges[i], cosDist_bin_edges[i + 1])
-
-        Logger()('Histogram:\n{}\n'.format(output))
+        # Logger()('Histogram:\n{}\n'.format(output))
 
 
 

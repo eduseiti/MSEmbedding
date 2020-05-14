@@ -98,29 +98,6 @@ class MSEmbeddingNet(nn.Module):
 
         print('-- After pack: Len = {}, shape = {}'.format(len(x), x.shape))
 
-        hidden_state = hidden_state.view(self.numOfLayers, 2 if self.bidirecionalLstm else 1, hidden_state.shape[1], -1)
-
-
-        #
-        # Apply the fusion layer if using bi-LSTM
-        #
-
-        if self.bidirecionalLstm:
-
-            print("hidden_state.shape={}".format(hidden_state.shape))
-            print("last hidden layer.shape={}".format(hidden_state[self.numOfLayers - 1].shape))
-            # print("concatenated.shape={}".format(torch.cat((hidden_state[self.numOfLayers - 1, 0], hidden_state[self.numOfLayers - 1, 1]), 1).shape))
-
-            # selects the last internal state of each direction
-
-            x = F.relu(self.fusion(torch.cat((hidden_state[self.numOfLayers - 1, 0], hidden_state[self.numOfLayers - 1, 1]), 1)))
-
-            print("final x.shape={}".format(x.shape))
-
-        else:
-            x = hidden_state[self.numOfLayers - 1, 0]
-
-
 
         #
         # Return the hidden states to their original order
@@ -131,7 +108,53 @@ class MSEmbeddingNet(nn.Module):
         for i in range(len(indexesSortedPeaks)):
             originalIndexes[indexesSortedPeaks[i]] = i
 
+        # x = x[originalIndexes]
+
+        # x = x.view(x.shape[0], x.shape[1], -1, self.lstmOutDim)
+
+        # hidden_state = hidden_state.view(self.numOfLayers, -1, hidden_state.shape[1], hidden_state.shape[2])
+
+        cell_state = cell_state.view(self.numOfLayers, -1, cell_state.shape[1], cell_state.shape[2])
+
+
+        # print("shape lstm output={}".format(x.shape))
+        # print("shape lstm output accessed={}".format(x[range(x.shape[0]), originalPeaksLen - 1].shape))
+
+        # print("hidden_state.shape={}".format(hidden_state.shape))
+        # print("last hidden layer.shape={}".format(hidden_state[self.numOfLayers - 1].shape))
+
+
+        # for i in range(40):
+        #     print("Dim {}: LSTM={}, hidden={}".format(i, x[range(x.shape[0]), originalPeaksLen - 1][0][0][i], hidden_state[2, 0][originalIndexes][0][i]))
+
+        # print("\n")
+
+        # for i in range(40):
+        #     print("Dim {}: LSTM={}, h0={}".format(i, x[range(x.shape[0]), 0][0][1][i], hidden_state[2, 1][originalIndexes][0][i]))
+
+
+        #
+        # Apply the fusion layer if using bi-LSTM
+        #
+
+        if self.bidirecionalLstm:
+
+            print("cell_state.shape={}".format(cell_state.shape))
+            print("last cell layer.shape={}".format(cell_state[self.numOfLayers - 1].shape))
+            # print("concatenated.shape={}".format(torch.cat((cell_state[self.numOfLayers - 1, 0], cell_state[self.numOfLayers - 1, 1]), 1).shape))
+
+            # selects the last internal state of each direction
+
+            x = F.relu(self.fusion(torch.cat((cell_state[self.numOfLayers - 1, 0], cell_state[self.numOfLayers - 1, 1]), 1)))
+
+            print("final x.shape={}".format(x.shape))
+
+        else:
+            x = cell_state[self.numOfLayers - 1, 0]
+
+
         x = x[originalIndexes]
+
 
         if self.applyPepmass:
             #
