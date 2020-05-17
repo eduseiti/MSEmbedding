@@ -12,6 +12,7 @@ import re
 
 import torch
 
+from bootstrap.lib.options import Options
 from bootstrap.lib.logger import Logger
 
 
@@ -58,7 +59,7 @@ class Scan:
 class SpectraFound:
 
     PERCENTILES_TO_CALCULATE = (1.0, 5.0, 10.0, 50.0, 75.0, 90.0, 95.0, 99.0, 99.99)
-    LIMIT_PERCENTILE_INDEX = -3
+    LIMIT_PERCENTILE_INDEX = -2
 
 
     def __init__(self, saveFiles, filesFolder):
@@ -241,6 +242,7 @@ class SpectraFound:
 
             totalNonZeroPeaks = 0
 
+            winsorizing_index = Options().get("dataset.winsorizing_index", SpectraFound.LIMIT_PERCENTILE_INDEX)
 
             all_intensities = []
 
@@ -262,15 +264,16 @@ class SpectraFound:
                 print("Percentile={}, intensity={}".format(SpectraFound.PERCENTILES_TO_CALCULATE[i], percentiles[i]))
 
 
-            print("\nStart to calculate the mzMean, intensityMean, and pepmassMean applying the intensity limit of={}...".format(percentiles[SpectraFound.LIMIT_PERCENTILE_INDEX]))
+            print("\nStart to calculate the mzMean, intensityMean, and pepmassMean applying the intensity limit of={}...".format(percentiles[winsorizing_index]))
 
             for key in self.multipleScansSequences + self.singleScanSequences:
                 for peaksList in self.spectra[key]:
-                    #
-                    # First of all, limit the intensity value
-                    #
+                    if winsorizing_index != 0:
+                        #
+                        # First of all, limit the intensity value
+                        #
 
-                    peaksList['nzero_peaks'][:, 1][peaksList['nzero_peaks'][:, 1] > percentiles[SpectraFound.LIMIT_PERCENTILE_INDEX]] = percentiles[SpectraFound.LIMIT_PERCENTILE_INDEX]
+                        peaksList['nzero_peaks'][:, 1][peaksList['nzero_peaks'][:, 1] > percentiles[winsorizing_index]] = percentiles[winsorizing_index]
 
                     #
                     # Now, calculate the sums
@@ -312,6 +315,7 @@ class SpectraFound:
             self.normalizationParameters['intensity_mean'] = intensityMean
             self.normalizationParameters['intensity_std']  = intensityStd
             self.normalizationParameters['intensity_percentiles'] = list(zip(SpectraFound.PERCENTILES_TO_CALCULATE, percentiles))
+            self.normalizationParameters['winsorizing_index'] = winsorizing_index
             self.normalizationParameters['pepmass_mean'] = pepmassMean
             self.normalizationParameters['pepmass_std']  = pepmassStd
 

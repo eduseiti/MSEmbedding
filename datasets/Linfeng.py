@@ -103,6 +103,8 @@ class Linfeng(data.Dataset):
 
         print("Linfeng.read_spectra current folder: {}".format(os.getcwd()))
 
+        apply_winsorizing = ('winsorizing_index' in normalizationParameters) and (normalizationParameters['winsorizing_index'] != 0)
+
         with open(os.path.join(self.currentDirectory, self.embeddingsFolder, Linfeng.TMP_EMBEDDINGS_FILENAME), "w") as outputFile:
             for folder in folders:
 
@@ -161,7 +163,8 @@ class Linfeng(data.Dataset):
                     # First of all, limit the intensity value
                     #
 
-                    # peaksList['nzero_peaks'][:, 1][peaksList['nzero_peaks'][:, 1] > normalizationParameters['intensity_percentiles'][SpectraFound.LIMIT_PERCENTILE_INDEX][1]] = normalizationParameters['intensity_percentiles'][SpectraFound.LIMIT_PERCENTILE_INDEX][1]
+                    if apply_winsorizing:
+                        peaksList['nzero_peaks'][:, 1][peaksList['nzero_peaks'][:, 1] > normalizationParameters['intensity_percentiles'][normalizationParameters['winsorizing_index']][1]] = normalizationParameters['intensity_percentiles'][normalizationParameters['winsorizing_index']][1]
 
                     peaksList['nzero_peaks'][:, 0] = (peaksList['nzero_peaks'][:, 0] - normalizationParameters['mz_mean']) / normalizationParameters['mz_std']
                     peaksList['nzero_peaks'][:, 1] = (peaksList['nzero_peaks'][:, 1] - normalizationParameters['intensity_mean']) / normalizationParameters['intensity_std']
