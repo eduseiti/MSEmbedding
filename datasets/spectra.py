@@ -340,13 +340,16 @@ class SpectraFound:
 
         print("Now, normalize the entire spectra (excluding unrecognized scans).")
 
+        apply_winsorizing = ('winsorizing_index' in self.normalizationParameters) and (self.normalizationParameters['winsorizing_index'] != 0)
+
         for key in self.multipleScansSequences + self.singleScanSequences:
             for peaksList in self.spectra[key]:
-                #
-                # First of all, limit the intensity value
-                #
+                if apply_winsorizing:
+                    #
+                    # First of all, limit the intensity value
+                    #
 
-                peaksList['nzero_peaks'][:, 1][peaksList['nzero_peaks'][:, 1] > self.normalizationParameters['intensity_percentiles'][SpectraFound.LIMIT_PERCENTILE_INDEX][1]] = self.normalizationParameters['intensity_percentiles'][SpectraFound.LIMIT_PERCENTILE_INDEX][1]
+                    peaksList['nzero_peaks'][:, 1][peaksList['nzero_peaks'][:, 1] > self.normalizationParameters['intensity_percentiles'][self.normalizationParameters['winsorizing_index']][1]] = self.normalizationParameters['intensity_percentiles'][self.normalizationParameters['winsorizing_index']][1]
 
                 peaksList['nzero_peaks'][:, 0] = (peaksList['nzero_peaks'][:, 0] - self.normalizationParameters['mz_mean']) / self.normalizationParameters['mz_std']
                 peaksList['nzero_peaks'][:, 1] = (peaksList['nzero_peaks'][:, 1] - self.normalizationParameters['intensity_mean']) / self.normalizationParameters['intensity_std']
