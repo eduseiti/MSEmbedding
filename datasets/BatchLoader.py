@@ -26,7 +26,10 @@ class BatchLoader(object):
         self.dataDumpFolder = dataDumpFolder
         self.includeNegative = Options().get("dataset.include_negative", False)
 
-        self.createTripletBatch()
+        if Options().get("dataset.discretize", False):
+            self.createTripletBatch_MLP()
+        else:
+            self.createTripletBatch()
 
 
 
@@ -103,7 +106,65 @@ class BatchLoader(object):
         #     if (BatchLoader.numberOfEpochs >= BatchLoader.SAVE_EPOCH_DATA_FIRST and BatchLoader.numberOfEpochs <= BatchLoader.SAVE_EPOCH_DATA_LAST):
         #         self.dumpData(BatchLoader.numberOfEpochs, self.totalSpectra.multipleScansSequences, self.totalSpectra.singleScanSequences, self.epoch)
 
-        return (self.epoch, self.peaksLen)
+        return (self.epoch, self.peaksLen, self.pepmass)
+
+
+    def createTripletBatch_MLP(self):
+
+        random.shuffle(self.totalSpectra.multipleScansSequences)
+
+        random.shuffle(self.totalSpectra.singleScanSequences)
+
+
+        Logger()('>>> createTripletBatch_MLP: New epoch initial sequences: {}'.format(self.totalSpectra.multipleScansSequences[0:10]))
+
+
+        peaksList = []
+        self.peaksLen = []
+        self.pepmass = []
+
+
+        #
+        # When the epoch data needs to be externalized
+        # 
+
+        self.epoch_data = []
+
+
+        #
+        # If "includeNegative" enabled, Every 3 peaks corresponds to the following sequence: anchor, positive and negative examples.
+        #
+        # Otherwise, every 2 peaks corresponds to: anchr, positive example.
+        #
+
+        for i, sequence in enumerate(self.totalSpectra.multipleScansSequences):
+
+            positiveExamplesIndexes = random.sample(range(len(self.totalSpectra.spectra[sequence])), k = 2)
+
+            anchor = self.totalSpectra.spectra[sequence][positiveExamplesIndexes[0]]['bins']
+            peaksList.append(anchor)
+            self.peaksLen.append(len(anchor))
+            self.pepmass.append(self.totalSpectra.spectra[sequence][positiveExamplesIndexes[0]]['pepmass'][0])
+            self.epoch_data.append({"sequence": sequence, "index": positiveExamplesIndexes[0]})
+
+            positive = self.totalSpectra.spectra[sequence][positiveExamplesIndexes[1]]['bins']
+            peaksList.append(positive)
+            self.peaksLen.append(len(positive))
+            self.pepmass.append(self.totalSpectra.spectra[sequence][positiveExamplesIndexes[1]]['pepmass'][0])
+            self.epoch_data.append({"sequence": sequence, "index": positiveExamplesIndexes[1]})
+
+
+        self.pepmass = np.array(self.pepmass, dtype = np.float32)
+
+        self.epoch = peaksList
+
+        print('********************* BatchLoader.createTripletBatch_MLP. self.epoch len: {}, element 0 shape: {}'.format(len(self.epoch), self.epoch[0].shape))
+
+
+        BatchLoader.numberOfEpochs += 1
+
+        return (self.epoch, self.peaksLen, self.pepmass)
+
 
 
     def __iter__(self):

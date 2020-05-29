@@ -12,6 +12,7 @@ import numpy as np
 class MSEmbeddingNet(nn.Module):
     
     def __init__(self):
+        super(MSEmbeddingNet, self).__init__()
 
         self.fcOutDim = Options()['model']['network']['fc_out_dim']
         self.lstmOutDim = Options()['model']['network']['lstm_out_dim']
@@ -20,8 +21,6 @@ class MSEmbeddingNet(nn.Module):
         self.applyPepmass = Options()['model']['network'].get('apply_pepmass', False)
         
         self.pepmassFinalDim = 16
-
-        super(MSEmbeddingNet, self).__init__()
 
         self.fcMZ1 = nn.Linear(1, 32)
         self.fcMZ2 = nn.Linear(32, self.fcOutDim)

@@ -27,7 +27,7 @@ class Linfeng(data.Dataset):
     SPECTRA_FILES_EXTENSION = ".pkl"
     SPECTRA_EXPERIMENT_LIST_FILE_EXTENSION = "_experiments.pkl"
 
-    TMP_EMBEDDINGS_FILENAME = "tmp_files_list.txt"
+    TMP_EMBEDDINGS_FILENAME = "tmp_files_list_{}.txt"
 
 
     EXPERIMENTS_FOLDERS_ALL = [
@@ -105,7 +105,10 @@ class Linfeng(data.Dataset):
 
         apply_winsorizing = ('winsorizing_index' in normalizationParameters) and (normalizationParameters['winsorizing_index'] != 0)
 
-        with open(os.path.join(self.currentDirectory, self.embeddingsFolder, Linfeng.TMP_EMBEDDINGS_FILENAME), "w") as outputFile:
+
+        tmp_embeddings_filename = Linfeng.TMP_EMBEDDINGS_FILENAME.format(str(datetime.datetime.now()))
+
+        with open(os.path.join(self.currentDirectory, self.embeddingsFolder, tmp_embeddings_filename), "w") as outputFile:
             for folder in folders:
 
                 print("Processing folder {}".format(folder))
@@ -182,7 +185,7 @@ class Linfeng(data.Dataset):
 
                 experimentsList.append([folder + "_" + self.trainingDatasetVersion + Linfeng.SPECTRA_FILES_EXTENSION, len(spectraFound.spectra[Scan.UNRECOGNIZED_SEQUENCE])])
 
-        os.rename(os.path.join(self.currentDirectory, self.embeddingsFolder, Linfeng.TMP_EMBEDDINGS_FILENAME), 
+        os.rename(os.path.join(self.currentDirectory, self.embeddingsFolder, tmp_embeddings_filename), 
                   os.path.join(self.currentDirectory, self.embeddingsFolder, 
                                self.fileListFilename.format(str(math.ceil(totalSpectraCount / self.batch_size)).zfill(6)) + SaveEmbeddings.EMBEDDINGS_FILES_LIST_FILE_EXTENSION))
 

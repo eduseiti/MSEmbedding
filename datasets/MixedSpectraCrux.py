@@ -376,12 +376,23 @@ class MixedSpectraCrux(data.Dataset):
             # Now, analyze the sequences
             self.totalSpectra.list_single_and_multiple_scans_sequences()
 
+
             # And finally normalize the data
 
             if self.trainingDataset:
                 self.totalSpectra.normalize_data(self.trainingDataset.normalizationParameters)
             else:
                 self.totalSpectra.normalize_data()
+
+
+            # Check if needs to discretize the data
+
+            if Options().get("dataset.discretize", False):
+                if self.trainingDataset:
+                    self.totalSpectra.discretize_data(self.trainingDataset.discretizationParameters)
+                else:
+                    self.totalSpectra.discretize_data()
+
 
             # Save the entire data
             self.totalSpectra.save_spectra(peaksFile, True)

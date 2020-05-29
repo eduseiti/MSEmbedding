@@ -61,6 +61,9 @@ class SpectraFound:
     PERCENTILES_TO_CALCULATE = (1.0, 5.0, 10.0, 50.0, 75.0, 90.0, 95.0, 99.0, 99.99)
     LIMIT_PERCENTILE_INDEX = -2
 
+    BIN_WIDTH = 1.000508
+    NUM_OF_BINS = 2000
+
 
     def __init__(self, saveFiles, filesFolder):
                 
@@ -185,6 +188,9 @@ class SpectraFound:
                 self.singleScanSequences = entireData['singleScanSequences']
                 self.normalizationParameters = entireData['normalizationParameters']
                 self.spectraCount = entireData['spectraCount']
+
+                if 'discretizationParameters' in entireData:                
+                    self.discretizationParameters = entireData['discretizationParameters']
             else:
                 self.spectra = entireData
 
@@ -356,6 +362,49 @@ class SpectraFound:
                 peaksList['pepmass'][0] = (peaksList['pepmass'][0] - self.normalizationParameters['pepmass_mean']) / self.normalizationParameters['pepmass_std']
 
 
+
+    def discretize_data(self, discretizationParameters = None):
+
+        if discretizationParameters:
+            bin_width = discretizationParameters['bin_width']
+            num_of_bins = discretizationParameters['num_of_bins']
+
+            self.discretizationParameters = discretizationParameters
+
+            Logger()("Discretize data using the received parameters from training dataset:")
+            Logger()("bin_width={}, num_of_bins={}".format(bin_width, num_of_bins))
+        else:
+            bin_width = SpectraFound.BIN_WIDTH
+            num_of_bins = SpectraFound.NUM_OF_BINS
+
+            self.discretizationParameters = {}
+
+            self.discretizationParameters['bin_width'] = bin_width
+            self.discretizationParameters['num_of_bins'] = num_of_bins
+
+            Logger()("Discretize data using default parameters:")
+            Logger()("bin_width={}, num_of_bins={}".format(bin_width, num_of_bins))
+
+
+        for key in self.multipleScansSequences + self.singleScanSequences:
+            for peaksList in self.spectra[key]:
+                peaksList['bins'] = torch.from_numpy(np.zeros(num_of_bins, dtype = np.float32))
+
+                original_mz = peaksList['nzero_peaks'][:, 0] * self.normalizationParameters['mz_std'] + self.normalizationParameters['mz_mean']
+                bin_indexes_mz = (original_mz / bin_width).long()
+
+                peaksList['bins'][bin_indexes_mz] = peaksList['nzero_peaks'][:, 1][range(peaksList['nzero_peaks'].shape[0])]
+
+                # for i in range(peaksList['nzero_peaks'].shape[0]):
+                #     print("original_mz={}".format(original_mz[i]))
+                #     print("bin_indexes_mz={}".format(bin_indexes_mz[i]))
+                #     print("intensity={}".format(peaksList['nzero_peaks'][:, 1][i]))
+
+                # for i in range(peaksList['bins'].shape[0]):
+                #     print("peaksList['bins'][{}]={}".format(i, peaksList['bins'][i]))
+
+
+
     def save_spectra(self, spectraName, overwrite = False):
         
         entireData = {}
@@ -364,6 +413,9 @@ class SpectraFound:
         entireData['singleScanSequences'] = self.singleScanSequences
         entireData['normalizationParameters'] = self.normalizationParameters
         entireData['spectraCount'] = self.spectraCount
+
+        if hasattr(self, "discretizationParameters"):
+            entireData['discretizationParameters'] = self.discretizationParameters
 
         completeFilename = os.path.join(self.filesFolder, spectraName) 
 
