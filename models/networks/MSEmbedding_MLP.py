@@ -28,7 +28,8 @@ class MSEmbedding_MLP_Net(nn.Module):
         print("MSEmbedding_MLP_Net: batch.shape={}".format(batch['peaks'].shape))
 
         x = F.relu(self.batchNorm01(self.fc01(batch['peaks'])))
-        x = F.relu(self.batchNorm02(self.fc02(x)))
+        # x = F.relu(self.batchNorm02(self.fc02(x)))
+        x = F.relu(self.fc02(x))
 
         return x
 

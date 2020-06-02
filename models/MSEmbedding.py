@@ -30,7 +30,7 @@ class MSEmbedding(Model):
             self.criterions['train'] = criterions.factory(engine = engine, mode = 'train')
 
         if 'eval' in modes:
-            self.criterions['eval'] = criterions.factory(engine = engine, mode = 'train')
+            self.criterions['eval'] = criterions.factory(engine = engine, mode = 'eval')
             self.metrics['eval'] = metrics.factory(engine = engine, mode = 'eval')
 
         if 'test' in modes:

@@ -1,0 +1,42 @@
+__include__: abstract.yaml
+exp:
+  dir: logs/MSEmbedding/mixedSpectraCrux_all_mtp_n_pair_LR1e-3_margin0.3_q0.01_pvalue_0.1
+dataset:
+  name: mixedSpectraCrux
+  dir: data/mixedSpectraCrux
+  train_set_version: v6.2
+  eval_set_version: v6.2
+  max_pvalue: -63.91983
+  batch_size: 250
+  winsorizing_index: 0
+  discretize: True
+engine:
+  nb_epochs: 1000
+  saving_criteria:
+  - eval_epoch.metric.MedR:min
+  - eval_epoch.metric.recall_at_10:max  
+model:
+  network:
+    name: MSEmbedding_MLP_Net
+    embeddings_size: 40
+  criterion:
+    name: NPair
+    aggregation: valid
+    epsilon: 0.0000000001
+optimizer:
+  import: MSEmbedding.models.optimizers.factory
+  name: radam
+  lr: 0.00001 
+  weight_decay: 0.00001
+misc:
+  cuda: True
+views:
+  items:  
+    - logs:train_batch.loss
+    - logs:train_epoch.loss
+    - logs:eval_batch.loss
+    - logs:eval_epoch.loss
+    - logs:eval_epoch.metric.MedR
+    - logs:eval_epoch.metric.recall_at_1
+    - logs:eval_epoch.metric.recall_at_5
+    - logs:eval_epoch.metric.recall_at_10
