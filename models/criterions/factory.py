@@ -4,6 +4,7 @@ from bootstrap.lib.logger import Logger
 from .TripletMargin import TripletMargin
 from .matrix_triplet_margin import MatrixTripletMargin
 from .n_pair import NPair
+from .double_n_pair import DoubleNPair
 
 #
 # mode: depending on the split (?)
@@ -24,6 +25,8 @@ def factory(engine=None, mode=None):
         criterion = MatrixTripletMargin()
     elif (selectedCriterion == 'NPair'):
         criterion = NPair()
+    elif (selectedCriterion == 'DoubleNPair'):
+        criterion = DoubleNPair()
     else:
         raise ValueError()
 
