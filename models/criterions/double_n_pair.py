@@ -42,19 +42,21 @@ class DoubleNPair(nn.Module):
 
         embeddings = networkOutput
 
-        # print("criterion: embeddings.shape={}".format(embeddings.shape))
+        print("criterion: embeddings.shape={}".format(embeddings.shape))
 
         allEmbeddingsDotProduct = torch.mm(embeddings, embeddings.t())
 
-        anchorPositiveDotProduct = allEmbeddingsDotProduct.diag(diagonal=1).unsqueeze(1)
+        anchorPositiveDotProduct = allEmbeddingsDotProduct.diag(diagonal=1).unsqueeze(1)[0::2]
         print("anchorPositiveDotProduct.shape={}".format(anchorPositiveDotProduct.shape))
 
         if embeddings.shape[0] < self.batch_size:
-            anchorAllOtherDotProduct = torch.masked_select(allEmbeddingsDotProduct, self.access_mask[:embeddings.shape[0], :embeddings.shape[0]])
+            anchorAllOtherDotProduct = torch.masked_select(allEmbeddingsDotProduct, self.access_mask[:embeddings.shape[0], :embeddings.shape[0]]).view(int(embeddings.shape[0] / 2), embeddings.shape[0] - 1)
         else:
-            anchorAllOtherDotProduct = torch.masked_select(allEmbeddingsDotProduct, self.access_mask)
+            anchorAllOtherDotProduct = torch.masked_select(allEmbeddingsDotProduct, self.access_mask).view(int(self.batch_size / 2), self.batch_size - 1)
 
         print("anchorAllOtherDotProduct.shape={}".format(anchorAllOtherDotProduct.shape))
+
+
         # print("anchorAllOtherDotProduct[0]={}".format(anchorAllOtherDotProduct[0]))
 
         dotProductDiferences = anchorAllOtherDotProduct - anchorPositiveDotProduct
