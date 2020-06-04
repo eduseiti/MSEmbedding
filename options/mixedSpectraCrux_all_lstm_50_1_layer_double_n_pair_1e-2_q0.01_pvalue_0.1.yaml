@@ -1,6 +1,6 @@
 __include__: abstract.yaml
 exp:
-  dir: logs/MSEmbedding/mixedSpectraCrux_all_lstm_50_1_layer_double_n_pair_LR1e-2_q0.01_pvalue_0.1_epsilon_1e-8
+  dir: logs/MSEmbedding/mixedSpectraCrux_all_lstm_50_1_layer_n_pair_LR1e-2_q0.01_pvalue_0.1_epsilon_1e-8
 dataset:
   name: mixedSpectraCrux
   dir: data/mixedSpectraCrux
@@ -21,7 +21,7 @@ model:
     bidirecional_lstm: True
     num_of_layers: 1
   criterion:
-    name: DoubleNPair
+    name: NPair
     aggregation: valid
     epsilon: 0.00000001
 optimizer:
