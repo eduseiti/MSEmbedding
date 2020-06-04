@@ -1,12 +1,12 @@
 __include__: abstract.yaml
 exp:
-  dir: logs/MSEmbedding/mixedSpectraCrux_all_lstm_50_1_layer_double_n_pair_LR1e-2_q0.01_pvalue_0.1_epsilon_1e-8
+  dir: logs/MSEmbedding/mixedSpectraCrux_all_lstm_40_3_layers_double_n_pair_LR1e-2_q0.01_pvalue_0.3_epsilon_1e-8
 dataset:
   name: mixedSpectraCrux
   dir: data/mixedSpectraCrux
-  train_set_version: v6.2
-  eval_set_version: v6.2
-  max_pvalue: -63.91983
+  train_set_version: v6.3
+  eval_set_version: v6.3
+  max_pvalue: -58.57034
   batch_size: 250
   winsorizing_index: 0
 engine:
@@ -17,9 +17,9 @@ engine:
   - eval_epoch.metric.recall_at_1:max  
 model:
   network:
-    lstm_out_dim: 50
+    lstm_out_dim: 40
     bidirecional_lstm: True
-    num_of_layers: 1
+    num_of_layers: 3
   criterion:
     name: DoubleNPair
     aggregation: valid
