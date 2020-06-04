@@ -1,0 +1,43 @@
+__include__: abstract.yaml
+exp:
+  dir: logs/MSEmbedding/mixedSpectraCrux_all_lstm_50_3_layers_double_n_pair_LR1e-2_q0.01_pvalue_0.1_epsilon_1e-8
+dataset:
+  name: mixedSpectraCrux
+  dir: data/mixedSpectraCrux
+  train_set_version: v6.2
+  eval_set_version: v6.2
+  max_pvalue: -63.91983
+  batch_size: 700
+  winsorizing_index: 0
+engine:
+  nb_epochs: 1000
+  saving_criteria:
+  - eval_epoch.metric.MedR:min
+  - eval_epoch.metric.recall_at_10:max  
+  - eval_epoch.metric.recall_at_1:max  
+model:
+  network:
+    lstm_out_dim: 50
+    bidirecional_lstm: True
+    num_of_layers: 3
+  criterion:
+    name: DoubleNPair
+    aggregation: valid
+    epsilon: 0.00000001
+optimizer:
+  import: MSEmbedding.models.optimizers.factory
+  name: radam
+  lr: 0.01 
+  weight_decay: 0.00001
+misc:
+  cuda: True
+views:
+  items:  
+    - logs:train_batch.loss
+    - logs:train_epoch.loss
+    - logs:eval_batch.loss
+    - logs:eval_epoch.loss
+    - logs:eval_epoch.metric.MedR
+    - logs:eval_epoch.metric.recall_at_1
+    - logs:eval_epoch.metric.recall_at_5
+    - logs:eval_epoch.metric.recall_at_10
