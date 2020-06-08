@@ -214,7 +214,7 @@ class Linfeng(data.Dataset):
         self.experimentsListFilename = Options().get("dataset.spectra_list_file", Linfeng.SPECTRA_LIST_FILE_DEFAULT) + "_" + self.trainingDatasetVersion + Linfeng.SPECTRA_EXPERIMENT_LIST_FILE_EXTENSION
 
         self.spectraExperimentsFolder = getattr(Linfeng, Options().get("dataset.mgf_experiments", "EXPERIMENTS_FOLDERS_ALL"))
-        self.fileListFilename = SaveEmbeddings.build_embeddings_filename()
+        self.fileListFilename = SaveEmbeddings.build_embeddings_filename(Options().get("model.metric.embeddings_format", "binary"))
         self.embeddingsFolder = Options().get("dataset.embeddings_dir", SaveEmbeddings.EMBEDDINGS_FOLDER)
 
         self.currentDirectory = os.getcwd()

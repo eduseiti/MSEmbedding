@@ -10,7 +10,6 @@ from .SaveEmbeddings import SaveEmbeddings
 
 def factory(engine=None, mode=None):
 
-
     if (Options()['model']['metric']['name'] == 'embeddingsDistance'):
         if mode == 'eval':
             Logger()('Creating EmbeddingsDistance metric...')

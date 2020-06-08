@@ -51,6 +51,9 @@ class BatchLoader(object):
         self.peaksLen = []
         self.pepmass = []
 
+        self.indexes = []
+        self.sequences = []
+
 
         #
         # When the epoch data needs to be externalized
@@ -80,6 +83,9 @@ class BatchLoader(object):
             self.peaksLen.append(len(positive))
             self.pepmass.append(self.totalSpectra.spectra[sequence][positiveExamplesIndexes[1]]['pepmass'][0])
             self.epoch_data.append({"sequence": sequence, "index": positiveExamplesIndexes[1]})
+
+            self.indexes += positiveExamplesIndexes
+            self.sequences += [sequence] + [sequence]
 
             if self.includeNegative:
                 negative = self.totalSpectra.spectra[self.totalSpectra.singleScanSequences[i % singleScanSequencesCount]][0]['nzero_peaks']

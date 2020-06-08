@@ -1,0 +1,30 @@
+__include__: abstract.yaml
+exp:
+  dir: logs/MSEmbedding/mixedSpectraCrux_all_lstm_40_3_layers_double_n_pair_LR1e-2_q0.01_pvalue_0.3_epsilon_1e-8_plot_validation
+dataset:
+  train_split: 
+  name: mixedSpectraCrux
+  dir: data/mixedSpectraCrux
+  embeddings_file: sample_embeddings_q0.01_all_lstm40_3layer_pvalue_0.3_double_n_pair
+  embeddings_dir: logs/MSEmbedding/mixedSpectraCrux_all_lstm_40_3_layers_double_n_pair_LR1e-2_q0.01_pvalue_0.3_epsilon_1e-8_plot_validation
+  eval_set_version: v6.2
+  batch_size: 400
+engine:
+  nb_epochs: 1
+model:
+  name: MSEmbedding_encoding
+  network:
+    lstm_out_dim: 40
+    bidirecional_lstm: True
+    num_of_layers: 3
+  metric:
+    name: saveEmbeddings
+    import: MSEmbedding.models.metrics.factory
+    embeddings_format: complete
+optimizer:
+  import: MSEmbedding.models.optimizers.factory
+  name: radam
+  lr: 0.01 
+  weight_decay: 0.00001
+misc:
+  cuda: True
