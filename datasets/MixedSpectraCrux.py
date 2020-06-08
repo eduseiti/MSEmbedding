@@ -299,7 +299,90 @@ class MixedSpectraCrux(data.Dataset):
         "Fetal_Heart_Gel_Velos_73_q_lt_0.01_identifications.tsv" : {"peaksFile" : "Fetal_Heart_Gel_Velos_73_crux_q0.01_pvalue{}.pkl", "filesList" : None, "constructor" : HumanProteome},
         "Fetal_Heart_bRP_Elite_19_q_lt_0.01_identifications.tsv" : {"peaksFile" : "Fetal_Heart_bRP_Elite_19_crux_q0.01_pvalue{}.pkl", "filesList" : None, "constructor" : HumanProteome},
         "Fetal_Placenta_Gel_Velos_14_q_lt_0.01_identifications.tsv" : {"peaksFile" : "Fetal_Placenta_Gel_Velos_14_crux_q0.01_pvalue{}.pkl", "filesList" : None, "constructor" : HumanProteome},
-}
+    }
+
+
+    TRAIN_EXPERIMENTS_DATA_7_0 = {
+        "Fetal_Brain_Gel_Velos_16_q_lt_0.001_identifications.tsv" : {"peaksFile" : "fetal_brain_gel_velos_16_crux_q_0.001_pvalue{}.pkl", "filesList": None, "constructor" : HumanProteome},
+        "Fetal_Ovary_bRP_Velos_41_q_lt_0.001_identifications.tsv" : {"peaksFile" : "fetal_ovary_brp_velos_41_crux_q_0.001_pvalue{}.pkl", "filesList": None, "constructor" : HumanProteome},
+        "Fetal_Ovary_bRP_Elite_25_q_lt_0.001_identifications.tsv" : {"peaksFile" : "fetal_ovary_brp_elite_25_crux_q_0.001_pvalue{}.pkl", "filesList": None, "constructor" : HumanProteome},
+        "Adult_Adrenalgland_Gel_Elite_49_q_lt_0.001_identifications.tsv" : {"peaksFile" : "adult_adrenalgland_gel_elite_49_crux_q_0.001_pvalue{}.pkl", "filesList": None, "constructor" : HumanProteome},
+        "Adult_Adrenalgland_Gel_Velos_2_q_lt_0.001_identifications.tsv" : {"peaksFile" : "adult_adrenalgland_gel_velos_2_crux_q_0.001_pvalue{}.pkl", "filesList": None, "constructor" : HumanProteome},
+        "Adult_Adrenalgland_bRP_Velos_1_q_lt_0.001_identifications.tsv" : {"peaksFile" : "adult_adrenalgland_bRP_velos_1_crux_q_0.001_pvalue{}.pkl", "filesList": None, "constructor" : HumanProteome},
+        "Adult_Urinarybladder_Gel_Elite_70_q_lt_0.001_identifications.tsv" : {"peaksFile" : "adult_urinarybladder_gel_elite_70_crux_q_0.001_pvalue{}.pkl", "filesList": None, "constructor" : HumanProteome},
+        "Adult_Platelets_Gel_Elite_48_q_lt_0.001_identifications.tsv" : {"peaksFile" : "adult_platelets_gel_elite_48_crux_q_0.001_pvalue{}.pkl", "filesList": None, "constructor" : HumanProteome},
+
+        "Adult_Bcells_bRP_Elite_75_q_lt_0.001_identifications.tsv" : {"peaksFile" : "adult_bcells_brp_elite_75_crux_q_0.001_pvalue{}.pkl", "filesList" : None, "constructor" : HumanProteome},
+        "Adult_Bcells_bRP_Velos_42_q_lt_0.001_identifications.tsv" : {"peaksFile" : "adult_bcells_brp_velos_42_crux_q_0.001_pvalue{}.pkl", "filesList" : None, "constructor" : HumanProteome},
+        "Adult_CD4Tcells_Gel_Velos_30_q_lt_0.001_identifications.tsv" : {"peaksFile" : "adult_cd4tcells_gel_velos_30_crux_q_0.001_pvalue{}.pkl", "filesList" : None, "constructor" : HumanProteome},
+        "Adult_CD8Tcells_Gel_Elite_44_q_lt_0.001_identifications.tsv" : {"peaksFile" : "adult_cd8tcells_gel_elite_44_crux_q_0.001_pvalue{}.pkl", "filesList" : None, "constructor" : HumanProteome},
+        "Adult_Colon_Gel_Elite_51_q_lt_0.001_identifications.tsv" : {"peaksFile" : "adult_colon_gel_elite_51_crux_q_0.001_pvalue{}.pkl", "filesList" : None, "constructor" : HumanProteome},
+        "Adult_Esophagus_Gel_Velos_4_q_lt_0.001_identifications.tsv" : {"peaksFile" : "adult_esophagus_gel_velos_4_crux_q_0.001_pvalue{}.pkl", "filesList" : None, "constructor" : HumanProteome},
+        "Adult_NKcells_bRP_Velos_46_q_lt_0.001_identifications.tsv" : {"peaksFile" : "adult_nkcells_brp_velos_46_crux_q_0.001_pvalue{}.pkl", "filesList" : None, "constructor" : HumanProteome},
+        "Adult_Pancreas_bRP_Elite_59_q_lt_0.001_identifications.tsv" : {"peaksFile" : "adult_pancreas_brp_elite_59_crux_q_0.001_pvalue{}.pkl", "filesList" : None, "constructor" : HumanProteome},
+        "Fetal_Gut_Gel_Velos_72_q_lt_0.001_identifications.tsv" : {"peaksFile" : "fetal_gut_gel_velos_72_crux_q_0.001_pvalue{}.pkl", "filesList" : None, "constructor" : HumanProteome},
+        "Fetal_Liver_bRP_Elite_23_q_lt_0.001_identifications.tsv" : {"peaksFile" : "fetal_liver_brp_elite_23_crux_q_0.001_pvalue{}.pkl", "filesList" : None, "constructor" : HumanProteome},
+        "Fetal_Testis_bRP_Elite_26_q_lt_0.001_identifications.tsv" : {"peaksFile" : "fetal_testis_brp_elite_26_crux_q_0.001_pvalue{}.pkl", "filesList" : None, "constructor" : HumanProteome},
+        "Adult_Bcells_Gel_Elite_76_q_lt_0.001_identifications.tsv" : {"peaksFile" : "adult_bcells_gel_elite_76_crux_q_0.001_pvalue{}.pkl", "filesList" : None, "constructor" : HumanProteome},
+        "Fetal_Liver_Gel_Velos_24_q_lt_0.001_identifications.tsv" : {"peaksFile" : "fetal_liver_gel_velos_24_crux_q_0.001_pvalue{}.pkl", "filesList" : None, "constructor" : HumanProteome},
+
+        "Adult_CD4Tcells_bRP_Elite_28_q_lt_0.001_identifications.tsv" : {"peaksFile" : "Adult_CD4Tcells_bRP_Elite_28_crux_q_0.001_pvalue{}.pkl", "filesList" : None, "constructor" : HumanProteome},
+        "Adult_CD4Tcells_bRP_Velos_29_q_lt_0.001_identifications.tsv" : {"peaksFile" : "Adult_CD4Tcells_bRP_Velos_29_crux_q_0.001_pvalue{}.pkl", "filesList" : None, "constructor" : HumanProteome},
+        "Adult_CD8Tcells_Gel_Velos_45_q_lt_0.001_identifications.tsv" : {"peaksFile" : "Adult_CD8Tcells_Gel_Velos_45_crux_q_0.001_pvalue{}.pkl", "filesList" : None, "constructor" : HumanProteome},
+        "Adult_CD8Tcells_bRP_Elite_77_q_lt_0.001_identifications.tsv" : {"peaksFile" : "Adult_CD8Tcells_bRP_Elite_77_crux_q_0.001_pvalue{}.pkl", "filesList" : None, "constructor" : HumanProteome},
+        "Adult_CD8Tcells_bRP_Velos_43_q_lt_0.001_identifications.tsv" : {"peaksFile" : "Adult_CD8Tcells_bRP_Velos_43_crux_q_0.001_pvalue{}.pkl", "filesList" : None, "constructor" : HumanProteome},
+        "Adult_Colon_bRP_Elite_50_q_lt_0.001_identifications.tsv" : {"peaksFile" : "Adult_Colon_bRP_Elite_50_crux_q_0.001_pvalue{}.pkl", "filesList" : None, "constructor" : HumanProteome},
+        "Adult_Esophagus_bRP_Velos_3_q_lt_0.001_identifications.tsv" : {"peaksFile" : "Adult_Esophagus_bRP_Velos_3_crux_q_0.001_pvalue{}.pkl", "filesList" : None, "constructor" : HumanProteome},
+        "Adult_Frontalcortex_Gel_Elite_80_q_lt_0.001_identifications.tsv" : {"peaksFile" : "Adult_Frontalcortex_Gel_Elite_80_crux_q_0.001_pvalue{}.pkl", "filesList" : None, "constructor" : HumanProteome},
+        "Adult_Frontalcortex_bRP_Elite_38_q_lt_0.001_identifications.tsv" : {"peaksFile" : "Adult_Frontalcortex_bRP_Elite_38_crux_q_0.001_pvalue{}.pkl", "filesList" : None, "constructor" : HumanProteome},
+        "Adult_Frontalcortex_bRP_Elite_85_q_lt_0.001_identifications.tsv" : {"peaksFile" : "Adult_Frontalcortex_bRP_Elite_85_crux_q_0.001_pvalue{}.pkl", "filesList" : None, "constructor" : HumanProteome},
+        "Adult_Gallbladder_Gel_Elite_52_q_lt_0.001_identifications.tsv" : {"peaksFile" : "Adult_Gallbladder_Gel_Elite_52_crux_q_0.001_pvalue{}.pkl", "filesList" : None, "constructor" : HumanProteome},
+        "Adult_Gallbladder_bRP_Elite_53_q_lt_0.001_identifications.tsv" : {"peaksFile" : "Adult_Gallbladder_bRP_Elite_53_crux_q_0.001_pvalue{}.pkl", "filesList" : None, "constructor" : HumanProteome},
+        "Adult_Heart_Gel_Elite_54_q_lt_0.001_identifications.tsv" : {"peaksFile" : "Adult_Heart_Gel_Elite_54_crux_q_0.001_pvalue{}.pkl", "filesList" : None, "constructor" : HumanProteome},
+        "Adult_Heart_Gel_Velos_7_q_lt_0.001_identifications.tsv" : {"peaksFile" : "Adult_Heart_Gel_Velos_7_crux_q_0.001_pvalue{}.pkl", "filesList" : None, "constructor" : HumanProteome},
+        "Adult_Heart_bRP_Elite_81_q_lt_0.001_identifications.tsv" : {"peaksFile" : "Adult_Heart_bRP_Elite_81_crux_q_0.001_pvalue{}.pkl", "filesList" : None, "constructor" : HumanProteome},
+        "Adult_Kidney_Gel_Elite_55_q_lt_0.001_identifications.tsv" : {"peaksFile" : "Adult_Kidney_Gel_Elite_55_crux_q_0.001_pvalue{}.pkl", "filesList" : None, "constructor" : HumanProteome},
+        "Adult_Kidney_Gel_Velos_9_q_lt_0.001_identifications.tsv" : {"peaksFile" : "Adult_Kidney_Gel_Velos_9_crux_q_0.001_pvalue{}.pkl", "filesList" : None, "constructor" : HumanProteome},
+        "Adult_Kidney_bRP_Velos_8_q_lt_0.001_identifications.tsv" : {"peaksFile" : "Adult_Kidney_bRP_Velos_8_crux_q_0.001_pvalue{}.pkl", "filesList" : None, "constructor" : HumanProteome},
+        "Adult_Liver_Gel_Elilte_83_q_lt_0.001_identifications.tsv" : {"peaksFile" : "Adult_Liver_Gel_Elilte_83_crux_q_0.001_pvalue{}.pkl", "filesList" : None, "constructor" : HumanProteome},
+        "Adult_Liver_Gel_Velos_11_q_lt_0.001_identifications.tsv" : {"peaksFile" : "Adult_Liver_Gel_Velos_11_crux_q_0.001_pvalue{}.pkl", "filesList" : None, "constructor" : HumanProteome},
+        "Adult_Liver_bRP_Elite_82_q_lt_0.001_identifications.tsv" : {"peaksFile" : "Adult_Liver_bRP_Elite_82_crux_q_0.001_pvalue{}.pkl", "filesList" : None, "constructor" : HumanProteome},
+        "Adult_Liver_bRP_Velos_10_q_lt_0.001_identifications.tsv" : {"peaksFile" : "Adult_Liver_bRP_Velos_10_crux_q_0.001_pvalue{}.pkl", "filesList" : None, "constructor" : HumanProteome},
+        "Adult_Lung_Gel_Elite_56_q_lt_0.001_identifications.tsv" : {"peaksFile" : "Adult_Lung_Gel_Elite_56_crux_q_0.001_pvalue{}.pkl", "filesList" : None, "constructor" : HumanProteome},
+        "Adult_Lung_Gel_Velos_13_q_lt_0.001_identifications.tsv" : {"peaksFile" : "Adult_Lung_Gel_Velos_13_crux_q_0.001_pvalue{}.pkl", "filesList" : None, "constructor" : HumanProteome},
+        "Adult_Lung_bRP_Velos_12_q_lt_0.001_identifications.tsv" : {"peaksFile" : "Adult_Lung_bRP_Velos_12_crux_q_0.001_pvalue{}.pkl", "filesList" : None, "constructor" : HumanProteome},
+        "Adult_Monocytes_Gel_Velos_32_q_lt_0.001_identifications.tsv" : {"peaksFile" : "Adult_Monocytes_Gel_Velos_32_crux_q_0.001_pvalue{}.pkl", "filesList" : None, "constructor" : HumanProteome},
+        "Adult_Monocytes_bRP_Elite_33_q_lt_0.001_identifications.tsv" : {"peaksFile" : "Adult_Monocytes_bRP_Elite_33_crux_q_0.001_pvalue{}.pkl", "filesList" : None, "constructor" : HumanProteome},
+        "Adult_Monocytes_bRP_Velos_31_q_lt_0.001_identifications.tsv" : {"peaksFile" : "Adult_Monocytes_bRP_Velos_31_crux_q_0.001_pvalue{}.pkl", "filesList" : None, "constructor" : HumanProteome},
+        "Adult_NKcells_Gel_Elite_78_q_lt_0.001_identifications.tsv" : {"peaksFile" : "Adult_NKcells_Gel_Elite_78_crux_q_0.001_pvalue{}.pkl", "filesList" : None, "constructor" : HumanProteome},
+        "Adult_NKcells_Gel_Velos_47_q_lt_0.001_identifications.tsv" : {"peaksFile" : "Adult_NKcells_Gel_Velos_47_crux_q_0.001_pvalue{}.pkl", "filesList" : None, "constructor" : HumanProteome},
+        "Adult_Ovary_Gel_Elite_58_q_lt_0.001_identifications.tsv" : {"peaksFile" : "Adult_Ovary_Gel_Elite_58_crux_q_0.001_pvalue{}.pkl", "filesList" : None, "constructor" : HumanProteome},
+        "Adult_Ovary_bRP_Elite_57_q_lt_0.001_identifications.tsv" : {"peaksFile" : "Adult_Ovary_bRP_Elite_57_crux_q_0.001_pvalue{}.pkl", "filesList" : None, "constructor" : HumanProteome},
+        "Adult_Pancreas_Gel_Elite_60_q_lt_0.001_identifications.tsv" : {"peaksFile" : "Adult_Pancreas_Gel_Elite_60_crux_q_0.001_pvalue{}.pkl", "filesList" : None, "constructor" : HumanProteome},
+        "Adult_Platelets_Gel_Velos_36_q_lt_0.001_identifications.tsv" : {"peaksFile" : "Adult_Platelets_Gel_Velos_36_crux_q_0.001_pvalue{}.pkl", "filesList" : None, "constructor" : HumanProteome},
+        "Adult_Platelets_bRP_Velos_35_q_lt_0.001_identifications.tsv" : {"peaksFile" : "Adult_Platelets_bRP_Velos_35_crux_q_0.001_pvalue{}.pkl", "filesList" : None, "constructor" : HumanProteome},
+        "Adult_Prostate_Gel_Elite_62_q_lt_0.001_identifications.tsv" : {"peaksFile" : "Adult_Prostate_Gel_Elite_62_crux_q_0.001_pvalue{}.pkl", "filesList" : None, "constructor" : HumanProteome},
+        "Adult_Prostate_bRP_Elite_61_q_lt_0.001_identifications.tsv" : {"peaksFile" : "Adult_Prostate_bRP_Elite_61_crux_q_0.001_pvalue{}.pkl", "filesList" : None, "constructor" : HumanProteome},
+        "Adult_Rectum_Gel_Elite_63_q_lt_0.001_identifications.tsv" : {"peaksFile" : "Adult_Rectum_Gel_Elite_63_crux_q_0.001_pvalue{}.pkl", "filesList" : None, "constructor" : HumanProteome},
+        "Adult_Rectum_bRP_Elite_84_q_lt_0.001_identifications.tsv" : {"peaksFile" : "Adult_Rectum_bRP_Elite_84_crux_q_0.001_pvalue{}.pkl", "filesList" : None, "constructor" : HumanProteome},
+        "Adult_Retina_Gel_Elite_65_q_lt_0.001_identifications.tsv" : {"peaksFile" : "Adult_Retina_Gel_Elite_65_crux_q_0.001_pvalue{}.pkl", "filesList" : None, "constructor" : HumanProteome},
+        "Adult_Retina_Gel_Velos_5_q_lt_0.001_identifications.tsv" : {"peaksFile" : "Adult_Retina_Gel_Velos_5_crux_q_0.001_pvalue{}.pkl", "filesList" : None, "constructor" : HumanProteome},
+        "Adult_Retina_bRP_Elite_64_q_lt_0.001_identifications.tsv" : {"peaksFile" : "Adult_Retina_bRP_Elite_64_crux_q_0.001_pvalue{}.pkl", "filesList" : None, "constructor" : HumanProteome},
+        "Adult_Spinalcord_Gel_Elite_67_q_lt_0.001_identifications.tsv" : {"peaksFile" : "Adult_Spinalcord_Gel_Elite_67_crux_q_0.001_pvalue{}.pkl", "filesList" : None, "constructor" : HumanProteome},
+        "Adult_Spinalcord_bRP_Elite_66_q_lt_0.001_identifications.tsv" : {"peaksFile" : "Adult_Spinalcord_bRP_Elite_66_crux_q_0.001_pvalue{}.pkl", "filesList" : None, "constructor" : HumanProteome},
+        "Adult_Testis_Gel_Elite_69_q_lt_0.001_identifications.tsv" : {"peaksFile" : "Adult_Testis_Gel_Elite_69_crux_q_0.001_pvalue{}.pkl", "filesList" : None, "constructor" : HumanProteome},
+        "Adult_Testis_bRP_Elite_68_q_lt_0.001_identifications.tsv" : {"peaksFile" : "Adult_Testis_bRP_Elite_68_crux_q_0.001_pvalue{}.pkl", "filesList" : None, "constructor" : HumanProteome},
+        "Adult_Urinarybladder_Gel_Elite_40_q_lt_0.001_identifications.tsv" : {"peaksFile" : "Adult_Urinarybladder_Gel_Elite_40_crux_q_0.001_pvalue{}.pkl", "filesList" : None, "constructor" : HumanProteome},
+        "Adult_Urinarybladder_bRP_Elite_71_q_lt_0.001_identifications.tsv" : {"peaksFile" : "Adult_Urinarybladder_bRP_Elite_71_crux_q_0.001_pvalue{}.pkl", "filesList" : None, "constructor" : HumanProteome},
+        "Fetal_Brain_bRP_Elite_15_q_lt_0.001_identifications.tsv" : {"peaksFile" : "Fetal_Brain_bRP_Elite_15_crux_q_0.001_pvalue{}.pkl", "filesList" : None, "constructor" : HumanProteome},
+        "Fetal_Gut_bRP_Elite_17_q_lt_0.001_identifications.tsv" : {"peaksFile" : "Fetal_Gut_bRP_Elite_17_crux_q_0.001_pvalue{}.pkl", "filesList" : None, "constructor" : HumanProteome},
+        "Fetal_Gut_bRP_Elite_18_q_lt_0.001_identifications.tsv" : {"peaksFile" : "Fetal_Gut_bRP_Elite_18_crux_q_0.001_pvalue{}.pkl", "filesList" : None, "constructor" : HumanProteome},
+        "Fetal_Heart_Gel_Velos_73_q_lt_0.001_identifications.tsv" : {"peaksFile" : "Fetal_Heart_Gel_Velos_73_crux_q_0.001_pvalue{}.pkl", "filesList" : None, "constructor" : HumanProteome},
+        "Fetal_Heart_bRP_Elite_19_q_lt_0.001_identifications.tsv" : {"peaksFile" : "Fetal_Heart_bRP_Elite_19_crux_q_0.001_pvalue{}.pkl", "filesList" : None, "constructor" : HumanProteome},
+        "Fetal_Placenta_Gel_Velos_14_q_lt_0.001_identifications.tsv" : {"peaksFile" : "Fetal_Placenta_Gel_Velos_14_crux_q_0.001_pvalue{}.pkl", "filesList" : None, "constructor" : HumanProteome},
+        "Fetal_Heart_bRP_Elite_20_q_lt_0.001_identifications.tsv" : {"peaksFile" : "Fetal_Heart_bRP_Elite_20_crux_q_0.001_pvalue{}.pkl", "filesList" : None, "constructor" : HumanProteome},
+        "Fetal_Ovary_Gel_Velos_74_q_lt_0.001_identifications.tsv" : {"peaksFile" : "Fetal_Ovary_Gel_Velos_74_crux_q_0.001_pvalue{}.pkl", "filesList" : None, "constructor" : HumanProteome}
+    }
 
 
 
@@ -367,6 +450,18 @@ class MixedSpectraCrux(data.Dataset):
         "Fetal_Ovary_Gel_Velos_74_q_lt_0.01_identifications.tsv" : {"peaksFile" : "Fetal_Ovary_Gel_Velos_74_crux_q0.01_pvalue{}.pkl", "filesList" : None, "constructor" : HumanProteome},
         "Fetal_Placenta_bRP_Elite_79_q_lt_0.01_identifications.tsv" : {"peaksFile" : "Fetal_Placenta_bRP_Elite_79_crux_q0.01_pvalue{}.pkl", "filesList" : None, "constructor" : HumanProteome},
         "Fetal_Testis_Gel_Velos_27_q_lt_0.01_identifications.tsv" : {"peaksFile" : "Fetal_Testis_Gel_Velos_27_crux_q0.01_pvalue{}.pkl", "filesList" : None, "constructor" : HumanProteome}
+    }
+
+
+
+    TEST_EXPERIMENTS_DATA_7_0 = {
+        "Adult_Heart_bRP_Velos_6_q_lt_0.001_identifications.tsv" : {"peaksFile" : "adult_heart_brp_velos_6_crux_q_0.001_pvalue{}.pkl", "filesList": None, "constructor" : HumanProteome},
+
+        "Adult_NKcells_bRP_Elite_34_q_lt_0.001_identifications.tsv" : {"peaksFile" : "adult_nkcells_brp_elite_34_crux_q_0.001_pvalue{}.pkl", "filesList" : None, "constructor" : HumanProteome},
+
+        "Fetal_Heart_Gel_Velos_21_q_lt_0.001_identifications.tsv" : {"peaksFile" : "Fetal_Heart_Gel_Velos_21_crux_q_0.001_pvalue{}.pkl", "filesList" : None, "constructor" : HumanProteome},
+        "Fetal_Placenta_bRP_Elite_79_q_lt_0.001_identifications.tsv" : {"peaksFile" : "Fetal_Placenta_bRP_Elite_79_crux_q_0.001_pvalue{}.pkl", "filesList" : None, "constructor" : HumanProteome},
+        "Fetal_Testis_Gel_Velos_27_q_lt_0.001_identifications.tsv" : {"peaksFile" : "Fetal_Testis_Gel_Velos_27_crux_q_0.001_pvalue{}.pkl", "filesList" : None, "constructor" : HumanProteome}
     }
 
 
@@ -539,6 +634,9 @@ class MixedSpectraCrux(data.Dataset):
         item['peaksLen'] = self.batchSampler.peaksLen[index]
         item['pepmass'] = self.batchSampler.pepmass[index]
         item['epoch_data'] = self.batchSampler.epoch_data[index]
+
+        item['sequence'] = self.batchSampler.sequences[index]
+        item['index'] = self.batchSampler.indexes[index]
 
         return item
 
