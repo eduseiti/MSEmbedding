@@ -385,6 +385,7 @@ class MixedSpectraCrux(data.Dataset):
     }
 
 
+    TRAIN_EXPERIMENTS_DATA_7_1 = TRAIN_EXPERIMENTS_DATA_7_0
 
 
 
@@ -465,7 +466,7 @@ class MixedSpectraCrux(data.Dataset):
     }
 
 
-
+    TEST_EXPERIMENTS_DATA_7_1 = TEST_EXPERIMENTS_DATA_7_0
 
 
 
@@ -650,7 +651,7 @@ class MixedSpectraCrux(data.Dataset):
 
     def make_batch_loader(self):
 
-        self.batchSampler = BatchLoader(self.totalSpectra, self.batch_size, dataDumpFolder = self.dataDirectory)
+        self.batchSampler = BatchLoader(self.totalSpectra, self.batch_size, dataDumpFolder = self.dataDirectory, split=self.split)
 
         self.numberOfBatches = len(self.batchSampler.epoch) // self.batch_size
 

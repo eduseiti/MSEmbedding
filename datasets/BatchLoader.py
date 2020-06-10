@@ -19,12 +19,16 @@ class BatchLoader(object):
 
     DATA_DUMP_FILENAME = "data_epoch_{}.pkl"
 
-    def __init__(self, originalData, batchSize, dataDumpFolder = None):
+    def __init__(self, originalData, batchSize, dataDumpFolder = None, split = 'train'):
 
         self.totalSpectra = originalData
         self.batchSize = batchSize
         self.dataDumpFolder = dataDumpFolder
         self.includeNegative = Options().get("dataset.include_negative", False)
+
+        self.max_validation_samples = Options().get("dataset.max_validation_samples", 7000)
+
+        self.split = split
 
         if Options().get("dataset.discretize", False):
             self.createTripletBatch_MLP()
@@ -38,6 +42,21 @@ class BatchLoader(object):
         random.shuffle(self.totalSpectra.multipleScansSequences)
 
         random.shuffle(self.totalSpectra.singleScanSequences)
+
+
+        #
+        # Define the number of dataset samples to include in the epoch
+        #
+
+        max_samples = len(self.totalSpectra.multipleScansSequences)
+
+        if self.split == 'eval' and self.max_validation_samples < max_samples:
+            max_samples = self.max_validation_samples
+
+        Logger()("Considering {} samples, from a total of {}".format(max_samples, len(self.totalSpectra.multipleScansSequences)))
+
+
+
 
         if self.includeNegative:
             singleScanSequencesCount = len(self.totalSpectra.singleScanSequences)
@@ -55,6 +74,7 @@ class BatchLoader(object):
         self.sequences = []
 
 
+
         #
         # When the epoch data needs to be externalized
         # 
@@ -68,7 +88,7 @@ class BatchLoader(object):
         # Otherwise, every 2 peaks corresponds to: anchr, positive example.
         #
 
-        for i, sequence in enumerate(self.totalSpectra.multipleScansSequences):
+        for i, sequence in enumerate(self.totalSpectra.multipleScansSequences[:max_samples]):
 
             positiveExamplesIndexes = random.sample(range(len(self.totalSpectra.spectra[sequence])), k = 2)
 
