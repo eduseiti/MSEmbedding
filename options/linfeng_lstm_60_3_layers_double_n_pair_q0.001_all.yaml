@@ -1,0 +1,40 @@
+__include__: abstract.yaml
+exp:
+  dir: logs/MSEmbedding/linfeng_lstm_60_3_layers_double_n_pair_LR1e-2_q0.001_all
+dataset:
+  name: linfeng
+  dir: data/linfeng_all_q0.001_n_pair
+  mgf_dir: /media/eduseiti/bigdata01/unicamp/doutorado/linfeng
+  mgf_experiments: SAMPLE_EXPERIMENTS_FOLDERS
+  spectra_list_file: sample_linfeng_q0.001_all_double_n_pair_lstm_60
+  embeddings_file: sample_embeddings_q0.001_all_lstm60_3layer_double_n_pair
+  embeddings_dir: data/linfeng_all_q0.001_n_pair
+  train_split: 
+  eval_split: test
+  train_normalization_file: data/mixedSpectraCrux/sequences/train_mixedSpectraCrux_v7.1.pkl
+  batch_size: 400
+  nb_threads: 0  
+engine:
+  nb_epochs: 1
+model:
+  name: MSEmbedding_encoding
+  network:
+    lstm_out_dim: 60
+    bidirecional_lstm: True
+    num_of_layers: 3
+  metric:
+    name: saveEmbeddings
+    import: MSEmbedding.models.metrics.factory    
+optimizer:
+  import: MSEmbedding.models.optimizers.factory
+  name: radam
+  lr: 0.001 
+  weight_decay: 0.00001
+misc:
+  cuda: True
+views:
+  items:  
+    - logs:eval_epoch.metric.MedR
+    - logs:eval_epoch.metric.recall_at_1
+    - logs:eval_epoch.metric.recall_at_5
+    - logs:eval_epoch.metric.recall_at_10
