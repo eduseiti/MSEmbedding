@@ -7,7 +7,7 @@ dataset:
   train_set_version: v7.2
   eval_set_version: v7.2
   max_pvalue: -53.19835
-  batch_size: 10000
+  batch_size: 1000
   winsorizing_index: 0
   max_validation_samples: 18000
 engine:
