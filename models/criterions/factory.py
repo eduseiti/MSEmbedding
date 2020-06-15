@@ -5,6 +5,7 @@ from .TripletMargin import TripletMargin
 from .matrix_triplet_margin import MatrixTripletMargin
 from .n_pair import NPair
 from .double_n_pair import DoubleNPair
+from .quad_n_pair import QuadNPair
 
 #
 # mode: depending on the split (?)
@@ -27,6 +28,8 @@ def factory(engine=None, mode=None):
         criterion = NPair()
     elif (selectedCriterion == 'DoubleNPair'):
         criterion = DoubleNPair()
+    elif (selectedCriterion == 'QuadNPair'):
+        criterion = QuadNPair()
     else:
         raise ValueError()
 
