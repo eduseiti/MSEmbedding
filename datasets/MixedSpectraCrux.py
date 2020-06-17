@@ -468,7 +468,7 @@ class MixedSpectraCrux(data.Dataset):
     }
 
 
-
+    TRAIN_EXPERIMENTS_DATA_7_3 = TRAIN_EXPERIMENTS_DATA_7_2
 
 
     TEST_EXPERIMENTS_DATA_2_0 = {
@@ -561,10 +561,10 @@ class MixedSpectraCrux(data.Dataset):
         "Fetal_Placenta_Gel_Velos_14_q_lt_0.001_identifications.tsv" : {"peaksFile" : "Fetal_Placenta_Gel_Velos_14_crux_q_0.001_pvalue{}.pkl", "filesList" : None, "constructor" : HumanProteome},
         "Fetal_Heart_bRP_Elite_20_q_lt_0.001_identifications.tsv" : {"peaksFile" : "Fetal_Heart_bRP_Elite_20_crux_q_0.001_pvalue{}.pkl", "filesList" : None, "constructor" : HumanProteome},
         "Fetal_Ovary_Gel_Velos_74_q_lt_0.001_identifications.tsv" : {"peaksFile" : "Fetal_Ovary_Gel_Velos_74_crux_q_0.001_pvalue{}.pkl", "filesList" : None, "constructor" : HumanProteome}
-}
+    }   
 
 
-
+    TEST_EXPERIMENTS_DATA_7_3 = TEST_EXPERIMENTS_DATA_7_2
 
 
     def __init__(self, dataDirectory = 'data/mixedSpectraCrux', split = 'train', 
