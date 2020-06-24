@@ -5,6 +5,7 @@ from bootstrap.models.networks.data_parallel import DataParallel
 
 from .MSEmbedding import MSEmbeddingNet
 from .MSEmbedding_MLP import MSEmbedding_MLP_Net
+from .MSEmbedding_norm import MSEmbeddingNormNet
 
 def factory(engine=None):
 
@@ -18,6 +19,12 @@ def factory(engine=None):
 
     elif Options()['model']['network']['name'] == 'MSEmbedding_MLP_Net':
         network = MSEmbedding_MLP_Net()
+
+        if Options()['misc']['cuda'] and len(utils.available_gpu_ids()) >= 2:
+            network = DataParallel(network)
+
+    elif Options()['model']['network']['name'] == 'MSEmbeddingNormNet':
+        network = MSEmbeddingNormNet()
 
         if Options()['misc']['cuda'] and len(utils.available_gpu_ids()) >= 2:
             network = DataParallel(network)
