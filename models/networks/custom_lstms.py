@@ -189,24 +189,20 @@ class LayerNormLSTMCell(jit.ScriptModule):
         # type: (Tensor, Tuple[Tensor, Tensor]) -> Tuple[Tensor, Tuple[Tensor, Tensor]]
         hx, cx = state
 
-        if torch.all(input == 0xFFFFFFFF):  # Could not use the PADDING_32 value here since it produced error
-            cy = cx
-            hy = hx
-        else:
-            igates = self.layernorm_i(torch.mm(input, self.weight_ih.t()))
-            hgates = self.layernorm_h(torch.mm(hx, self.weight_hh.t()))
-            gates = igates + hgates
-            ingate, forgetgate, cellgate, outgate = gates.chunk(4, 1)
+        igates = self.layernorm_i(torch.mm(input, self.weight_ih.t()))
+        hgates = self.layernorm_h(torch.mm(hx, self.weight_hh.t()))
+        gates = igates + hgates
+        ingate, forgetgate, cellgate, outgate = gates.chunk(4, 1)
 
-            ingate = torch.sigmoid(ingate)
-            forgetgate = torch.sigmoid(forgetgate)
-            cellgate = torch.tanh(cellgate)
-            outgate = torch.sigmoid(outgate)
+        ingate = torch.sigmoid(ingate)
+        forgetgate = torch.sigmoid(forgetgate)
+        cellgate = torch.tanh(cellgate)
+        outgate = torch.sigmoid(outgate)
 
-            cy = self.layernorm_c((forgetgate * cx) + (ingate * cellgate))
-            hy = outgate * torch.tanh(cy)
+        cy = self.layernorm_c((forgetgate * cx) + (ingate * cellgate))
+        hy = outgate * torch.tanh(cy)
 
-        return hy, (hy, cy)
+        return cy, (hy, cy)
 
 
 class LSTMLayer(jit.ScriptModule):

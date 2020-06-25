@@ -68,12 +68,6 @@ class MSEmbeddingNormNet(nn.Module):
         # print (">>> peaksLen.shape={}".format(batch['peaksLen'].shape)) 
 
         originalPeaksLen = batch['peaksLen']
-        indexesSortedPeaks = torch.argsort(originalPeaksLen, descending = True)
-
-        sortedPeaks = batch['peaks'][indexesSortedPeaks]
-
-        x = sortedPeaks
-
 
         x = batch['peaks']
 
@@ -99,67 +93,18 @@ class MSEmbeddingNormNet(nn.Module):
 
         transform = torch.stack((xMZ, xIntensity), 2).view(x.shape[0], x.shape[1], -1)
 
-        # print('-- Before pack: Len = {}, shape = {}'.format(len(transform), transform.shape))
-
-        # transform = torch.nn.utils.rnn.pack_padded_sequence(transform, originalPeaksLen[indexesSortedPeaks], batch_first = True)
-
         x, output_states = self.lstm(torch.transpose(transform, 0, 1), self.lstm_states)
 
-        consolidated_directions = []
-
-        for layer in output_states:
-            consolidated_directions.append(join_and_split_output(layer))
-
-        hidden_state = torch.stack([consolidated[0] for consolidated in consolidated_directions])
-        cell_state = torch.stack([consolidated[1] for consolidated in consolidated_directions])
-
-
-        print('Output type={}, hidden_state.shape={}, cell_state.shape={}'.format(type(x), hidden_state.shape, cell_state.shape))
-
-        # x, _ = torch.nn.utils.rnn.pad_packed_sequence(x, batch_first = True, total_length = originalPeaksMaxLen)
-
-        # print('-- After pack: Len = {}, shape = {}'.format(len(x), x.shape))
-
-
-        #
-        # Return the hidden states to their original order
-        #
-
-        # originalIndexes = torch.zeros_like(indexesSortedPeaks)
-
-        # for i in range(len(indexesSortedPeaks)):
-        #     originalIndexes[indexesSortedPeaks[i]] = i
-
-        # x = x[originalIndexes]
-
-        # x = x.view(x.shape[0], x.shape[1], -1, self.lstmOutDim)
-
-        # hidden_state = hidden_state.view(self.numOfLayers, -1, hidden_state.shape[1], hidden_state.shape[2])
-
-        # cell_state = cell_state.view(self.numOfLayers, -1, cell_state.shape[1], cell_state.shape[2])
-
-
-        # print("shape lstm output={}".format(x.shape))
-        # print("shape lstm output accessed={}".format(x[range(x.shape[0]), originalPeaksLen - 1].shape))
-
-        # print("hidden_state.shape={}".format(hidden_state.shape))
-        # print("last hidden layer.shape={}".format(hidden_state[self.numOfLayers - 1].shape))
-
-
-        # for i in range(40):
-        #     print("Dim {}: LSTM={}, hidden={}".format(i, x[range(x.shape[0]), originalPeaksLen - 1][0][0][i], hidden_state[2, 0][originalIndexes][0][i]))
-
-        # print("\n")
-
-        # for i in range(40):
-        #     print("Dim {}: LSTM={}, h0={}".format(i, x[range(x.shape[0]), 0][0][1][i], hidden_state[2, 1][originalIndexes][0][i]))
-
-
-        #
-        # Apply the fusion layer if using bi-LSTM
-        #
-
         if self.bidirecionalLstm:
+            consolidated_directions = []
+
+            for layer in output_states:
+                consolidated_directions.append(join_and_split_output(layer))
+
+            hidden_state = torch.stack([consolidated[0] for consolidated in consolidated_directions])
+            cell_state = torch.stack([consolidated[1] for consolidated in consolidated_directions])
+
+            print('Output type={}, hidden_state.shape={}, cell_state.shape={}'.format(type(x), hidden_state.shape, cell_state.shape))
 
             print("cell_state.shape={}".format(cell_state.shape))
             print("last cell layer.shape={}".format(cell_state[self.numOfLayers - 1].shape))
@@ -169,15 +114,16 @@ class MSEmbeddingNormNet(nn.Module):
 
             x = F.relu(self.fusion(torch.cat((cell_state[self.numOfLayers - 1, 0], cell_state[self.numOfLayers - 1, 1]), 1)))
 
-            print("final x.shape={}".format(x.shape))
-
         else:
-            print("cell_state.shape={}".format(cell_state.shape))
+            print("Original x.shape={}".format(x.shape))
 
-            x = cell_state[self.numOfLayers - 1, 0]
+            cell_states = torch.transpose(x, 0, 1)
+
+            x = cell_states[range(len(originalPeaksLen)), originalPeaksLen - 1]
 
 
-        # x = x[originalIndexes]
+        print("final x.shape={}".format(x.shape))
+
 
         return x
 

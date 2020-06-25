@@ -7,9 +7,9 @@ dataset:
   train_set_version: v7.2
   eval_set_version: v7.2
   max_pvalue: -53.19835
-  batch_size: 500
+  batch_size: 10
   winsorizing_index: 0
-  max_validation_samples: 18000
+  max_validation_samples: 7000
 engine:
   nb_epochs: 1000
   saving_criteria:
@@ -19,9 +19,9 @@ engine:
 model:
   network:
     name: MSEmbeddingNormNet
-    lstm_out_dim: 80
-    bidirecional_lstm: True
-    num_of_layers: 3
+    lstm_out_dim: 20
+    bidirecional_lstm: False
+    num_of_layers: 1
   criterion:
     name: DoubleNPair
     aggregation: valid
@@ -29,7 +29,7 @@ model:
 optimizer:
   import: MSEmbedding.models.optimizers.factory
   name: radam
-  lr: 0.01 
+  lr: 0.001 
   weight_decay: 0.00001
 misc:
   cuda: True
