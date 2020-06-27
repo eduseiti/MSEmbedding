@@ -86,9 +86,9 @@ class MSEmbeddingNormNet(nn.Module):
         xIntensity = F.relu(self.fcIntensity2(xIntensity))
 
 
-        for i in range(x.shape[0]):
-            xMZ[i, -originalPeaksLen[i]:] = PADDING_32
-            xIntensity[i, -originalPeaksLen[i]:] = PADDING_32
+        # for i in range(x.shape[0]):
+        #     xMZ[i, -originalPeaksLen[i]:] = PADDING_32
+        #     xIntensity[i, -originalPeaksLen[i]:] = PADDING_32
 
 
         transform = torch.stack((xMZ, xIntensity), 2).view(x.shape[0], x.shape[1], -1)
