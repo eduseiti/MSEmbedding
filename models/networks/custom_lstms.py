@@ -201,7 +201,7 @@ class LayerNormLSTMCell(jit.ScriptModule):
         cellgate = torch.tanh(cellgate)
         outgate = torch.sigmoid(outgate)
 
-        cy = self.layernorm_c((forgetgate * cx) + (ingate * cellgate))
+        cy = self.layernorm_c((forgetgate * cx[:igates.shape[0]]) + (ingate * cellgate))
         hy = outgate * torch.tanh(cy)
 
         return cy, (hy, cy)
