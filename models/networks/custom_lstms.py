@@ -36,7 +36,7 @@ A few notes about features we could add to clean up the below code:
 '''
 
 
-PADDING_32 = 0xFFFFFFFF
+# PADDING_32 = 0xFFFFFFFF
 
 def script_lstm(input_size, hidden_size, num_layers, bias=True,
                 batch_first=False, dropout=False, bidirectional=False):
@@ -152,6 +152,7 @@ class LayerNorm(jit.ScriptModule):
 
         self.weight = Parameter(torch.ones(normalized_shape))
         self.bias = Parameter(torch.zeros(normalized_shape))
+
         self.normalized_shape = normalized_shape
 
     @jit.script_method
@@ -173,6 +174,7 @@ class LayerNormLSTMCell(jit.ScriptModule):
         self.hidden_size = hidden_size
         self.weight_ih = Parameter(torch.randn(4 * hidden_size, input_size))
         self.weight_hh = Parameter(torch.randn(4 * hidden_size, hidden_size))
+
         # The layernorms provide learnable biases
 
         if decompose_layernorm:

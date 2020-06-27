@@ -7,7 +7,7 @@ from bootstrap.lib.options import Options
 
 import numpy as np
 
-from .custom_lstms import script_lnlstm, LSTMState, PADDING_32
+from .custom_lstms import script_lnlstm, LSTMState#, PADDING_32
 
 
 def join_and_split_output(list):
@@ -37,7 +37,7 @@ class MSEmbeddingNormNet(nn.Module):
 
 
         self.lstm = script_lnlstm(self.fcOutDim * 2, self.lstmOutDim, self.numOfLayers,
-                                  bidirectional=self.bidirecionalLstm, decompose_layernorm=True)
+                                  bidirectional=self.bidirecionalLstm)
 
         if self.bidirecionalLstm:
 
