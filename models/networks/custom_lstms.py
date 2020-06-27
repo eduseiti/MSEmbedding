@@ -193,7 +193,7 @@ class LayerNormLSTMCell(jit.ScriptModule):
 
         igates = self.layernorm_i(torch.mm(input, self.weight_ih.t()))
         hgates = self.layernorm_h(torch.mm(hx, self.weight_hh.t()))
-        gates = igates + hgates
+        gates = igates + hgates[:igates.shape[0]]
         ingate, forgetgate, cellgate, outgate = gates.chunk(4, 1)
 
         ingate = torch.sigmoid(ingate)
