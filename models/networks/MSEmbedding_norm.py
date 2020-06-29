@@ -117,9 +117,11 @@ class MSEmbeddingNormNet(nn.Module):
         else:
             print("Original x.shape={}".format(x.shape))
 
-            cell_states = torch.transpose(x, 0, 1)
+            # cell_states = torch.transpose(x, 0, 1)
+            # x = cell_states[range(len(originalPeaksLen)), originalPeaksLen - 1]
 
-            x = cell_states[range(len(originalPeaksLen)), originalPeaksLen - 1]
+            x = x[originalPeaksLen - 1, range(len(originalPeaksLen))]
+
 
 
         print("final x.shape={}".format(x.shape))
