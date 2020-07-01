@@ -1,15 +1,15 @@
 __include__: abstract.yaml
 exp:
-  dir: logs/MSEmbedding/mixedSpectraCrux_all_LN_lstm_80_3_layers_double_n_pair_LR1e-2_q0.001_pvalue_0.6
+  dir: logs/MSEmbedding/mixedSpectraCrux_all_LN_lstm_60_3_layers_double_n_pair_LR1e-2_q0.001_pvalue_0.6
 dataset:
   name: mixedSpectraCrux
   dir: data/mixedSpectraCrux
   train_set_version: v7.2
   eval_set_version: v7.2
   max_pvalue: -53.19835
-  batch_size: 10
+  batch_size: 1000
   winsorizing_index: 0
-  max_validation_samples: 7000
+  max_validation_samples: 18000
 engine:
   nb_epochs: 1000
   saving_criteria:
@@ -19,7 +19,7 @@ engine:
 model:
   network:
     name: MSEmbeddingNormNet
-    lstm_out_dim: 40
+    lstm_out_dim: 60
     bidirecional_lstm: False
     num_of_layers: 3
   criterion:
