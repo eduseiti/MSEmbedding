@@ -7,7 +7,7 @@ dataset:
   train_set_version: v7.2
   eval_set_version: v7.2
   max_pvalue: -53.19835
-  batch_size: 50
+  batch_size: 10
   winsorizing_index: 0
   max_validation_samples: 5000
 
@@ -20,8 +20,10 @@ engine:
 model:
   network:
     name: MSEmbeddingTransformerNet
-    num_of_heads: 6
-    dim_feedforward: 80
+    fc_intermediate_dim: 64
+    fc_out_dim: 32
+    num_of_heads: 4
+    dim_feedforward: 256
     num_of_layers: 3
     transformer_dropout: 0.0
     classification_token: -255

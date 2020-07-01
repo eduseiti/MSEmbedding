@@ -41,6 +41,7 @@ class MSEmbeddingTransformerNet(nn.Module):
 
         self.classificationToken = Options().get("dataset.classification_token", 0)
 
+        self.fcIntermediateDim = Options()['model']['network']['fc_intermediate_dim']
         self.fcOutDim = Options()['model']['network']['fc_out_dim']
         self.lstmOutDim = Options()['model']['network']['lstm_out_dim']
         self.numOfLayers = Options()['model']['network'].get('num_of_layers', 1)
@@ -49,17 +50,19 @@ class MSEmbeddingTransformerNet(nn.Module):
         self.dimFeedForward = Options()['model']['network'].get('dim_feedforward', 40)
         self.transformerDropout = Options()['model']['network'].get('transformer_dropout', 0.0)
 
-        self.fcMZ1 = nn.Linear(1, 32)
-        self.fcMZ2 = nn.Linear(32, self.fcOutDim)
+        self.fcMZ1 = nn.Linear(1, self.fcIntermediateDim)
+        self.fcMZ2 = nn.Linear(self.fcIntermediateDim, self.fcOutDim)
 
-        self.fcIntensity1 = nn.Linear(1, 32)
-        self.fcIntensity2 = nn.Linear(32, self.fcOutDim)
+        self.fcIntensity1 = nn.Linear(1, self.fcIntermediateDim)
+        self.fcIntensity2 = nn.Linear(self.fcIntermediateDim, self.fcOutDim)
 
         self.positionalEncoder = PositionalEncoding(self.fcOutDim * 2)
 
         encoder_layers = nn.TransformerEncoderLayer(self.fcOutDim * 2, self.numOfHeads, self.dimFeedForward, self.transformerDropout)
 
         self.transformerEncoder = nn.TransformerEncoder(encoder_layers, self.numOfLayers)
+
+        print("Number of parameters={}".format(sum(p.numel() for p in self.parameters())))
 
 
     #
