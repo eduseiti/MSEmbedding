@@ -302,6 +302,11 @@ class MixedSpectraCrux(data.Dataset):
     }
 
 
+    # This will contains ALL spectra
+
+    TRAIN_EXPERIMENTS_DATA_6_4 = TRAIN_EXPERIMENTS_DATA_6_3
+
+
     TRAIN_EXPERIMENTS_DATA_7_0 = {
         "Fetal_Brain_Gel_Velos_16_q_lt_0.001_identifications.tsv" : {"peaksFile" : "fetal_brain_gel_velos_16_crux_q_0.001_pvalue{}.pkl", "filesList": None, "constructor" : HumanProteome},
         "Fetal_Ovary_bRP_Velos_41_q_lt_0.001_identifications.tsv" : {"peaksFile" : "fetal_ovary_brp_velos_41_crux_q_0.001_pvalue{}.pkl", "filesList": None, "constructor" : HumanProteome},
@@ -533,6 +538,11 @@ class MixedSpectraCrux(data.Dataset):
         "Fetal_Placenta_bRP_Elite_79_q_lt_0.01_identifications.tsv" : {"peaksFile" : "Fetal_Placenta_bRP_Elite_79_crux_q0.01_pvalue{}.pkl", "filesList" : None, "constructor" : HumanProteome},
         "Fetal_Testis_Gel_Velos_27_q_lt_0.01_identifications.tsv" : {"peaksFile" : "Fetal_Testis_Gel_Velos_27_crux_q0.01_pvalue{}.pkl", "filesList" : None, "constructor" : HumanProteome}
     }
+
+
+    # This will contains ALL spectra
+
+    TEST_EXPERIMENTS_DATA_6_4 = TEST_EXPERIMENTS_DATA_6_3
 
 
 
