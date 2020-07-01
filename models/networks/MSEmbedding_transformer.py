@@ -95,7 +95,7 @@ class MSEmbeddingTransformerNet(nn.Module):
         transform = torch.stack((xMZ, xIntensity), 2).view(x.shape[0], x.shape[1], -1)
 
 
-        print('-- Before adding classification token: shape = {}'.format(transform.shape))
+        # print('-- Before adding classification token: shape = {}'.format(transform.shape))
 
         classification = torch.empty(transform.shape[0], 1, transform.shape[2])
         classification.fill_(self.classificationToken)
@@ -110,26 +110,26 @@ class MSEmbeddingTransformerNet(nn.Module):
         for i in range(x.shape[0]):
             keyPaddingMask[i, originalPeaksLen[i]:] = True
 
-        print('-- keyPaddingMask.shape={}'.format(keyPaddingMask.shape))
+        # print('-- keyPaddingMask.shape={}'.format(keyPaddingMask.shape))
 
         # print("keyPaddingMask={}".format(keyPaddingMask))
 
 
-        print('-- Before entering positionalEncoder: shape = {}'.format(x.shape))
+        # print('-- Before entering positionalEncoder: shape = {}'.format(x.shape))
 
         x = self.positionalEncoder(x.transpose(0, 1))
 
         x = self.transformerEncoder(x, src_key_padding_mask=keyPaddingMask)
 
-        print('Transformer output shape={}'.format(x.shape))
+        # print('Transformer output shape={}'.format(x.shape))
 
         x = x.transpose(0, 1)
 
-        print('Transformer transposed output shape={}'.format(x.shape))
+        # print('Transformer transposed output shape={}'.format(x.shape))
 
         x = x[:,0]
 
-        print('Model output shape={}'.format(x.shape))
+        # print('Model output shape={}'.format(x.shape))
 
         # print("x[0]={}".format(x[0]))
         # print("x[1]={}".format(x[1]))
