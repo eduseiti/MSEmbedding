@@ -4,6 +4,7 @@ import torch.nn.functional as F
 import torch.optim as optim
 from torch.autograd import Variable
 from bootstrap.lib.options import Options
+from bootstrap.lib.logger import Logger
 
 import math
 
@@ -62,7 +63,7 @@ class MSEmbeddingTransformerNet(nn.Module):
 
         self.transformerEncoder = nn.TransformerEncoder(encoder_layers, self.numOfLayers)
 
-        print("Number of parameters={}".format(sum(p.numel() for p in self.parameters())))
+        Logger()("Number of parameters={}".format(sum(p.numel() for p in self.parameters())))
 
 
     #

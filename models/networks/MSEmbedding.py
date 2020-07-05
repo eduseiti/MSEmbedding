@@ -47,6 +47,8 @@ class MSEmbeddingNet(nn.Module):
 
             self.pepmassCombination = nn.Linear(self.lstmOutDim + self.pepmassFinalDim, self.lstmOutDim)
 
+        Logger()("Number of parameters={}".format(sum(p.numel() for p in self.parameters())))
+        
 
     #
     # Receives a batch with two elements:
