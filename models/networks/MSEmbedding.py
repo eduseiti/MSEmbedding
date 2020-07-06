@@ -4,6 +4,7 @@ import torch.nn.functional as F
 import torch.optim as optim
 from torch.autograd import Variable
 from bootstrap.lib.options import Options
+from bootstrap.lib.logger import Logger
 
 import numpy as np
 
@@ -48,7 +49,7 @@ class MSEmbeddingNet(nn.Module):
             self.pepmassCombination = nn.Linear(self.lstmOutDim + self.pepmassFinalDim, self.lstmOutDim)
 
         Logger()("Number of parameters={}".format(sum(p.numel() for p in self.parameters())))
-        
+
 
     #
     # Receives a batch with two elements:

@@ -24,7 +24,7 @@ model:
     fc_out_dim: 32
     num_of_heads: 4
     dim_feedforward: 256
-    num_of_layers: 3
+    num_of_layers: 4
     transformer_dropout: 0.0
     classification_token: -255
   criterion:
