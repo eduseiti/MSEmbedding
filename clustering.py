@@ -24,7 +24,7 @@ import sys
 EMBEDDINGS_FILE = "sample_embeddings_q0.001_transformer_64_pvalue_0.6_double_n_pair_091215.bin"
 EMBEDDINGS_FOLDER = "data/linfeng"
 
-CLUSTERS_NUMBER = 5000
+CLUSTERS_NUMBER = 50000
 
 KMEANS_RESULTS_FILE = "kmeans_clustering.pkl"
 AGGLOMERATIVE_RESULTS_FILE = "agglomerative_clustering.pkl"
