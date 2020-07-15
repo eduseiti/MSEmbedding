@@ -31,7 +31,7 @@ class SaveEmbeddings(torch.nn.Module):
             return Options().get("dataset.embeddings_file", SaveEmbeddings.EMBEDDINGS_FILENAME_DEFAULT) + "_{}"
 
 
-    SAVE_COUNT = 20000
+    SAVE_COUNT = 40000
 
     def __init__(self, engine = None, mode = 'test'):
         super(SaveEmbeddings, self).__init__()
