@@ -93,6 +93,14 @@ class Linfeng(data.Dataset):
 
 
 
+    PXD000561_SAMPLE_FOLDER = [
+        "sample_PXD000561"
+    ]
+
+
+
+
+
     def read_spectra(self, folders, mgfFolder, outputFolder, normalizationParameters):
 
         spectraParser = MGF()
@@ -123,7 +131,7 @@ class Linfeng(data.Dataset):
                 spectraFound.spectraCount = 0
 
                 files = os.listdir(os.path.join(mgfFolder, folder))
-                files.sort()
+                files.sort(key=str.lower)
 
                 for fileName in files:
 
