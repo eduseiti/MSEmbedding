@@ -76,7 +76,7 @@ elif sys.argv[3].lower() == "aglomerative":
         pickle.dump(agglomerative_result, outputFile, pickle.HIGHEST_PROTOCOL)
 
 elif sys.argv[3].lower() == "hdbscan":
-    hdbscan_clusterer = hdbscan.HDBSCAN(min_cluster_size=5)
+    hdbscan_clusterer = hdbscan.HDBSCAN(min_cluster_size=2)
     hdbscan_clusterer.fit(all_embeddings)
 
     print("clustered labels: {}".format(hdbscan_clusterer.labels_))
