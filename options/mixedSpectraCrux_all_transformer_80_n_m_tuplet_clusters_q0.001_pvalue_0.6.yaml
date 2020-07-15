@@ -1,0 +1,51 @@
+__include__: abstract.yaml
+exp:
+  dir: logs/MSEmbedding/mixedSpectraCrux_all_transformer_double_n_pair_margin_LR1e-2_q0.001_pvalue_0.6
+dataset:
+  name: mixedSpectraCrux
+  dir: data/mixedSpectraCrux
+  train_set_version: v7.2
+  eval_set_version: v7.2
+  max_pvalue: -53.19835
+  batch_size: 180
+  winsorizing_index: 0
+  max_validation_samples: 5000
+
+engine:
+  nb_epochs: 1000
+  saving_criteria:
+  - eval_epoch.metric.MedR:min
+  - eval_epoch.metric.recall_at_10:max  
+  - eval_epoch.metric.recall_at_1:max  
+model:
+  network:
+    name: MSEmbeddingTransformerNet
+    fc_intermediate_dim: 64
+    fc_out_dim: 40
+    num_of_heads: 6
+    dim_feedforward: 256
+    num_of_layers: 5
+    transformer_dropout: 0.0
+    classification_token: -255
+  criterion:
+    name: DoubleNPairMargin
+    aggregation: valid
+    epsilon: 0.00000001
+    loss_margin: 0.5
+optimizer:
+  import: MSEmbedding.models.optimizers.factory
+  name: radam
+  lr: 0.001 
+  weight_decay: 0.00001
+misc:
+  cuda: True
+views:
+  items:  
+    - logs:train_batch.loss
+    - logs:train_epoch.loss
+    - logs:eval_batch.loss
+    - logs:eval_epoch.loss
+    - logs:eval_epoch.metric.MedR
+    - logs:eval_epoch.metric.recall_at_1
+    - logs:eval_epoch.metric.recall_at_5
+    - logs:eval_epoch.metric.recall_at_10
