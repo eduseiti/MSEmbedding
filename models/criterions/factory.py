@@ -7,6 +7,7 @@ from .n_pair import NPair
 from .double_n_pair import DoubleNPair
 from .quad_n_pair import QuadNPair
 from .double_n_pair_margin import DoubleNPairMargin
+from .n_m_tuplet_clusters import NMTupletClusters
 
 #
 # mode: depending on the split (?)
@@ -33,6 +34,8 @@ def factory(engine=None, mode=None):
         criterion = DoubleNPairMargin()
     elif (selectedCriterion == 'QuadNPair'):
         criterion = QuadNPair()
+    elif (selectedCriterion == 'NMTupletClusters'):
+        criterion = NMTupletClusters()
     else:
         raise ValueError()
 
