@@ -38,7 +38,7 @@ class PositionalEncoding(nn.Module):
 class MSEmbeddingTransformer2Net(nn.Module):
     
     def __init__(self):
-        super(MSEmbeddingTransformerNet, self).__init__()
+        super(MSEmbeddingTransformer2Net, self).__init__()
 
         self.classificationToken = Options().get("dataset.classification_token", 0)
 
