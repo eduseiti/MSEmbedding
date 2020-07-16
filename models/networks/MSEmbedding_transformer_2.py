@@ -134,7 +134,7 @@ class MSEmbeddingTransformer2Net(nn.Module):
 
         # print('Transformer transposed output shape={}'.format(x.shape))
 
-        x = torch.cat([x[:,0], x[range(x.shape[0]), originalPeaksLen]. dim=1)
+        x = torch.cat([x[:,0], x[range(x.shape[0]), originalPeaksLen]], dim=1)
 
         # print('Model output shape={}'.format(x.shape))
 
