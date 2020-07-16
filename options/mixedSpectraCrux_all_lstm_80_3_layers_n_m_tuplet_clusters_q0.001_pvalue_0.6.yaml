@@ -7,7 +7,7 @@ dataset:
   train_set_version: v7.2
   eval_set_version: v7.2
   max_pvalue: -53.19835
-  batch_size: 300
+  batch_size: 150
   winsorizing_index: 0
   max_validation_samples: 5000
 engine:
@@ -18,19 +18,19 @@ engine:
   - eval_epoch.metric.recall_at_1:max  
 model:
   network:
-    lstm_out_dim: 40
+    lstm_out_dim: 80
     bidirecional_lstm: True
     num_of_layers: 3
   criterion:
     name: NMTupletClusters
     aggregation: valid
     epsilon: 0.00000001
-    loss_margin: 0.6
-    reference_distance: 0.3
+    loss_margin: 1.99
+    reference_distance: 0.0001
 optimizer:
   import: MSEmbedding.models.optimizers.factory
   name: radam
-  lr: 0.0001 
+  lr: 0.001 
   weight_decay: 0.00001
 misc:
   cuda: True
