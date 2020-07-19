@@ -1,13 +1,13 @@
 __include__: abstract.yaml
 exp:
-  dir: logs/MSEmbedding/linfeng_transformer_80_double_n_pair_LR1e-2_q0.001_pvalue_0.6
+  dir: logs/MSEmbedding/linfeng_transformer_160_double_n_pair_LR1e-2_q0.001_pvalue_0.6
 dataset:
   name: linfeng
   dir: data/linfeng_all_q0.001_n_pair
   mgf_dir: /media/eduseiti/bigdata01/unicamp/doutorado/linfeng
   mgf_experiments: SAMPLE_EXPERIMENTS_FOLDERS
-  spectra_list_file: sample_linfeng_q0.001_pvalue_0.6_double_n_pair_transformer_80_8h_6l
-  embeddings_file: sample_embeddings_q0.001_transformer_80_8h_6l_pvalue_0.6_double_n_pair
+  spectra_list_file: sample_linfeng_q0.001_pvalue_0.6_double_n_pair_transformer_160_8h_6l
+  embeddings_file: sample_embeddings_q0.001_transformer_160_8h_6l_pvalue_0.6_double_n_pair
   embeddings_dir: data/linfeng_all_q0.001_n_pair
   train_split: 
   eval_split: test
