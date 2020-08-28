@@ -1,0 +1,45 @@
+__include__: abstract.yaml
+exp:
+  dir: logs/MSEmbedding/linfeng_transformer_80_double_n_pair_L2_LR1e-3_q0.001_pvalue_0.6
+dataset:
+  name: linfeng
+  dir: data/linfeng_all_q0.001_n_pair
+  mgf_dir: /media/eduseiti/bigdata01/unicamp/doutorado/linfeng
+  mgf_experiments: SAMPLE_EXPERIMENTS_FOLDERS
+  spectra_list_file: sample_linfeng_q0.001_pvalue_0.6_double_n_pair_L2_transformer_80_8h_6l
+  embeddings_file: sample_embeddings_q0.001_transformer_80_8h_6l_pvalue_0.6_double_n_pair_L2
+  embeddings_dir: data/linfeng_all_q0.001_n_pair
+  train_split: 
+  eval_split: test
+  train_normalization_file: data/mixedSpectraCrux/sequences/train_mixedSpectraCrux_v7.2.pkl
+  batch_size: 80
+  nb_threads: 0  
+engine:
+  nb_epochs: 1
+model:
+  name: MSEmbedding_encoding
+  network:
+    name: MSEmbeddingTransformerNet
+    fc_intermediate_dim: 64
+    fc_out_dim: 40
+    num_of_heads: 8
+    dim_feedforward: 256
+    num_of_layers: 6
+    transformer_dropout: 0.0
+    classification_token: -255
+  metric:
+    name: saveEmbeddings
+    import: MSEmbedding.models.metrics.factory    
+optimizer:
+  import: MSEmbedding.models.optimizers.factory
+  name: radam
+  lr: 0.001 
+  weight_decay: 0.00001
+misc:
+  cuda: True
+views:
+  items:  
+    - logs:eval_epoch.metric.MedR
+    - logs:eval_epoch.metric.recall_at_1
+    - logs:eval_epoch.metric.recall_at_5
+    - logs:eval_epoch.metric.recall_at_10

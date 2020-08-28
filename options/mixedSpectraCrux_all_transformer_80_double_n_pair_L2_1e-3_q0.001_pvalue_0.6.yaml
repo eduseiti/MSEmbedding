@@ -7,7 +7,7 @@ dataset:
   train_set_version: v7.2
   eval_set_version: v7.2
   max_pvalue: -53.19835
-  batch_size: 180
+  batch_size: 150
   winsorizing_index: 0
   max_validation_samples: 5000
 
@@ -31,6 +31,7 @@ model:
     name: DoubleNPairL2
     aggregation: valid
     epsilon: 0.00000001
+    regularizer: 0.01
 optimizer:
   import: MSEmbedding.models.optimizers.factory
   name: radam
